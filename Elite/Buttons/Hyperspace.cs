@@ -27,9 +27,9 @@ namespace Elite.Buttons
                     PrimaryImageFilename = string.Empty,
                     SecondaryImageFilename = string.Empty,
                     TertiaryImageFilename = string.Empty,
-                    PrimaryColor = "#ffffff",
-                    SecondaryColor = "#ffffff",
-                    TertiaryColor = "#ffffff",
+                    PrimaryColor = "#ff00ff",
+                    SecondaryColor = "#ff00ff",
+                    TertiaryColor = "#ff00ff",
                     ClickSoundFilename = string.Empty,
                     ErrorSoundFilename = string.Empty
                 };
@@ -289,8 +289,7 @@ namespace Elite.Buttons
             {
                 switch (settings.Function)
                 {
-                    case "HYPERSUPERCOMBINATION"
-                        : // context dependent, i.e. jump if another system is targeted, supercruise if not.
+                    case "HYPERSUPERCOMBINATION": // context dependent, i.e. jump if another system is targeted, supercruise if not.
                         StreamDeckCommon.SendKeypress(Program.Binding[BindingType.Ship].HyperSuperCombination);
                         break;
                     case "SUPERCRUISE": // supercruise even if another system targeted
@@ -402,17 +401,17 @@ namespace Elite.Buttons
 
             if (string.IsNullOrEmpty(settings.PrimaryColor))
             {
-                settings.PrimaryColor = "#ffffff";
+                settings.PrimaryColor = "#ff00ff";
             }
 
             if (string.IsNullOrEmpty(settings.SecondaryColor))
             {
-                settings.SecondaryColor = "#ffffff";
+                settings.SecondaryColor = "#ff00ff";
             }
 
             if (string.IsNullOrEmpty(settings.TertiaryColor))
             {
-                settings.TertiaryColor = "#ffffff";
+                settings.TertiaryColor = "#ff00ff";
             }
 
             try
