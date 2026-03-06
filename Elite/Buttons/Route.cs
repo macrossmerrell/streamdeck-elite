@@ -73,7 +73,7 @@ namespace Elite.Buttons
         private SolidBrush _primaryBrush = new SolidBrush(Color.White);
         private SolidBrush _tertiaryBrush = new SolidBrush(Color.White);
 
-        private readonly Font drawFont = new Font("Arial", 60);
+        private readonly Font drawFont = new Font("Arial", 100, FontStyle.Bold);
 
         private async Task HandleDisplay()
         {
@@ -113,7 +113,7 @@ namespace Elite.Buttons
 
                                 var fontContainerHeight = 100 * (width / 256.0);
 
-                                for (int adjustedSize = 60; adjustedSize >= 10; adjustedSize -= 5)
+                                for (int adjustedSize = 100; adjustedSize >= 10; adjustedSize -= 5)
                                 {
                                     var testFont = new Font(drawFont.Name, adjustedSize, drawFont.Style);
 
