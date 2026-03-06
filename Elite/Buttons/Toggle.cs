@@ -151,6 +151,10 @@ namespace Elite.Buttons
                 case "AutoBreakBuggyButton":
                     isPrimary = EliteData.StatusData.SrvHandbrake;
                     break;
+                case "HumanoidSelectUtilityWeaponButton":
+                    isPrimary = EliteData.StatusData.SelectedWeapon != null &&
+                                EliteData.StatusData.SelectedWeapon.ToLower().Contains("geneticsampler");
+                    break;
 
             }
 
@@ -335,6 +339,10 @@ namespace Elite.Buttons
 
                 case "AutoBreakBuggyButton":
                     StreamDeckCommon.SendKeypress(Program.Binding[BindingType.Srv].AutoBreakBuggyButton);
+                    break;
+
+                case "HumanoidSelectUtilityWeaponButton":
+                    StreamDeckCommon.SendKeypress(Program.Binding[BindingType.OnFoot].HumanoidSelectUtilityWeaponButton);
                     break;
 
             }
