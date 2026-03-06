@@ -152,8 +152,7 @@ namespace Elite.Buttons
                     isPrimary = EliteData.StatusData.SrvHandbrake;
                     break;
                 case "HumanoidSelectUtilityWeaponButton":
-                    isPrimary = EliteData.StatusData.SelectedWeapon != null &&
-                                EliteData.StatusData.SelectedWeapon.ToLower().Contains("geneticsampler");
+                    isPrimary = EliteData.StatusData.SelectedWeapon == "$humanoid_sampletool_name;";
                     break;
 
             }
