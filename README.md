@@ -10,7 +10,7 @@ I will update this readme over time as I add new functions, but I am leaving the
 - Route Button has been overhauled to have a larger font, have Bold capability, and allows vertical adjustment of the count on the button face to better fit custom graphics.
 - **NEW** Genetic Sampler option to the Toggle Button.  Created for explorers like myself that like to see a button change when the tool is deployed / stowed.
 
-
+Latest Release can be found here: https://github.com/macrossmerrell/streamdeck-elite/releases
 
 
 Elgato Stream Deck button plugin for Elite Dangerous
@@ -219,8 +219,6 @@ You may see errors like this in the plugin log file :
 In that case, the plugin has no access to the bindings directory. 
 
 Start streamdeck.exe as administrator.
-
-The plugin installer is here: https://github.com/DrFr33ze/streamdeck-elite/releases
 
 To install the plugin, double click the file `com.mhwlng.elite.streamDeckPlugin` which should install the plugin.
 
