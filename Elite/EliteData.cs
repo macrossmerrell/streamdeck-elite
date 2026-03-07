@@ -96,6 +96,7 @@ namespace Elite
             public bool TelepresenceMulticrew { get; set; }
             public bool PhysicalMulticrew { get; set; }
             public bool Fsdhyperdrivecharging { get; set; }
+            public string SelectedWeapon { get; set; }
         }
 
         public static Status StatusData = new Status();
@@ -210,6 +211,7 @@ namespace Elite
             StatusData.PhysicalMulticrew = (evt.Flags2 & MoreStatusFlags.PhysicalMulticrew) != 0;
 
             StatusData.Fsdhyperdrivecharging = (evt.Flags2 & MoreStatusFlags.Fsdhyperdrivecharging) != 0;
+            StatusData.SelectedWeapon = evt.SelectedWeapon;
         }
 
 

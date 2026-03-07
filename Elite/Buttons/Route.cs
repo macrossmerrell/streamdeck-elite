@@ -27,6 +27,9 @@ namespace Elite.Buttons
                     TertiaryImageFilename = string.Empty,
                     PrimaryColor = "#ffffff",
                     TertiaryColor = "#ffffff",
+                    TextVerticalPosition = "28",
+                    TextFontSize = "100",
+                    TextBold = "true",
                     ClickSoundFilename = string.Empty,
                     ErrorSoundFilename = string.Empty
                 };
@@ -47,6 +50,15 @@ namespace Elite.Buttons
 
             [JsonProperty(PropertyName = "tertiaryColor")]
             public string TertiaryColor { get; set; }
+
+            [JsonProperty(PropertyName = "textVerticalPosition")]
+            public string TextVerticalPosition { get; set; }
+
+            [JsonProperty(PropertyName = "textFontSize")]
+            public string TextFontSize { get; set; }
+
+            [JsonProperty(PropertyName = "textBold")]
+            public string TextBold { get; set; }
 
             [FilenameProperty]
             [JsonProperty(PropertyName = "clickSound")]
@@ -73,7 +85,7 @@ namespace Elite.Buttons
         private SolidBrush _primaryBrush = new SolidBrush(Color.White);
         private SolidBrush _tertiaryBrush = new SolidBrush(Color.White);
 
-        private readonly Font drawFont = new Font("Arial", 60);
+        // private readonly Font drawFont = new Font("Arial", 100, FontStyle.Bold);
 
         private async Task HandleDisplay()
         {
@@ -113,10 +125,14 @@ namespace Elite.Buttons
 
                                 var fontContainerHeight = 100 * (width / 256.0);
 
-                                for (int adjustedSize = 60; adjustedSize >= 10; adjustedSize -= 5)
+                                for (int adjustedSize = 100; adjustedSize >= 10; adjustedSize -= 5)
+                                // var maxFontSize = int.TryParse(settings.TextFontSize, out int parsedSize) ? parsedSize : 100;
+                                // for (int adjustedSize = maxFontSize; adjustedSize >= 10; adjustedSize -= 5)
                                 {
-                                    var testFont = new Font(drawFont.Name, adjustedSize, drawFont.Style);
-
+                                    // var testFont = new Font(drawFont.Name, adjustedSize, drawFont.Style);
+                                    var isBold = settings.TextBold == "true";
+                                    var fontStyle = isBold ? FontStyle.Bold : FontStyle.Regular;
+                                    var testFont = new Font("Arial", adjustedSize, fontStyle);
                                     var adjustedSizeNew =
                                         graphics.MeasureString(remainingJumpsInRoute.ToString(),
                                             testFont);
@@ -128,7 +144,9 @@ namespace Elite.Buttons
                                                 testFont);
 
                                         var x = (width - stringSize.Width) / 2.0;
-                                        var y = 28.0 * (width / 256.0);
+                                        // var y = 28.0 * (width / 256.0);
+                                        var verticalPosition = double.TryParse(settings.TextVerticalPosition, out double parsedPosition) ? parsedPosition : 28.0;
+                                        var y = verticalPosition * (width / 256.0);
 
                                         graphics.DrawString(remainingJumpsInRoute.ToString(), testFont,
                                             textBrush, (float) x, (float) y);
@@ -306,6 +324,21 @@ namespace Elite.Buttons
             if (string.IsNullOrEmpty(settings.TertiaryColor))
             {
                 settings.TertiaryColor = "#ffffff";
+            }
+
+            if (string.IsNullOrEmpty(settings.TextVerticalPosition))
+            {
+                settings.TextVerticalPosition = "28";
+            }
+
+            if (string.IsNullOrEmpty(settings.TextFontSize))
+            {
+                settings.TextFontSize = "100";
+            }
+
+            if (string.IsNullOrEmpty(settings.TextBold))
+            {
+                settings.TextBold = "true";
             }
 
             try
