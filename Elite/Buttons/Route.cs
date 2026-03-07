@@ -1,3 +1,23 @@
+<div class="sdpi-item" id="dvTextVerticalPosition">
+    <div class="sdpi-item-label">Number Position</div>
+    <select class="sdpi-item-value select sdProperty" id="textVerticalPosition" oninput="setSettings()">
+        <option value="5">Very Top</option>
+        <option value="28">Top</option>
+        <option value="60">Upper Middle</option>
+        <option value="80">Center</option>
+        <option value="100">Lower Middle</option>
+        <option value="128">Bottom</option>
+        <option value="150">Very Bottom</option>
+    </select>
+</div>
+
+<div class="sdpi-item" id="dvTextBold">
+    <div class="sdpi-item-label">Bold</div>
+    <select class="sdpi-item-value select sdProperty" id="textBold" oninput="setSettings()">
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+    </select>
+</div>
 ﻿using System;
 using System.Drawing;
 using System.IO;
