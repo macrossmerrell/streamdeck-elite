@@ -112,7 +112,7 @@ namespace Elite.Buttons
 
             if (_primaryImage != null)
             {
-                if (!bitmapImageIsGif && EliteData.StarSystem != EliteData.FsdTargetName && remainingJumpsInRoute > 0  && textHtmlColor != "#ff00ff")
+                if (!bitmapImageIsGif && remainingJumpsInRoute > 0 && textHtmlColor != "#ff00ff")
                 {
                     try
                     {
@@ -126,8 +126,7 @@ namespace Elite.Buttons
                                 var fontContainerHeight = 100 * (width / 256.0);
 
                                 for (int adjustedSize = 100; adjustedSize >= 10; adjustedSize -= 5)
-                                // var maxFontSize = int.TryParse(settings.TextFontSize, out int parsedSize) ? parsedSize : 100;
-                                // for (int adjustedSize = maxFontSize; adjustedSize >= 10; adjustedSize -= 5)
+                           
                                 {
                                     // var testFont = new Font(drawFont.Name, adjustedSize, drawFont.Style);
                                     var isBold = settings.TextBold == "true";
