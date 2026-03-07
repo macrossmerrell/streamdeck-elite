@@ -12,6 +12,7 @@ I will update this readme over time as I add new functions, but I am leaving the
 
 Latest Release can be found here: https://github.com/macrossmerrell/streamdeck-elite/releases
 
+Shoutout to Andechs75 for an awesome set of buttons and a PowerPoint that you can use to quickly make new buttons (make it, snip it, or copy and paste into your favorite paint program to crop them down if they get wild):  https://github.com/Andechs75/Elite-Dangerous-Streamdeck-Icons/tree/master
 
 Elgato Stream Deck button plugin for Elite Dangerous
 
