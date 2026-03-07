@@ -1,4 +1,18 @@
 # streamdeck-elite
+
+This is a custom fork of mhwlng's original project and DrFr33ze's .NET 10 conversion. I could not do any of this without all the hard work they put into the project!  I'm learning as I go and will add things that are important to how I explore in Elite.
+
+I will update this readme over time as I add new functions, but I am leaving the core of the readme intact as it is relevant information.
+
+**New / updated functions:**
+
+- Route Counter is disabled on 'Hyperspace Button' function by default.
+- Route Button has been overhauled to have a larger font, have Bold capability, and allows vertical adjustment of the count on the button face to better fit custom graphics.
+- **NEW** Genetic Sampler option to the Toggle Button.  Created for explorers like myself that like to see a button change when the tool is deployed / stowed.
+
+
+
+
 Elgato Stream Deck button plugin for Elite Dangerous
 
 ![Elgato Stream Deck and Flight Instrument Panel](https://i.imgur.com/bE2ODlF.jpg)
@@ -248,7 +262,7 @@ Also see companion application for Logitech Flight Instrument Panel and VR :
 
 https://github.com/mhwlng/fip-elite
 
-This is a fork of [mhwlng/streamdeck-elite](https://github.com/mhwlng/streamdeck-elite), updated for .NET 10 and with Stream Deck Neo support added.
+This is a fork of [mhwlng/streamdeck-elite](https://github.com/mhwlng/streamdeck-elite) and [DrFr33ze/streamdeck-elite](https://github.com/DrFr33ze/streamdeck-elite), updated for .NET 10 and with Stream Deck Neo support added.
 
 Thanks to :
 
