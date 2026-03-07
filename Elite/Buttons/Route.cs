@@ -1,23 +1,3 @@
-<div class="sdpi-item" id="dvTextVerticalPosition">
-    <div class="sdpi-item-label">Number Position</div>
-    <select class="sdpi-item-value select sdProperty" id="textVerticalPosition" oninput="setSettings()">
-        <option value="5">Very Top</option>
-        <option value="28">Top</option>
-        <option value="60">Upper Middle</option>
-        <option value="80">Center</option>
-        <option value="100">Lower Middle</option>
-        <option value="128">Bottom</option>
-        <option value="150">Very Bottom</option>
-    </select>
-</div>
-
-<div class="sdpi-item" id="dvTextBold">
-    <div class="sdpi-item-label">Bold</div>
-    <select class="sdpi-item-value select sdProperty" id="textBold" oninput="setSettings()">
-        <option value="true">Yes</option>
-        <option value="false">No</option>
-    </select>
-</div>
 ﻿using System;
 using System.Drawing;
 using System.IO;
@@ -105,8 +85,7 @@ namespace Elite.Buttons
         private SolidBrush _primaryBrush = new SolidBrush(Color.White);
         private SolidBrush _tertiaryBrush = new SolidBrush(Color.White);
 
-        //Not needed with changes to default settings - leaving for historical information
-        //private readonly Font drawFont = new Font("Arial", 100, FontStyle.Bold);
+        // private readonly Font drawFont = new Font("Arial", 100, FontStyle.Bold);
 
         private async Task HandleDisplay()
         {
@@ -147,6 +126,8 @@ namespace Elite.Buttons
                                 var fontContainerHeight = 100 * (width / 256.0);
 
                                 for (int adjustedSize = 100; adjustedSize >= 10; adjustedSize -= 5)
+                                // var maxFontSize = int.TryParse(settings.TextFontSize, out int parsedSize) ? parsedSize : 100;
+                                // for (int adjustedSize = maxFontSize; adjustedSize >= 10; adjustedSize -= 5)
                                 {
                                     // var testFont = new Font(drawFont.Name, adjustedSize, drawFont.Style);
                                     var isBold = settings.TextBold == "true";
@@ -164,9 +145,8 @@ namespace Elite.Buttons
 
                                         var x = (width - stringSize.Width) / 2.0;
                                         // var y = 28.0 * (width / 256.0);
-                                        var maxFontSize = int.TryParse(settings.TextFontSize, out int parsedSize) ? parsedSize : 100;
-                                        for (int adjustedSize = maxFontSize; adjustedSize >= maxFontSize; adjustedSize -= 5)
-
+                                        var verticalPosition = double.TryParse(settings.TextVerticalPosition, out double parsedPosition) ? parsedPosition : 28.0;
+                                        var y = verticalPosition * (width / 256.0);
 
                                         graphics.DrawString(remainingJumpsInRoute.ToString(), testFont,
                                             textBrush, (float) x, (float) y);
@@ -345,6 +325,7 @@ namespace Elite.Buttons
             {
                 settings.TertiaryColor = "#ffffff";
             }
+
             if (string.IsNullOrEmpty(settings.TextVerticalPosition))
             {
                 settings.TextVerticalPosition = "28";
