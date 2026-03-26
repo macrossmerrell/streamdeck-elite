@@ -94,10 +94,10 @@ When no alerts are active, the button shows a configurable default state (image 
 
 ---
 ### New Explorer Buttons Information
- ![Explorer Button Additions](images/optional/explorerbuttons.png)
+ ![Explorer Button Additions](https://raw.githubusercontent.com/macrossmerrell/streamdeck-elite/refs/heads/master/Elite/Images/Optional/explorerbuttons.png)
 
 ## Sample Ship Status / States  
- ![Ship ](images/optional/shipstatusstates.png)
+ ![Ship ](https://raw.githubusercontent.com/macrossmerrell/streamdeck-elite/refs/heads/master/Elite/Images/Optional/shipstatusstates.png)
  
 ---
 
