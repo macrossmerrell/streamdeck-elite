@@ -28,7 +28,6 @@ namespace Elite.Buttons
                     PrimaryColor = "#ffffff",
                     TertiaryColor = "#ffffff",
                     TextVerticalPosition = "28",
-                    TextFontSize = "100",
                     TextBold = "true",
                     ClickSoundFilename = string.Empty,
                     ErrorSoundFilename = string.Empty
@@ -53,9 +52,6 @@ namespace Elite.Buttons
 
             [JsonProperty(PropertyName = "textVerticalPosition")]
             public string TextVerticalPosition { get; set; }
-
-            [JsonProperty(PropertyName = "textFontSize")]
-            public string TextFontSize { get; set; }
 
             [JsonProperty(PropertyName = "textBold")]
             public string TextBold { get; set; }
@@ -266,7 +262,6 @@ namespace Elite.Buttons
         public override async void OnTick()
         {
             base.OnTick();
-
             await HandleDisplay();
         }
 
@@ -328,11 +323,6 @@ namespace Elite.Buttons
             if (string.IsNullOrEmpty(settings.TextVerticalPosition))
             {
                 settings.TextVerticalPosition = "28";
-            }
-
-            if (string.IsNullOrEmpty(settings.TextFontSize))
-            {
-                settings.TextFontSize = "100";
             }
 
             if (string.IsNullOrEmpty(settings.TextBold))

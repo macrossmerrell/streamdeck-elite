@@ -612,14 +612,10 @@ namespace Elite
 
             if (manifest?.Profiles?.Any() != true) return;
 
-            FindProfiles(DeviceType.StreamDeckClassic, manifest);
-            FindProfiles(DeviceType.StreamDeckMini, manifest);
-            FindProfiles(DeviceType.StreamDeckXL, manifest);
-
-            FindProfiles(DeviceType.StreamDeckMobile, manifest);
-
-            FindProfiles(DeviceType.StreamDeckPlus, manifest);
-            FindProfiles(DeviceType.StreamDeckNeo, manifest);
+            foreach (var deviceType in manifest.Profiles.Select(p => p.DeviceType).Distinct())
+            {
+                FindProfiles(deviceType, manifest);
+            }
         }
 
     }

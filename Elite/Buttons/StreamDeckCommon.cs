@@ -339,8 +339,11 @@ namespace Elite.Buttons
         {
             lock (myLock)
             {
+                Logger.Instance.LogMessage(TracingLevel.DEBUG, "HandleOnTick called");
+        
                 var deviceInfo = connection.DeviceInfo();
-
+                Logger.Instance.LogMessage(TracingLevel.DEBUG, $"DeviceType: {deviceInfo.Type} ContainsKey: {Profile.Profiles.ContainsKey(deviceInfo.Type)}");
+        
                 /*
     
     [Id: 49C5DB3C77BEDDEB4EE9DA88ED76CF59 Type: StreamDeckXL Size: Rows: 4 Columns: 8]
@@ -467,7 +470,15 @@ namespace Elite.Buttons
 
                                 _lastStatus[deviceInfo.Id] = key;
 
-                                connection.SwitchProfileAsync(profile.Name);
+                                try
+                                {
+                                    AsyncHelper.RunSync(() => connection.SwitchProfileAsync(profile.Name));
+                                    Logger.Instance.LogMessage(TracingLevel.DEBUG, $"SwitchProfileAsync completed for: {profile.Name}");
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logger.Instance.LogMessage(TracingLevel.ERROR, $"SwitchProfileAsync failed: {ex.Message}");
+                                }
                             }
 
                             return;
@@ -511,7 +522,15 @@ namespace Elite.Buttons
 
                             _lastStatus[deviceInfo.Id] = Profile.ProfileType.Main.ToString();
 
-                            connection.SwitchProfileAsync(p.Name);
+                            try
+                            {
+                                AsyncHelper.RunSync(() => connection.SwitchProfileAsync(p.Name));
+                                Logger.Instance.LogMessage(TracingLevel.DEBUG, $"SwitchProfileAsync completed for: {p.Name}");
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.Instance.LogMessage(TracingLevel.ERROR, $"SwitchProfileAsync failed: {ex.Message}");
+                            }
 
                             break;
 

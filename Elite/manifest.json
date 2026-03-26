@@ -2,6 +2,81 @@
   "Actions": [
     {
       "Icon": "Images/icon",
+      "Name": "(New) Ship Status Button",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "bottom",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Elite Dangerous Ship Status Button - displays current flight state image",
+      "UUID": "com.mhwlng.elite.shipstatus",
+      "PropertyInspectorPath": "PropertyInspector/Elite/ShipStatus.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "(New) Planetary Gravity Button",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "bottom",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Elite Dangerous Planetary Gravity Button - displays current planet gravity",
+      "UUID": "com.mhwlng.elite.gravity",
+      "PropertyInspectorPath": "PropertyInspector/Elite/Gravity.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "(New) Planet Info Button",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "bottom",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Elite Dangerous Planet Info Button - displays atmosphere type and surface temperature",
+      "UUID": "com.mhwlng.elite.planetinfo",
+      "PropertyInspectorPath": "PropertyInspector/Elite/PlanetInfo.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "(New) Alert Button",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "bottom",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Elite Dangerous Alert Button - displays active alerts and warnings",
+      "UUID": "com.mhwlng.elite.alert",
+      "PropertyInspectorPath": "PropertyInspector/Elite/Alert.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "(Updated) Route Button",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "bottom",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Elite Dangerous Route Button",
+      "UUID": "com.mhwlng.elite.route",
+      "PropertyInspectorPath": "PropertyInspector/Elite/Route.html"
+    },
+    {
+      "Icon": "Images/icon",
       "Name": "Alarm Button",
       "States": [
         {
@@ -29,36 +104,6 @@
       "Tooltip": "Elite Dangerous FSS Button",
       "UUID": "com.mhwlng.elite.fss",
       "PropertyInspectorPath": "PropertyInspector/Elite/FSS.html"
-    },
-    {
-      "Icon": "Images/icon",
-      "Name": "Hyperspace Button",
-      "States": [
-        {
-          "Image": "Images/Default",
-          "TitleAlignment": "bottom",
-          "FontSize": "8"
-        }
-      ],
-      "SupportedInMultiActions": false,
-      "Tooltip": "Elite Dangerous Hyperspace Button",
-      "UUID": "com.mhwlng.elite.hyperspace",
-      "PropertyInspectorPath": "PropertyInspector/Elite/Hyperspace.html"
-    },
-    {
-      "Icon": "Images/icon",
-      "Name": "Route Button",
-      "States": [
-        {
-          "Image": "Images/Default",
-          "TitleAlignment": "bottom",
-          "FontSize": "8"
-        }
-      ],
-      "SupportedInMultiActions": false,
-      "Tooltip": "Elite Dangerous Route Button",
-      "UUID": "com.mhwlng.elite.route",
-      "PropertyInspectorPath": "PropertyInspector/Elite/Route.html"
     },
     {
       "Icon": "Images/icon",
@@ -153,7 +198,9 @@
     {
       "Icon": "Images/pluginIcon",
       "Name": "Dial Button",
-      "Controllers": [ "Encoder" ],
+      "Controllers": [
+        "Encoder"
+      ],
       "States": [
         {
           "Image": "Images/pluginIcon"
@@ -171,7 +218,9 @@
     {
       "Icon": "Images/pluginIcon",
       "Name": "FireGroup Dial",
-      "Controllers": [ "Encoder" ],
+      "Controllers": [
+        "Encoder"
+      ],
       "States": [
         {
           "Image": "Images/pluginIcon"
@@ -185,14 +234,29 @@
       "Tooltip": "Elite Dangerous FireGroup Dial",
       "UUID": "com.mhwlng.elite.firegroupdial",
       "PropertyInspectorPath": "PropertyInspector/Elite/FireGroupDial.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "(Deprecated) Hyperspace Button",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "bottom",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Elite Dangerous Hyperspace Button (deprecated - use Ship Status Button instead)",
+      "UUID": "com.mhwlng.elite.hyperspace",
+      "PropertyInspectorPath": "PropertyInspector/Elite/Hyperspace.html"
     }
   ],
-  "Author": "mhwlng",
-  "Description": "Elite Dangerous Buttons",
+  "Author": "mhwlng, DrFr33ze, macrossmerrell",
+  "Description": "Elite Dangerous Buttons - Explorer Edition",
   "Name": "Elite Dangerous",
   "Icon": "Images/pluginIcon",
-  "URL": "https://github.com/mhwlng/streamdeck-elite",
-  "Version": "2.7.5",
+  "URL": "https://github.com/macrossmerrell/streamdeck-elite",
+  "Version": "2.8.0",
   "CodePath": "com.mhwlng.elite",
   "Category": "Elite Dangerous",
   "CategoryIcon": "Images/categoryIcon",
@@ -207,8 +271,221 @@
     "MinimumVersion": "6.1"
   },
   "Profiles": [
-
-
-
-  ]  
+    {
+      "Name": "Elite Main",
+      "DeviceType": 0,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite OnFoot",
+      "DeviceType": 0,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InSRV",
+      "DeviceType": 0,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InFighter",
+      "DeviceType": 0,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite Main",
+      "DeviceType": 1,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite OnFoot",
+      "DeviceType": 1,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InSRV",
+      "DeviceType": 1,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InFighter",
+      "DeviceType": 1,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite Main",
+      "DeviceType": 2,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite OnFoot",
+      "DeviceType": 2,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InSRV",
+      "DeviceType": 2,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InFighter",
+      "DeviceType": 2,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite Main",
+      "DeviceType": 3,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite OnFoot",
+      "DeviceType": 3,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InSRV",
+      "DeviceType": 3,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InFighter",
+      "DeviceType": 3,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite Main",
+      "DeviceType": 4,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite OnFoot",
+      "DeviceType": 4,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InSRV",
+      "DeviceType": 4,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InFighter",
+      "DeviceType": 4,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite Main",
+      "DeviceType": 5,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite OnFoot",
+      "DeviceType": 5,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InSRV",
+      "DeviceType": 5,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InFighter",
+      "DeviceType": 5,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite Main",
+      "DeviceType": 6,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite OnFoot",
+      "DeviceType": 6,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InSRV",
+      "DeviceType": 6,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InFighter",
+      "DeviceType": 6,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite Main",
+      "DeviceType": 7,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite OnFoot",
+      "DeviceType": 7,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InSRV",
+      "DeviceType": 7,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InFighter",
+      "DeviceType": 7,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite Main",
+      "DeviceType": 11,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite OnFoot",
+      "DeviceType": 11,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InSRV",
+      "DeviceType": 11,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    },
+    {
+      "Name": "Elite InFighter",
+      "DeviceType": 11,
+      "ReadOnly": false,
+      "DontAutoSwitchWhenInstalled": false
+    }
+  ]
 }

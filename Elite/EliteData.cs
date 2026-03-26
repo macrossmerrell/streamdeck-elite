@@ -20,7 +20,10 @@ namespace Elite
         public static List<RouteItem> RouteList = new List<RouteItem>();
 
 
-        public static int LimpetCount { get; set; } 
+        public static int LimpetCount { get; set; }
+
+        // Cache of planet data per body name, populated from Scan journal events
+        public static Dictionary<string, (double SurfaceGravity, double PlanetRadius, string Atmosphere, double SurfaceTemperature)> GravityCache = new Dictionary<string, (double, double, string, double)>(); 
 
         public class Status
         {
@@ -97,6 +100,7 @@ namespace Elite
             public bool PhysicalMulticrew { get; set; }
             public bool Fsdhyperdrivecharging { get; set; }
             public string SelectedWeapon { get; set; }
+            public double Temperature { get; set; }
         }
 
         public static Status StatusData = new Status();
@@ -212,6 +216,7 @@ namespace Elite
 
             StatusData.Fsdhyperdrivecharging = (evt.Flags2 & MoreStatusFlags.Fsdhyperdrivecharging) != 0;
             StatusData.SelectedWeapon = evt.SelectedWeapon;
+            StatusData.Temperature = evt.Temperature;
         }
 
 
@@ -334,6 +339,22 @@ namespace Elite
                     EliteData.RouteList = new List<RouteItem>();
                     EliteData.RemainingJumpsInRoute = 0;
 
+                    break;
+
+                case "Scan":
+                    // Cache planet data for gravity and planet info buttons
+                    var scanEvent = ((JournalEventArgs)e).OriginalEvent;
+                    var bodyName = scanEvent.Value<string>("BodyName");
+                    var surfaceGravity = scanEvent.Value<double?>("SurfaceGravity");
+                    var planetRadius = scanEvent.Value<double?>("Radius");
+                    var atmosphere = scanEvent.Value<string>("Atmosphere") ?? scanEvent.Value<string>("AtmosphereType") ?? "";
+                    var surfaceTemperature = scanEvent.Value<double?>("SurfaceTemperature") ?? 0;
+
+                    if (!string.IsNullOrEmpty(bodyName) && surfaceGravity.HasValue && planetRadius.HasValue && surfaceGravity.Value > 0)
+                    {
+                        // SurfaceGravity in journal is in m/s², divide by 9.81 to get g
+                        EliteData.GravityCache[bodyName] = (surfaceGravity.Value / 9.81, planetRadius.Value, atmosphere, surfaceTemperature);
+                    }
                     break;
 
             }

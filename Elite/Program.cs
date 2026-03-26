@@ -483,6 +483,100 @@ namespace Elite
 
         }
 
+        /// <summary>
+        /// Backfills the GravityCache by scanning recent journal files for Scan events
+        /// matching the current star system. Walks backwards through journal files,
+        /// most recent first, up to 10 files back.
+        /// </summary>
+        private static void BackfillScanCache(string journalPath)
+        {
+            try
+            {
+                var currentSystem = EliteData.StarSystem;
+                if (string.IsNullOrEmpty(currentSystem))
+                {
+                    Logger.Instance.LogMessage(TracingLevel.INFO, "BackfillScanCache: no current system, skipping");
+                    return;
+                }
+
+                Logger.Instance.LogMessage(TracingLevel.INFO, $"BackfillScanCache: scanning for system '{currentSystem}'");
+
+                // Get all journal files sorted most-recent first
+                var journalFiles = Directory.GetFiles(journalPath, "Journal.*.log")
+                    .OrderByDescending(f => f)
+                    .Take(10)
+                    .ToArray();
+
+                Logger.Instance.LogMessage(TracingLevel.INFO, $"BackfillScanCache: checking {journalFiles.Length} journal files");
+
+                foreach (var file in journalFiles)
+                {
+                    try
+                    {
+                        var lines = File.ReadAllLines(file);
+                        bool systemFound = false;
+
+                        foreach (var line in lines)
+                        {
+                            if (string.IsNullOrWhiteSpace(line)) continue;
+
+                            JObject obj;
+                            try { obj = JObject.Parse(line); }
+                            catch { continue; }
+
+                            var evt = obj.Value<string>("event");
+                            if (string.IsNullOrEmpty(evt)) continue;
+
+                            // Check if this file contains our current system
+                            if (evt == "FSDJump" || evt == "Location" || evt == "CarrierJump")
+                            {
+                                if (obj.Value<string>("StarSystem") == currentSystem)
+                                    systemFound = true;
+                            }
+
+                            // Cache Scan events if we've confirmed system presence
+                            if (evt == "Scan" && systemFound)
+                            {
+                                var bodyName = obj.Value<string>("BodyName");
+                                var surfaceGravity = obj.Value<double?>("SurfaceGravity");
+                                var radius = obj.Value<double?>("Radius");
+                                var atmosphere = obj.Value<string>("Atmosphere") 
+                                    ?? obj.Value<string>("AtmosphereType") ?? "";
+                                var surfaceTemperature = obj.Value<double?>("SurfaceTemperature") ?? 0;
+
+                                if (!string.IsNullOrEmpty(bodyName) 
+                                    && surfaceGravity.HasValue 
+                                    && radius.HasValue 
+                                    && surfaceGravity.Value > 0
+                                    && !EliteData.GravityCache.ContainsKey(bodyName))
+                                {
+                                    EliteData.GravityCache[bodyName] = (
+                                        surfaceGravity.Value / 9.81,
+                                        radius.Value,
+                                        atmosphere,
+                                        surfaceTemperature);
+
+                                    Logger.Instance.LogMessage(TracingLevel.INFO, 
+                                        $"BackfillScanCache: cached '{bodyName}' g={surfaceGravity.Value / 9.81:F2}");
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Instance.LogMessage(TracingLevel.WARN, $"BackfillScanCache: error reading {file}: {ex.Message}");
+                    }
+                }
+
+                Logger.Instance.LogMessage(TracingLevel.INFO, 
+                    $"BackfillScanCache: complete, {EliteData.GravityCache.Count} bodies cached");
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.LogMessage(TracingLevel.FATAL, $"BackfillScanCache: {ex}");
+            }
+        }
+
         static void Main(string[] args)
         {
             // Uncomment this line of code to allow for debugging
@@ -520,6 +614,9 @@ namespace Elite
                 JournalWatcher.AllEventHandler += EliteData.HandleEliteEvents;
 
                 JournalWatcher.StartWatching().Wait();
+
+                // Backfill scan cache from recent journal files for current star system
+                BackfillScanCache(journalPath);
 
                 CargoWatcher = new CargoWatcher(journalPath);
 

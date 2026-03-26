@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover">
+    <meta name=apple-mobile-web-app-capable content=yes>
+    <meta name=apple-mobile-web-app-status-bar-style content=black>
+    <title>Mhwlng's Elite - Ship Status</title>
+    <link rel="stylesheet" href="../sdpi.css">
+    <link rel="stylesheet" href="../jquery.highlight-within-textarea.css">
+    <script src="../sdtools.common.js"></script>
+    <script src="../jquery-3.3.1.min.js"></script>
+    <script src="../jquery.highlight-within-textarea.js"></script>
+</head>
+<body>
+<div class="sdpi-wrapper">
+
+    <!-- Hyperspace Charging -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Hyperspace Charging</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvHyperspaceChargingImage">
+                <div class="sdpi-item-label" onclick="clearFileName('hyperspaceChargingImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup1">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="hyperspaceChargingImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="hyperspaceChargingImage" id="hyperspaceChargingImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="hyperspaceChargingImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Hyperspace Jump -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Hyperspace Jump</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvFsdHyperspaceJumpingImage">
+                <div class="sdpi-item-label" onclick="clearFileName('fsdHyperspaceJumpingImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup2">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="fsdHyperspaceJumpingImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="fsdHyperspaceJumpingImage" id="fsdHyperspaceJumpingImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="fsdHyperspaceJumpingImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Supercruise Charging -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Supercruise Charging</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvSupercruiseChargingImage">
+                <div class="sdpi-item-label" onclick="clearFileName('supercruiseChargingImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup3">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="supercruiseChargingImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="supercruiseChargingImage" id="supercruiseChargingImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="supercruiseChargingImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Supercruise Activation -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Supercruise Activation</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvFsdSupercruiseJumpingImage">
+                <div class="sdpi-item-label" onclick="clearFileName('fsdSupercruiseJumpingImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup4">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="fsdSupercruiseJumpingImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="fsdSupercruiseJumpingImage" id="fsdSupercruiseJumpingImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="fsdSupercruiseJumpingImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Supercruise (Active) -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Supercruise (Active)</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvSupercruiseImage">
+                <div class="sdpi-item-label" onclick="clearFileName('supercruiseImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup5">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="supercruiseImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="supercruiseImage" id="supercruiseImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="supercruiseImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Normal Space (Supercruise Off) -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Normal Space (Supercruise Off)</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvNormalSpaceImage">
+                <div class="sdpi-item-label" onclick="clearFileName('normalSpaceImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup6">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="normalSpaceImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="normalSpaceImage" id="normalSpaceImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="normalSpaceImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Fuel Scooping -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Fuel Scooping</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvFuelScoopingImage">
+                <div class="sdpi-item-label" onclick="clearFileName('fuelScoopingImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup7">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="fuelScoopingImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="fuelScoopingImage" id="fuelScoopingImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="fuelScoopingImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Planet Approach -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Planet Approach</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvPlanetApproachImage">
+                <div class="sdpi-item-label" onclick="clearFileName('planetApproachImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup8">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="planetApproachImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="planetApproachImage" id="planetApproachImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="planetApproachImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Orbital Cruise -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Orbital Cruise</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvOrbitalCruiseImage">
+                <div class="sdpi-item-label" onclick="clearFileName('orbitalCruiseImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup9">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="orbitalCruiseImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="orbitalCruiseImage" id="orbitalCruiseImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="orbitalCruiseImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Glide / Deorbit -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Glide / Deorbit</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvDeorbitingImage">
+                <div class="sdpi-item-label" onclick="clearFileName('deorbitingImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup10">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="deorbitingImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="deorbitingImage" id="deorbitingImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="deorbitingImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Planetary Flight -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Planetary Flight</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvPlanetFlightImage">
+                <div class="sdpi-item-label" onclick="clearFileName('planetFlightImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup11">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="planetFlightImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="planetFlightImage" id="planetFlightImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="planetFlightImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Landed -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Landed</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvLandedImage">
+                <div class="sdpi-item-label" onclick="clearFileName('landedImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup12">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="landedImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="landedImage" id="landedImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="landedImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Liftoff -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Liftoff</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvLiftoffImage">
+                <div class="sdpi-item-label" onclick="clearFileName('liftoffImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup13">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="liftoffImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="liftoffImage" id="liftoffImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="liftoffImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Leaving Planet -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Leaving Planet</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvLeavingPlanetImage">
+                <div class="sdpi-item-label" onclick="clearFileName('leavingPlanetImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup13b">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="leavingPlanetImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="leavingPlanetImage" id="leavingPlanetImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="leavingPlanetImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- No-Fire Zone -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">(beta) No-Fire Zone</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvNoFireZoneImage">
+                <div class="sdpi-item-label" onclick="clearFileName('noFireZoneImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup14">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="noFireZoneImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="noFireZoneImage" id="noFireZoneImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="noFireZoneImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Station Approach -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">(beta) Station Approach</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvStationApproachImage">
+                <div class="sdpi-item-label" onclick="clearFileName('stationApproachImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup15">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="stationApproachImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="stationApproachImage" id="stationApproachImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="stationApproachImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Docked at Station -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">(beta) Docked at Station</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvDockedAtStationImage">
+                <div class="sdpi-item-label" onclick="clearFileName('dockedAtStationImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup16">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="dockedAtStationImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="dockedAtStationImage" id="dockedAtStationImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="dockedAtStationImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Station Interior -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">(beta) Station Interior</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvStationInteriorImage">
+                <div class="sdpi-item-label" onclick="clearFileName('stationInteriorImage');">Image</div>
+                <div class="sdpi-item-group file" id="filepickergroup17">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="stationInteriorImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="stationInteriorImage" id="stationInteriorImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="stationInteriorImage">Choose file...</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

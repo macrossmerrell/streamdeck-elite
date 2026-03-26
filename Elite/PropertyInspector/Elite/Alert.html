@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover">
+    <meta name=apple-mobile-web-app-capable content=yes>
+    <meta name=apple-mobile-web-app-status-bar-style content=black>
+    <title>Mhwlng's Elite - Alert</title>
+    <link rel="stylesheet" href="../sdpi.css">
+    <link rel="stylesheet" href="../jquery.highlight-within-textarea.css">
+    <script src="../sdtools.common.js"></script>
+    <script src="../jquery-3.3.1.min.js"></script>
+    <script src="../jquery.highlight-within-textarea.js"></script>
+</head>
+<body>
+<div class="sdpi-wrapper">
+
+    <!-- Default State -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Default (No Alert)</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item" id="dvDefaultImage">
+                <div class="sdpi-item-label" onclick="clearFileName('defaultImage');">Image</div>
+                <div class="sdpi-item-group file">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="defaultImage" accept=".jpg,.jpeg,.png,.ico,.gif,.bmp,.tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="defaultImage" id="defaultImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="defaultImage">Choose file...</label>
+                </div>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Text</div>
+                <textarea class="sdpi-item-value sdProperty" id="defaultText" oninput="setSettings()" rows="2" style="resize:vertical;"></textarea>
+            </div>
+            <div type="color" class="sdpi-item">
+                <div class="sdpi-item-label">Text Color</div>
+                <input class="sdpi-item-value sdProperty" type="color" id="defaultTextColor" oninput="setSettings()">
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Position</div>
+                <select class="sdpi-item-value select sdProperty" id="defaultTextVerticalPosition" oninput="setSettings()">
+                    <option value="5">Very Top</option>
+                    <option value="14">Top</option>
+                    <option value="34">Top-Middle</option>
+                    <option value="60">Upper Middle</option>
+                    <option value="80" selected>Center</option>
+                    <option value="100">Lower Middle</option>
+                    <option value="128">Bottom</option>
+                    <option value="144">Lower Bottom</option>
+                    <option value="160">Very Bottom</option>
+                    <option value="175">Near Edge</option>
+                    <option value="190">Edge</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Bold</div>
+                <select class="sdpi-item-value select sdProperty" id="defaultTextBold" oninput="setSettings()">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Self Destruct -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Self Destruct</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item">
+                <div class="sdpi-item-label" onclick="clearFileName('selfDestructImage');">Image</div>
+                <div class="sdpi-item-group file">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="selfDestructImage" accept=".jpg,.jpeg,.png,.ico,.gif,.bmp,.tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="selfDestructImage" id="selfDestructImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="selfDestructImage">Choose file...</label>
+                </div>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Text</div>
+                <textarea class="sdpi-item-value sdProperty" id="selfDestructText" oninput="setSettings()" rows="2" style="resize:vertical;"></textarea>
+            </div>
+            <div type="color" class="sdpi-item">
+                <div class="sdpi-item-label">Text Color</div>
+                <input class="sdpi-item-value sdProperty" type="color" id="selfDestructTextColor" oninput="setSettings()">
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Position</div>
+                <select class="sdpi-item-value select sdProperty" id="selfDestructTextVerticalPosition" oninput="setSettings()">
+                    <option value="5">Very Top</option>
+                    <option value="14" selected>Top</option>
+                    <option value="34">Top-Middle</option>
+                    <option value="60">Upper Middle</option>
+                    <option value="80">Center</option>
+                    <option value="100">Lower Middle</option>
+                    <option value="128">Bottom</option>
+                    <option value="144">Lower Bottom</option>
+                    <option value="160">Very Bottom</option>
+                    <option value="175">Near Edge</option>
+                    <option value="190">Edge</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Bold</div>
+                <select class="sdpi-item-value select sdProperty" id="selfDestructTextBold" oninput="setSettings()">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Timeout (s)</div>
+                <input class="sdpi-item-value sdProperty" type="number" id="selfDestructTimeout" min="0" oninput="setSettings()">
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Cockpit Breached -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Cockpit Breached</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item">
+                <div class="sdpi-item-label" onclick="clearFileName('cockpitBreachedImage');">Image</div>
+                <div class="sdpi-item-group file">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="cockpitBreachedImage" accept=".jpg,.jpeg,.png,.ico,.gif,.bmp,.tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="cockpitBreachedImage" id="cockpitBreachedImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="cockpitBreachedImage">Choose file...</label>
+                </div>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Text</div>
+                <textarea class="sdpi-item-value sdProperty" id="cockpitBreachedText" oninput="setSettings()" rows="2" style="resize:vertical;"></textarea>
+            </div>
+            <div type="color" class="sdpi-item">
+                <div class="sdpi-item-label">Text Color</div>
+                <input class="sdpi-item-value sdProperty" type="color" id="cockpitBreachedTextColor" oninput="setSettings()">
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Position</div>
+                <select class="sdpi-item-value select sdProperty" id="cockpitBreachedTextVerticalPosition" oninput="setSettings()">
+                    <option value="5">Very Top</option>
+                    <option value="14" selected>Top</option>
+                    <option value="34">Top-Middle</option>
+                    <option value="60">Upper Middle</option>
+                    <option value="80">Center</option>
+                    <option value="100">Lower Middle</option>
+                    <option value="128">Bottom</option>
+                    <option value="144">Lower Bottom</option>
+                    <option value="160">Very Bottom</option>
+                    <option value="175">Near Edge</option>
+                    <option value="190">Edge</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Bold</div>
+                <select class="sdpi-item-value select sdProperty" id="cockpitBreachedTextBold" oninput="setSettings()">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Timeout (s)</div>
+                <input class="sdpi-item-value sdProperty" type="number" id="cockpitBreachedTimeout" min="0" oninput="setSettings()">
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Systems Shutdown -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Systems Shutdown</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item">
+                <div class="sdpi-item-label" onclick="clearFileName('systemsShutdownImage');">Image</div>
+                <div class="sdpi-item-group file">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="systemsShutdownImage" accept=".jpg,.jpeg,.png,.ico,.gif,.bmp,.tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="systemsShutdownImage" id="systemsShutdownImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="systemsShutdownImage">Choose file...</label>
+                </div>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Text</div>
+                <textarea class="sdpi-item-value sdProperty" id="systemsShutdownText" oninput="setSettings()" rows="2" style="resize:vertical;"></textarea>
+            </div>
+            <div type="color" class="sdpi-item">
+                <div class="sdpi-item-label">Text Color</div>
+                <input class="sdpi-item-value sdProperty" type="color" id="systemsShutdownTextColor" oninput="setSettings()">
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Position</div>
+                <select class="sdpi-item-value select sdProperty" id="systemsShutdownTextVerticalPosition" oninput="setSettings()">
+                    <option value="5">Very Top</option>
+                    <option value="14" selected>Top</option>
+                    <option value="34">Top-Middle</option>
+                    <option value="60">Upper Middle</option>
+                    <option value="80">Center</option>
+                    <option value="100">Lower Middle</option>
+                    <option value="128">Bottom</option>
+                    <option value="144">Lower Bottom</option>
+                    <option value="160">Very Bottom</option>
+                    <option value="175">Near Edge</option>
+                    <option value="190">Edge</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Bold</div>
+                <select class="sdpi-item-value select sdProperty" id="systemsShutdownTextBold" oninput="setSettings()">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Timeout (s)</div>
+                <input class="sdpi-item-value sdProperty" type="number" id="systemsShutdownTimeout" min="0" oninput="setSettings()">
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Jet Cone Damage -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Jet Cone Damage</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item">
+                <div class="sdpi-item-label" onclick="clearFileName('jetConeDamageImage');">Image</div>
+                <div class="sdpi-item-group file">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="jetConeDamageImage" accept=".jpg,.jpeg,.png,.ico,.gif,.bmp,.tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="jetConeDamageImage" id="jetConeDamageImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="jetConeDamageImage">Choose file...</label>
+                </div>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Text</div>
+                <textarea class="sdpi-item-value sdProperty" id="jetConeDamageText" oninput="setSettings()" rows="2" style="resize:vertical;"></textarea>
+            </div>
+            <div type="color" class="sdpi-item">
+                <div class="sdpi-item-label">Text Color</div>
+                <input class="sdpi-item-value sdProperty" type="color" id="jetConeDamageTextColor" oninput="setSettings()">
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Position</div>
+                <select class="sdpi-item-value select sdProperty" id="jetConeDamageTextVerticalPosition" oninput="setSettings()">
+                    <option value="5">Very Top</option>
+                    <option value="14" selected>Top</option>
+                    <option value="34">Top-Middle</option>
+                    <option value="60">Upper Middle</option>
+                    <option value="80">Center</option>
+                    <option value="100">Lower Middle</option>
+                    <option value="128">Bottom</option>
+                    <option value="144">Lower Bottom</option>
+                    <option value="160">Very Bottom</option>
+                    <option value="175">Near Edge</option>
+                    <option value="190">Edge</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Bold</div>
+                <select class="sdpi-item-value select sdProperty" id="jetConeDamageTextBold" oninput="setSettings()">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Timeout (s)</div>
+                <input class="sdpi-item-value sdProperty" type="number" id="jetConeDamageTimeout" min="0" oninput="setSettings()">
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Heat Warning -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Heat Warning</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item">
+                <div class="sdpi-item-label" onclick="clearFileName('heatWarningImage');">Image</div>
+                <div class="sdpi-item-group file">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="heatWarningImage" accept=".jpg,.jpeg,.png,.ico,.gif,.bmp,.tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="heatWarningImage" id="heatWarningImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="heatWarningImage">Choose file...</label>
+                </div>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Text</div>
+                <textarea class="sdpi-item-value sdProperty" id="heatWarningText" oninput="setSettings()" rows="2" style="resize:vertical;"></textarea>
+            </div>
+            <div type="color" class="sdpi-item">
+                <div class="sdpi-item-label">Text Color</div>
+                <input class="sdpi-item-value sdProperty" type="color" id="heatWarningTextColor" oninput="setSettings()">
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Position</div>
+                <select class="sdpi-item-value select sdProperty" id="heatWarningTextVerticalPosition" oninput="setSettings()">
+                    <option value="5">Very Top</option>
+                    <option value="14" selected>Top</option>
+                    <option value="34">Top-Middle</option>
+                    <option value="60">Upper Middle</option>
+                    <option value="80">Center</option>
+                    <option value="100">Lower Middle</option>
+                    <option value="128">Bottom</option>
+                    <option value="144">Lower Bottom</option>
+                    <option value="160">Very Bottom</option>
+                    <option value="175">Near Edge</option>
+                    <option value="190">Edge</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Bold</div>
+                <select class="sdpi-item-value select sdProperty" id="heatWarningTextBold" oninput="setSettings()">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    
+    <!-- Heat Damage -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Heat Damage</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item">
+                <div class="sdpi-item-label" onclick="clearFileName('heatDamageImage');">Image</div>
+                <div class="sdpi-item-group file">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="heatDamageImage" accept=".jpg,.jpeg,.png,.ico,.gif,.bmp,.tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="heatDamageImage" id="heatDamageImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="heatDamageImage">Choose file...</label>
+                </div>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Text</div>
+                <textarea class="sdpi-item-value sdProperty" id="heatDamageText" oninput="setSettings()" rows="2" style="resize:vertical;"></textarea>
+            </div>
+            <div type="color" class="sdpi-item">
+                <div class="sdpi-item-label">Text Color</div>
+                <input class="sdpi-item-value sdProperty" type="color" id="heatDamageTextColor" oninput="setSettings()">
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Position</div>
+                <select class="sdpi-item-value select sdProperty" id="heatDamageTextVerticalPosition" oninput="setSettings()">
+                    <option value="5">Very Top</option>
+                    <option value="14" selected>Top</option>
+                    <option value="34">Top-Middle</option>
+                    <option value="60">Upper Middle</option>
+                    <option value="80">Center</option>
+                    <option value="100">Lower Middle</option>
+                    <option value="128">Bottom</option>
+                    <option value="144">Lower Bottom</option>
+                    <option value="160">Very Bottom</option>
+                    <option value="175">Near Edge</option>
+                    <option value="190">Edge</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Bold</div>
+                <select class="sdpi-item-value select sdProperty" id="heatDamageTextBold" oninput="setSettings()">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Timeout (s)</div>
+                <input class="sdpi-item-value sdProperty" type="number" id="heatDamageTimeout" min="0" oninput="setSettings()">
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Hull Damage -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Hull Damage</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item">
+                <div class="sdpi-item-label" onclick="clearFileName('hullDamageImage');">Image</div>
+                <div class="sdpi-item-group file">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="hullDamageImage" accept=".jpg,.jpeg,.png,.ico,.gif,.bmp,.tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="hullDamageImage" id="hullDamageImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="hullDamageImage">Choose file...</label>
+                </div>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Text</div>
+                <textarea class="sdpi-item-value sdProperty" id="hullDamageText" oninput="setSettings()" rows="2" style="resize:vertical;"></textarea>
+            </div>
+            <div type="color" class="sdpi-item">
+                <div class="sdpi-item-label">Text Color</div>
+                <input class="sdpi-item-value sdProperty" type="color" id="hullDamageTextColor" oninput="setSettings()">
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Position</div>
+                <select class="sdpi-item-value select sdProperty" id="hullDamageTextVerticalPosition" oninput="setSettings()">
+                    <option value="5">Very Top</option>
+                    <option value="14" selected>Top</option>
+                    <option value="34">Top-Middle</option>
+                    <option value="60">Upper Middle</option>
+                    <option value="80">Center</option>
+                    <option value="100">Lower Middle</option>
+                    <option value="128">Bottom</option>
+                    <option value="144">Lower Bottom</option>
+                    <option value="160">Very Bottom</option>
+                    <option value="175">Near Edge</option>
+                    <option value="190">Edge</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Bold</div>
+                <select class="sdpi-item-value select sdProperty" id="hullDamageTextBold" oninput="setSettings()">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Timeout (s)</div>
+                <input class="sdpi-item-value sdProperty" type="number" id="hullDamageTimeout" min="0" oninput="setSettings()">
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Shields Down -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Shields Down</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item">
+                <div class="sdpi-item-label" onclick="clearFileName('shieldsDownImage');">Image</div>
+                <div class="sdpi-item-group file">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="shieldsDownImage" accept=".jpg,.jpeg,.png,.ico,.gif,.bmp,.tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="shieldsDownImage" id="shieldsDownImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="shieldsDownImage">Choose file...</label>
+                </div>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Text</div>
+                <textarea class="sdpi-item-value sdProperty" id="shieldsDownText" oninput="setSettings()" rows="2" style="resize:vertical;"></textarea>
+            </div>
+            <div type="color" class="sdpi-item">
+                <div class="sdpi-item-label">Text Color</div>
+                <input class="sdpi-item-value sdProperty" type="color" id="shieldsDownTextColor" oninput="setSettings()">
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Position</div>
+                <select class="sdpi-item-value select sdProperty" id="shieldsDownTextVerticalPosition" oninput="setSettings()">
+                    <option value="5">Very Top</option>
+                    <option value="14" selected>Top</option>
+                    <option value="34">Top-Middle</option>
+                    <option value="60">Upper Middle</option>
+                    <option value="80">Center</option>
+                    <option value="100">Lower Middle</option>
+                    <option value="128">Bottom</option>
+                    <option value="144">Lower Bottom</option>
+                    <option value="160">Very Bottom</option>
+                    <option value="175">Near Edge</option>
+                    <option value="190">Edge</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Bold</div>
+                <select class="sdpi-item-value select sdProperty" id="shieldsDownTextBold" oninput="setSettings()">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Timeout (s, 0=until restored)</div>
+                <input class="sdpi-item-value sdProperty" type="number" id="shieldsDownTimeout" min="0" oninput="setSettings()">
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Under Attack -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Under Attack</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item">
+                <div class="sdpi-item-label" onclick="clearFileName('underAttackImage');">Image</div>
+                <div class="sdpi-item-group file">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="underAttackImage" accept=".jpg,.jpeg,.png,.ico,.gif,.bmp,.tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="underAttackImage" id="underAttackImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="underAttackImage">Choose file...</label>
+                </div>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Text</div>
+                <textarea class="sdpi-item-value sdProperty" id="underAttackText" oninput="setSettings()" rows="2" style="resize:vertical;"></textarea>
+            </div>
+            <div type="color" class="sdpi-item">
+                <div class="sdpi-item-label">Text Color</div>
+                <input class="sdpi-item-value sdProperty" type="color" id="underAttackTextColor" oninput="setSettings()">
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Position</div>
+                <select class="sdpi-item-value select sdProperty" id="underAttackTextVerticalPosition" oninput="setSettings()">
+                    <option value="5">Very Top</option>
+                    <option value="14" selected>Top</option>
+                    <option value="34">Top-Middle</option>
+                    <option value="60">Upper Middle</option>
+                    <option value="80">Center</option>
+                    <option value="100">Lower Middle</option>
+                    <option value="128">Bottom</option>
+                    <option value="144">Lower Bottom</option>
+                    <option value="160">Very Bottom</option>
+                    <option value="175">Near Edge</option>
+                    <option value="190">Edge</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Bold</div>
+                <select class="sdpi-item-value select sdProperty" id="underAttackTextBold" oninput="setSettings()">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Timeout (s)</div>
+                <input class="sdpi-item-value sdProperty" type="number" id="underAttackTimeout" min="0" oninput="setSettings()">
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Being Interdicted -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Being Interdicted</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item">
+                <div class="sdpi-item-label" onclick="clearFileName('beingInterdictedImage');">Image</div>
+                <div class="sdpi-item-group file">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="beingInterdictedImage" accept=".jpg,.jpeg,.png,.ico,.gif,.bmp,.tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="beingInterdictedImage" id="beingInterdictedImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="beingInterdictedImage">Choose file...</label>
+                </div>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Text</div>
+                <textarea class="sdpi-item-value sdProperty" id="beingInterdictedText" oninput="setSettings()" rows="2" style="resize:vertical;"></textarea>
+            </div>
+            <div type="color" class="sdpi-item">
+                <div class="sdpi-item-label">Text Color</div>
+                <input class="sdpi-item-value sdProperty" type="color" id="beingInterdictedTextColor" oninput="setSettings()">
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Position</div>
+                <select class="sdpi-item-value select sdProperty" id="beingInterdictedTextVerticalPosition" oninput="setSettings()">
+                    <option value="5">Very Top</option>
+                    <option value="14" selected>Top</option>
+                    <option value="34">Top-Middle</option>
+                    <option value="60">Upper Middle</option>
+                    <option value="80">Center</option>
+                    <option value="100">Lower Middle</option>
+                    <option value="128">Bottom</option>
+                    <option value="144">Lower Bottom</option>
+                    <option value="160">Very Bottom</option>
+                    <option value="175">Near Edge</option>
+                    <option value="190">Edge</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Bold</div>
+                <select class="sdpi-item-value select sdProperty" id="beingInterdictedTextBold" oninput="setSettings()">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Is In Danger -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Is In Danger</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item">
+                <div class="sdpi-item-label" onclick="clearFileName('isInDangerImage');">Image</div>
+                <div class="sdpi-item-group file">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="isInDangerImage" accept=".jpg,.jpeg,.png,.ico,.gif,.bmp,.tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="isInDangerImage" id="isInDangerImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="isInDangerImage">Choose file...</label>
+                </div>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Text</div>
+                <textarea class="sdpi-item-value sdProperty" id="isInDangerText" oninput="setSettings()" rows="2" style="resize:vertical;"></textarea>
+            </div>
+            <div type="color" class="sdpi-item">
+                <div class="sdpi-item-label">Text Color</div>
+                <input class="sdpi-item-value sdProperty" type="color" id="isInDangerTextColor" oninput="setSettings()">
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Position</div>
+                <select class="sdpi-item-value select sdProperty" id="isInDangerTextVerticalPosition" oninput="setSettings()">
+                    <option value="5">Very Top</option>
+                    <option value="14" selected>Top</option>
+                    <option value="34">Top-Middle</option>
+                    <option value="60">Upper Middle</option>
+                    <option value="80">Center</option>
+                    <option value="100">Lower Middle</option>
+                    <option value="128">Bottom</option>
+                    <option value="144">Lower Bottom</option>
+                    <option value="160">Very Bottom</option>
+                    <option value="175">Near Edge</option>
+                    <option value="190">Edge</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Bold</div>
+                <select class="sdpi-item-value select sdProperty" id="isInDangerTextBold" oninput="setSettings()">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Low Fuel -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Low Fuel</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item">
+                <div class="sdpi-item-label" onclick="clearFileName('lowFuelImage');">Image</div>
+                <div class="sdpi-item-group file">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="lowFuelImage" accept=".jpg,.jpeg,.png,.ico,.gif,.bmp,.tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="lowFuelImage" id="lowFuelImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="lowFuelImage">Choose file...</label>
+                </div>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Text</div>
+                <textarea class="sdpi-item-value sdProperty" id="lowFuelText" oninput="setSettings()" rows="2" style="resize:vertical;"></textarea>
+            </div>
+            <div type="color" class="sdpi-item">
+                <div class="sdpi-item-label">Text Color</div>
+                <input class="sdpi-item-value sdProperty" type="color" id="lowFuelTextColor" oninput="setSettings()">
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Position</div>
+                <select class="sdpi-item-value select sdProperty" id="lowFuelTextVerticalPosition" oninput="setSettings()">
+                    <option value="5">Very Top</option>
+                    <option value="14" selected>Top</option>
+                    <option value="34">Top-Middle</option>
+                    <option value="60">Upper Middle</option>
+                    <option value="80">Center</option>
+                    <option value="100">Lower Middle</option>
+                    <option value="128">Bottom</option>
+                    <option value="144">Lower Bottom</option>
+                    <option value="160">Very Bottom</option>
+                    <option value="175">Near Edge</option>
+                    <option value="190">Edge</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Bold</div>
+                <select class="sdpi-item-value select sdProperty" id="lowFuelTextBold" oninput="setSettings()">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Docking Denied -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Docking Denied</div>
+        <div class="sdpi-item-group">
+            <div class="sdpi-item">
+                <div class="sdpi-item-label" onclick="clearFileName('dockingDeniedImage');">Image</div>
+                <div class="sdpi-item-group file">
+                    <input class="sdpi-item-value sdProperty sdFile" type="file" id="dockingDeniedImage" accept=".jpg,.jpeg,.png,.ico,.gif,.bmp,.tiff" oninput="setSettings()">
+                    <label class="sdpi-file-info" for="dockingDeniedImage" id="dockingDeniedImageFilename">No file...</label>
+                    <label class="sdpi-file-label" for="dockingDeniedImage">Choose file...</label>
+                </div>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Text</div>
+                <textarea class="sdpi-item-value sdProperty" id="dockingDeniedText" oninput="setSettings()" rows="2" style="resize:vertical;"></textarea>
+            </div>
+            <div type="color" class="sdpi-item">
+                <div class="sdpi-item-label">Text Color</div>
+                <input class="sdpi-item-value sdProperty" type="color" id="dockingDeniedTextColor" oninput="setSettings()">
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Position</div>
+                <select class="sdpi-item-value select sdProperty" id="dockingDeniedTextVerticalPosition" oninput="setSettings()">
+                    <option value="5">Very Top</option>
+                    <option value="14" selected>Top</option>
+                    <option value="34">Top-Middle</option>
+                    <option value="60">Upper Middle</option>
+                    <option value="80">Center</option>
+                    <option value="100">Lower Middle</option>
+                    <option value="128">Bottom</option>
+                    <option value="144">Lower Bottom</option>
+                    <option value="160">Very Bottom</option>
+                    <option value="175">Near Edge</option>
+                    <option value="190">Edge</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Bold</div>
+                <select class="sdpi-item-value select sdProperty" id="dockingDeniedTextBold" oninput="setSettings()">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Timeout (s)</div>
+                <input class="sdpi-item-value sdProperty" type="number" id="dockingDeniedTimeout" min="0" oninput="setSettings()">
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

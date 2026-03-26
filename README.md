@@ -1,18 +1,172 @@
 # streamdeck-elite
 
-This is a custom fork of mhwlng's original project and DrFr33ze's .NET 10 conversion. I could not do any of this without all the hard work they put into the project!  I'm learning as I go and will add things that are important to how I explore in Elite.
+This is a custom fork of [mhwlng's original project](https://github.com/mhwlng/streamdeck-elite) and [DrFr33ze's .NET 10 conversion](https://github.com/DrFr33ze/streamdeck-elite). I could not do any of this without all the hard work they put into the project! I'm an explorer at heart and have added new buttons and features that reflect how I play Elite Dangerous.
 
-I will update this readme over time as I add new functions, but I am leaving the core of the readme intact as it is relevant information.
+Latest Release: https://github.com/macrossmerrell/streamdeck-elite/releases
 
-**New / updated functions:**
+---
 
-- Route Counter is disabled on 'Hyperspace Button' function by default.
-- Route Button has been overhauled to have a larger font, have Bold capability, and allows vertical adjustment of the count on the button face to better fit custom graphics.
-- **NEW** Genetic Sampler option to the Toggle Button.  Created for explorers like myself that like to see a button change when the tool is deployed / stowed.
+## Many New & Updated Features (v2.8.0)
 
-Latest Release can be found here: https://github.com/macrossmerrell/streamdeck-elite/releases
+### 🆕 Ship Status Button
+Displays the current flight state of your ship as a single image that automatically updates as your situation changes. Each state has its own configurable image.
 
-Shoutout to Andechs75 for an awesome set of buttons and a PowerPoint that you can use to quickly make new buttons (make it, snip it, or copy and paste into your favorite paint program to crop them down if they get wild):  https://github.com/Andechs75/Elite-Dangerous-Streamdeck-Icons/tree/master
+**Supported states (in priority order):**
+- Hyperspace Charging
+- Hyperspace Jump
+- Supercruise Charging
+- Supercruise Activation
+- Supercruise (Active)
+- Normal Space
+- Fuel Scooping
+- Planet Approach
+- Orbital Cruise
+- Glide / Deorbiting
+- **Leaving Planet** *(new — triggers after LeaveBody event, bounces with Planet Approach based on altitude)*
+- Planetary Flight
+- Landed
+- Liftoff *(displays for 2.5 seconds after liftoff)*
+- No-Fire Zone (beta)
+- Station Approach (beta)
+- Docked at Station (beta)
+- Station Interior / On Foot in Station (beta)
+
+The button intelligently handles the full departure and approach sequence — including orbital cruise on the way up, leaving planet after clearing the orbital altitude, and correctly bouncing between Leaving Planet and Planet Approach if you change direction. Works whether you physically lifted off from the surface or just flew up from planetary flight.
+
+---
+
+### 🆕 Planetary Gravity Button
+Displays real-time planetary gravity based on your current altitude using the inverse square law:
+
+`g(alt) = surfaceG × (planetRadius / (planetRadius + altitude))²`
+
+- Shows live altitude-adjusted gravity when near a planet (`HasLatLong`)
+- Shows cached surface gravity when targeting a scanned planet from supercruise
+- Falls back to `?g` for unscanned planets
+- Planet scan data is backfilled from recent journal files on startup (bast 10)  — works even after a fresh game session
+
+---
+
+### 🆕 Planet Info Button
+Displays atmosphere type and surface temperature for the current planet.
+
+- **Atmosphere** — full capitalized name, split across two lines for multi-word types (e.g. CARBON / DIOXIDE)
+- **Temperature** — surface temperature in Kelvin from scan data; switches to live real-time temperature when on foot
+- Separate color, position, and bold settings for atmosphere and temperature text — allows for any custom background image
+- Auto-scaling text fills the button width for maximum readability — limited size to avoid over-sizing
+
+**Supported atmosphere types:** Silicate Vapour, Oxygen, Ammonia, Nitrogen, Methane, Argon, Water, Sulphur Dioxide, Neon, Carbon Dioxide, Helium, Metallic Vapour, and more
+
+---
+
+### 🆕 Alert Button
+A single button that monitors multiple danger conditions simultaneously and cycles through active alerts every 2 seconds.
+
+**Monitored alerts (in priority order):**
+1. **Self Destruct** — 30s timer
+2. **Cockpit Breached** — 20s timer
+3. **Systems Shutdown** — 10s timer
+4. **Jet Cone Damage** — 5s timer
+5. **Heat Warning** — clears when overheating flag clears
+6. **Heat Damage** — 5s timer, clears when overheating ends
+7. **Hull Damage** — 5s timer
+8. **Shields Down** — clears when shields restore
+9. **Under Attack** — 4s timer
+10. **Being Interdicted** — clears when interdiction ends
+11. **Is In Danger** — clears when danger flag clears
+12. **Low Fuel** — clears when fuel restored
+13. **Docking Denied** — 5s timer
+
+Each alert has its own configurable image, text, text color, text position, bold setting, and timeout duration. Image must be set for alerts to work.
+**Press the button to manually dismiss all active alerts.**
+
+When no alerts are active, the button shows a configurable default state (image + text).  
+
+---
+
+### ✏️ Updated: Route Button
+- Larger auto-scaling font
+- Bold text option
+- Vertical position adjustment to better fit custom button graphics
+
+### ✏️ Updated: Toggle Button
+- Added **Genetic Sampler** option — shows button state change when the sampler is deployed or stowed, useful for explorers
+
+---
+### New Explorer Buttons Information
+ ![Explorer Button Additions](images/optional/explorerbuttons.png)
+
+## Sample Ship Status / States  
+ ![Ship ](images/optional/shipstatusstates.png)
+ 
+---
+
+## Optional Button Images
+
+A set of custom button images is included in the `Images/Optional` directory, created using [Andechs75's Elite Dangerous icon PowerPoint template](https://github.com/Andechs75/Elite-Dangerous-Streamdeck-Icons/tree/master). These cover the Ship Status states and other common functions. Feel free to use, modify, or create your own using the same template.
+
+> **Tip:** Use the PowerPoint template to design a button, take a snip, then crop in your favourite paint program to fit your Stream Deck button size.
+
+---
+
+## Automatic Profile Switching
+
+The plugin supports automatic Stream Deck profile switching based on game state. To set this up:
+
+1. Create profiles in the Stream Deck software with these exact names:
+   - `Elite Main` — default ship profile
+   - `Elite OnFoot` — switches when on foot in Odyssey
+   - `Elite InSRV` — switches when SRV is deployed
+   - `Elite InFighter` — switches when in a fighter
+2. Export each profile from Stream Deck software as a `.streamDeckProfile` file
+3. Place the exported files in the `Profiles` folder inside the plugin directory
+4. Reinstall the plugin — Stream Deck will prompt to import the profiles
+
+> **Note:** Profile files are device-specific and tied to your hardware UUID. They cannot be shared universally, which is why this folder ships empty. This is an advanced setup for users who want it.
+
+More information on the [original wiki](https://github.com/mhwlng/streamdeck-elite/wiki/Automatic-Profile-Switching).
+
+---
+
+## Installation
+
+Download the latest `com.mhwlng.elite.streamDeckPlugin` from the [Releases page](https://github.com/macrossmerrell/streamdeck-elite/releases) and double-click to install.
+
+> If the plugin is already installed, uninstall it first (right-click any button → Uninstall), then reinstall.
+
+The plugin installs to:
+```
+%appdata%\Elgato\StreamDeck\Plugins\com.mhwlng.elite.sdPlugin
+```
+
+**Before uninstalling**, save any custom images or profiles you have stored in the plugin directory.
+
+### Updating
+
+1. Stop the Stream Deck application
+2. Delete (or back up) the `com.mhwlng.elite.sdPlugin` directory
+3. Restart Stream Deck
+4. Double-click the new `.streamDeckPlugin` file to install
+
+### Troubleshooting
+
+If buttons aren't responding, check the `pluginlog.log` file in the plugin directory. A common issue is missing keyboard bindings:
+
+```
+file not found C:\Users\xxx\AppData\Local\Frontier Developments\Elite Dangerous\Options\Bindings\Custom.4.2.binds
+```
+
+If you see this, try running `StreamDeck.exe` as administrator.
+
+**All bindings must be 'custom'** — this happens automatically once you make at least one on-foot keyboard binding. Default binding names will cause the plugin to not work correctly.
+
+---
+
+## Original Plugin Documentation
+
+The sections below are from the original plugin and remain relevant.
+
+---
 
 Elgato Stream Deck button plugin for Elite Dangerous
 
@@ -79,9 +233,6 @@ If .gif images are configured for Power/Limpet/Hyperspace/Route buttons, then no
 
 **You can clear the image/sound path, by clicking on the label in front of the file picker edit box.**
 
-The plugin can (optionally) automatically switch to a different profile, if the in-game state changes. (e.g. deploy hardpoints, enter SRV etc.)
-More instructions on the [Wiki](https://github.com/mhwlng/streamdeck-elite/wiki/Automatic-Profile-Switching). (original wiki)
-
 Supported devices: Stream Deck Classic, Mini, XL, Mobile, Plus and **Neo**.
 
 The supported toggle-buttons are:
@@ -104,16 +255,8 @@ The supported toggle-buttons are:
 - Role Panel
 - Systems Panel
 
-For Odyssey, when On Foot, the Galaxy Map,System Map,Lights & Night Vision buttons will call the on-foot key bindings, 
+For Odyssey, when On Foot, the Galaxy Map, System Map, Lights & Night Vision buttons will call the on-foot key bindings, 
 but there is no state feedback. So the button image won't change.
-
-You could, for example, use the 'multi-action switch' function, that is built into the streamdeck software, 
-to set up a toggle function for on-foot functions. 
-You can add the relevant static function of this plugin to both the ON-and OFF-action of the 'multi-action switch' function. 
-You can then set up different images for each toggle state.
-The disadvantage is: that if you would press e.g. the on-foot shield on/off button when still in a ship, then the button image would be out of sync.
-
-A sound can be played when pressing a toggle button.
 
 The supported power distributor pips buttons are:
 - Reset
@@ -122,21 +265,6 @@ The supported power distributor pips buttons are:
 - Weapons
 
 A long press on a button will set the power distributor to 4 pips.
-There is a separate button image for 4 pips.
-
-There is a separate alarm image that is only used for the SYS button.
-That image is shown when under attack and pips are not set to 4 pips.
-
-The 3 Pip colors can be configured separately for each button state. 
-If color #ff00ff is chosen as 'Pip' color or 'No Pip' Color, then that pip type will always be hidden.
-
-The supported alarm buttons are:
-- Highest Threat (alarm = under attack status)
-- Deploy Chaff (alarm = under attack status)
-- Deploy Heatsink (alarm = overheating status)
-- Deploy Shield Cell Bank (alarm = shields down status. In that case DON'T fire a shield cell bank.)
-
-A sound can be played when pressing an alarm button.
 
 The supported FSD related buttons are:
 - Toggle FSD, also shows Remaining Jumps In Route
@@ -144,132 +272,23 @@ The supported FSD related buttons are:
 - Hyperspace Jump, also shows Remaining Jumps In Route
 - Route, also shows Remaining Jumps In Route
 
-The FSD buttons have 3 images:
-- engaged  : supercruise/hyperspace is active
-- enabled  : supercruise/hyperspace is inactive
-- disabled : supercruise/hyperspace is blocked for reasons like (Docked, Landed, LandingGearDown, CargoScoopDeployed, FsdMassLocked, FsdCooldown, HardpointsDeployed)
-
-Text colors can be configured separately for each button state. 
-If color #ff00ff is chosen, then the text will always be hidden.
-
-A normal and disabled sound can be played when pressing an FSD button.
-
-The FSS button has 3 images:
-- engaged  : FSS screen is visible
-- enabled  : FSS screen is not visible
-- disabled : not in supercruise mode (note that throttle position can't be detected)
-
-A normal and disabled sound can be played when pressing the FSS button.
-
-The Route button has 2 images:
-- enabled  : Remaining Jumps In Route > 0
-- disabled : Remaining Jumps In Route = 0
-
-When the route button is pressed, the 'Next Jump Destination' binding is executed. ('TargetNextRouteSystem' Binding)
-
-Text colors can be configured separately for each button state. 
-If color #ff00ff is chosen, then the text will always be hidden.
-
-A normal and disabled sound can be played when pressing the Route button.
-
-The limpet controller button works with any type of limpet controller.
-
-The button shows the current number of limpets in the cargo hold. (The same value is shown on all buttons).
-
-There is no specific keybind for any type of limpet controller.
-Instead, you need to set up a fire group letter and primary or secondary fire button.
-
-Text colors can be configured separately for each button state. 
-If color #ff00ff is chosen, then the text will always be hidden.
-
-A normal and disabled sound can be played when pressing a limpet button.
-
-The firegroup selection buttons have 3 images:
-- on       : firegroup is active
-- off      : firegroup is inactive
-- disabled : firegroup selection is blocked for reasons like (On Foot, in Srv, Docked, Landed, LandingGearDown, FSD Jump)
-
-A normal and disabled sound can be played when pressing a firegroup button.
-
-The plugin looks for a StartPreset.start file in this Elite Dangerous key bindings directory :
+The plugin looks for a StartPreset.start file in this Elite Dangerous key bindings directory:
 
 `%LocalAppData%\Frontier Developments\Elite Dangerous\Options\Bindings\`
 
-That .start file should contain the exact name of the key binding file(s). (Without the extension .3.0.binds or .binds)
+This plugin only works with keyboard bindings. When there is only a binding to a joystick / controller / mouse for a function, you need to add a keyboard binding.
 
-Also, the steam library directories are searched, for any of the default key binding files :
- 
-`....\steamapps\common\Elite Dangerous\Products\elite-dangerous-64\ControlSchemes`
+---
 
-This plugin only works with keyboard bindings. 
-So, when there is only a binding to a joystick / controller / mouse for a function, then you need to add a keyboard binding.
+## Credits & Thanks
 
-If you change the key bindings in Elite Dangerous, then you don't have to restart the streamdeck software. The plugin key bindings are updated automatically.
+- [mhwlng/streamdeck-elite](https://github.com/mhwlng/streamdeck-elite) — original plugin
+- [DrFr33ze/streamdeck-elite](https://github.com/DrFr33ze/streamdeck-elite) — .NET 10 conversion and Neo support
+- [BarRaider/streamdeck-tools](https://github.com/BarRaider/streamdeck-tools)
+- [MagicMau/EliteJournalReader](https://github.com/MagicMau/EliteJournalReader)
+- [ishaaniMittal/inputsimulator](https://github.com/ishaaniMittal/inputsimulator)
+- [Andechs75 — Elite Dangerous Stream Deck Icons](https://github.com/Andechs75/Elite-Dangerous-Streamdeck-Icons/tree/master) — fantastic button icon set and PowerPoint template
+- [nerdordie.com](https://nerdordie.com/product/stream-deck-key-icons/)
 
-**All bindings must be 'custom'. (this will happen automatically once you make at least one on-foot keyboard binding)
-If you see a default binding name, then the plugin won't work correctly.**
-
-![Binding Image](https://i.imgur.com/CpM7HTZ.png)
-
-If nothing happens, when pressing streamdeck buttons:
-
-You may see errors like this in the plugin log file :
-
-`file not found C:\Users\xxx\AppData\Local\Frontier Developments\Elite Dangerous\Options\Bindings\Custom.4.2.binds`
-
-In that case, the plugin has no access to the bindings directory. 
-
-Start streamdeck.exe as administrator.
-
-To install the plugin, double click the file `com.mhwlng.elite.streamDeckPlugin` which should install the plugin.
-
-(This only works, if the plugin not already installed. Otherwise you will need to uninstall or remove the plugin first.)
-
-This .streamDeckPlugin file is a zip file and the contents are simply copied to :
-
-`%appdata%\Elgato\StreamDeck\Plugins\com.mhwlng.elite.sdPlugin`
-
-To update to a new version :
-
-Stop the Stream Deck application:
-
-`c:\Program Files\Elgato\StreamDeck\StreamDeck.exe`
-
-Then delete the `%appdata%\Elgato\StreamDeck\Plugins\com.mhwlng.elite.sdPlugin` directory. (make a backup copy first)
-
-Then start the streamdeck software again.
-
-Then double click the file `com.mhwlng.elite.streamDeckPlugin` as usual.
-
-MAKE SURE that you save any images, profiles etc. that you put in these directories yourself, BEFORE deleting the directory.
-And put them back after the installation.
-The plugin installer doesn't come with button images.
-
-Also, the plugin can be uninstalled and the directory completely deleted by right-clicking on any button and selecting uninstall (make a backup copy first) :
-
-![Button Image](https://i.imgur.com/Ky2cH8R.png)
-
-The button configurations are not stored in the plugin directory.
-
-After uninstalling and re-installing the plugin, all the button definition should still be there.
-
-The com.mhwlng.elite.sdPlugin directory contains a pluginlog.log file, which may be useful for troubleshooting.
-
-Best is to create a separate directory for the images, so that they are not deleted when uninstalling/reinstalling the plugin.
-
-Also see companion application for Logitech Flight Instrument Panel and VR :
-
+Also see companion application for Logitech Flight Instrument Panel and VR:
 https://github.com/mhwlng/fip-elite
-
-This is a fork of [mhwlng/streamdeck-elite](https://github.com/mhwlng/streamdeck-elite) and [DrFr33ze/streamdeck-elite](https://github.com/DrFr33ze/streamdeck-elite), updated for .NET 10 and with Stream Deck Neo support added.
-
-Thanks to :
-
-https://github.com/BarRaider/streamdeck-tools
-
-https://github.com/MagicMau/EliteJournalReader
-
-https://github.com/ishaaniMittal/inputsimulator
-
-https://nerdordie.com/product/stream-deck-key-icons/
-
