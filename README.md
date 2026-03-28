@@ -1,6 +1,6 @@
 # streamdeck-elite
 
-This is a custom fork of [mhwlng's original project](https://github.com/mhwlng/streamdeck-elite) and [DrFr33ze's .NET 10 conversion](https://github.com/DrFr33ze/streamdeck-elite). I could not do any of this without all the hard work they put into the project! I'm an explorer at heart and have added new buttons and features that reflect how I play Elite Dangerous.
+This is a custom fork of [mhwlng's original project](https://github.com/mhwlng/streamdeck-elite) and [DrFr33ze's .NET 10 conversion](https://github.com/DrFr33ze/streamdeck-elite). I could not do any of this without all the hard work they put into the project! I'm an explorer at heart and have added new buttons and features to enhance the feel of exploration in Elite Dangerous.
 
 Latest Release: https://github.com/macrossmerrell/streamdeck-elite/releases
 
@@ -31,7 +31,7 @@ Displays the current flight state of your ship as a single image that automatica
 - Docked at Station (beta)
 - Station Interior / On Foot in Station (beta)
 
-The button intelligently handles the full departure and approach sequence — including orbital cruise on the way up, leaving planet after clearing the orbital altitude, and correctly bouncing between Leaving Planet and Planet Approach if you change direction. Works whether you physically lifted off from the surface or just flew up from planetary flight.
+Ship Status intelligently handles the full departure and approach sequence form a planet —  entering orbital cruise during ascent, switching to Leaving Planet after clearing the orbital cruise altitude, and correctly bouncing between Leaving Planet and Planet Approach if you change direction. Works whether you physically lifted off from the surface or just flew up from planetary flight.
 
 ---
 
@@ -43,7 +43,7 @@ Displays real-time planetary gravity based on your current altitude using the in
 - Shows live altitude-adjusted gravity when near a planet (`HasLatLong`)
 - Shows cached surface gravity when targeting a scanned planet from supercruise
 - Falls back to `?g` for unscanned planets
-- Planet scan data is backfilled from recent journal files on startup (bast 10)  — works even after a fresh game session
+- Planet scan data is backfilled from recent journal files on startup (last 10 journals)  — works even after a fresh game session
 
 ---
 
