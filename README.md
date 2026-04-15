@@ -9,7 +9,7 @@ Latest Release: https://github.com/macrossmerrell/streamdeck-elite/releases
 ## New & Update Features (v2.9.0)
 
 ### 🆕 Navigation Target Info Button
-After completing a System Scan, the button displays information on a currently selected planet — including additional noticiations on landable planets that have scannable bioligical or geological features, along with notifying if terraformable.
+After completing a System Scan, the button displays information on a currently selected planet — including additional notificiations on landable planets that have scannable bioligical or geological features, along with notifying if terraformable.
 
 - Supports Active (targeted) and Inactive (no target) background images
 - Supports any text color for both Planet Type and Biology / Geology / Terrafromable text.
