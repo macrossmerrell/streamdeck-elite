@@ -342,7 +342,7 @@ namespace Elite.Buttons
                 Logger.Instance.LogMessage(TracingLevel.DEBUG, "HandleOnTick called");
         
                 var deviceInfo = connection.DeviceInfo();
-                Logger.Instance.LogMessage(TracingLevel.DEBUG, $"DeviceType: {deviceInfo.Type} ContainsKey: {Profile.Profiles.ContainsKey(deviceInfo.Type)}");
+                // Logger.Instance.LogMessage(TracingLevel.DEBUG, $"DeviceType: {deviceInfo.Type} ContainsKey: {Profile.Profiles.ContainsKey(deviceInfo.Type)}");
         
                 /*
     

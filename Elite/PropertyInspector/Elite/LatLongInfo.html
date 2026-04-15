@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover">
+    <meta name=apple-mobile-web-app-capable content=yes>
+    <meta name=apple-mobile-web-app-status-bar-style content=black>
+    <title>Mhwlng's Elite</title>
+    <link rel="stylesheet" href="../sdpi.css">
+    <link rel="stylesheet" href="../jquery.highlight-within-textarea.css">
+    <script src="../sdtools.common.js"></script>
+    <script src="../jquery-3.3.1.min.js"></script>
+    <script src="../jquery.highlight-within-textarea.js"></script>
+</head>
+<body>
+    <div class="sdpi-wrapper">
+
+        <div type="group" class="sdpi-item">
+            <div class="sdpi-item-label">Near Planet</div>
+            <div class="sdpi-item-group">
+                <div class="sdpi-item" id="dvPrimaryImage">
+                    <div class="sdpi-item-label" onclick="clearFileName('primaryImage');">Image</div>
+                    <div class="sdpi-item-group file">
+                        <input class="sdpi-item-value sdProperty sdFile" type="file" id="primaryImage" accept=".jpg,.jpeg,.png,.ico,.gif,.bmp,.tiff" oninput="setSettings()">
+                        <label class="sdpi-file-info" for="primaryImage" id="primaryImageFilename">No file...</label>
+                        <label class="sdpi-file-label" for="primaryImage">Choose file...</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div type="group" class="sdpi-item">
+            <div class="sdpi-item-label">Not Active</div>
+            <div class="sdpi-item-group">
+                <div class="sdpi-item" id="dvDefaultImage">
+                    <div class="sdpi-item-label" onclick="clearFileName('defaultImage');">Image</div>
+                    <div class="sdpi-item-group file">
+                        <input class="sdpi-item-value sdProperty sdFile" type="file" id="defaultImage" accept=".jpg,.jpeg,.png,.ico,.gif,.bmp,.tiff" oninput="setSettings()">
+                        <label class="sdpi-file-info" for="defaultImage" id="defaultImageFilename">No file...</label>
+                        <label class="sdpi-file-label" for="defaultImage">Choose file...</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div type="group" class="sdpi-item">
+            <div class="sdpi-item-label">Latitude</div>
+            <div class="sdpi-item-group">
+                <div type="color" class="sdpi-item">
+                    <div class="sdpi-item-label">Color</div>
+                    <input class="sdpi-item-value sdProperty" type="color" id="latColor" oninput="setSettings()">
+                </div>
+                <div class="sdpi-item">
+                    <div class="sdpi-item-label">Position</div>
+                    <select class="sdpi-item-value select sdProperty" id="latVerticalPosition" oninput="setSettings()">
+                        <option value="5">Very Top</option>
+                        <option value="14">Top</option>
+                        <option value="34">Top-Middle</option>
+                        <option value="60">Upper Middle</option>
+                        <option value="80">Center</option>
+                        <option value="100">Lower Middle</option>
+                        <option value="128">Bottom</option>
+                        <option value="144">Lower Bottom</option>
+                        <option value="160">Very Bottom</option>
+                        <option value="175">Near Edge</option>
+                        <option value="190">Edge</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div type="group" class="sdpi-item">
+            <div class="sdpi-item-label">Longitude</div>
+            <div class="sdpi-item-group">
+                <div type="color" class="sdpi-item">
+                    <div class="sdpi-item-label">Color</div>
+                    <input class="sdpi-item-value sdProperty" type="color" id="longColor" oninput="setSettings()">
+                </div>
+                <div class="sdpi-item">
+                    <div class="sdpi-item-label">Position</div>
+                    <select class="sdpi-item-value select sdProperty" id="longVerticalPosition" oninput="setSettings()">
+                        <option value="5">Very Top</option>
+                        <option value="14">Top</option>
+                        <option value="34">Top-Middle</option>
+                        <option value="60">Upper Middle</option>
+                        <option value="80">Center</option>
+                        <option value="100">Lower Middle</option>
+                        <option value="128">Bottom</option>
+                        <option value="144">Lower Bottom</option>
+                        <option value="160">Very Bottom</option>
+                        <option value="175">Near Edge</option>
+                        <option value="190">Edge</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Bold</div>
+            <select class="sdpi-item-value select sdProperty" id="textBold" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+    </div>
+</body>
+</html>

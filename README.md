@@ -1,12 +1,30 @@
 # streamdeck-elite
 
-This is a custom fork of [mhwlng's original project](https://github.com/mhwlng/streamdeck-elite) and [DrFr33ze's .NET 10 conversion](https://github.com/DrFr33ze/streamdeck-elite). I could not do any of this without all the hard work they put into the project! I'm an explorer at heart and have added new buttons and features to enhance the feel of exploration in Elite Dangerous.
+This is a custom fork of [mhwlng's original project](https://github.com/mhwlng/streamdeck-elite) and [DrFr33ze's .NET 10 conversion](https://github.com/DrFr33ze/streamdeck-elite). I could not do any of this without all the hard work they put into the project! I'm an explorer at heart and have added new buttons and features that reflect how I play Elite Dangerous.
 
 Latest Release: https://github.com/macrossmerrell/streamdeck-elite/releases
 
 ---
 
-## Many New & Updated Features (v2.8.0)
+## New & Update Features (v2.9.0)
+
+### 🆕 Navigation Target Info Button
+After completing a System Scan, the button displays information on a currently selected planet — including additional noticiations on landable planets that have scannable bioligical or geological features, along with notifying if terraformable.
+
+- Supports Active (targeted) and Inactive (no target) background images
+- Supports any text color for both Planet Type and Biology / Geology / Terrafromable text.
+- Supports button text placement with 11 selectable positions
+- Provides option for bold text
+
+### 🆕 Latitude & Longitude Button
+Displays current planetary Latitude and Longitude in Ship, SRV, Fighter, and on foot — updates when Elite outputs new coordinates.
+
+- Supports Near Planet and Not Active background images
+- Supports any text color for both Latitude and Longitude informational text
+- Support button text placement with 11 selectable positions
+- Provides option for bold text 
+
+## New & Update Features (v2.8.0)
 
 ### 🆕 Ship Status Button
 Displays the current flight state of your ship as a single image that automatically updates as your situation changes. Each state has its own configurable image.
@@ -31,7 +49,7 @@ Displays the current flight state of your ship as a single image that automatica
 - Docked at Station (beta)
 - Station Interior / On Foot in Station (beta)
 
-Ship Status intelligently handles the full departure and approach sequence form a planet —  entering orbital cruise during ascent, switching to Leaving Planet after clearing the orbital cruise altitude, and correctly bouncing between Leaving Planet and Planet Approach if you change direction. Works whether you physically lifted off from the surface or just flew up from planetary flight.
+The button intelligently handles the full departure and approach sequence — including orbital cruise on the way up, leaving planet after clearing the orbital altitude, and correctly bouncing between Leaving Planet and Planet Approach if you change direction. Works whether you physically lifted off from the surface or just flew up from planetary flight.
 
 ---
 
@@ -43,7 +61,7 @@ Displays real-time planetary gravity based on your current altitude using the in
 - Shows live altitude-adjusted gravity when near a planet (`HasLatLong`)
 - Shows cached surface gravity when targeting a scanned planet from supercruise
 - Falls back to `?g` for unscanned planets
-- Planet scan data is backfilled from recent journal files on startup (last 10 journals)  — works even after a fresh game session
+- Planet scan data is backfilled from recent journal files on startup (bast 10)  — works even after a fresh game session
 
 ---
 
@@ -94,10 +112,10 @@ When no alerts are active, the button shows a configurable default state (image 
 
 ---
 ### New Explorer Buttons Information
- ![Explorer Button Additions](https://raw.githubusercontent.com/macrossmerrell/streamdeck-elite/refs/heads/master/Elite/Images/Optional/explorerbuttons.png)
+ ![Explorer Button Additions](images/optional/explorerbuttons.png)
 
 ## Sample Ship Status / States  
- ![Ship ](https://raw.githubusercontent.com/macrossmerrell/streamdeck-elite/refs/heads/master/Elite/Images/Optional/shipstatusstates.png)
+ ![Ship ](images/optional/shipstatusstates.png)
  
 ---
 

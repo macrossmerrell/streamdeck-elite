@@ -1,4 +1,8 @@
 ﻿using BarRaider.SdTools;
+using EliteJournalReader;
+using EliteJournalReader.Events;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,11 +11,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
-using EliteJournalReader;
-using EliteJournalReader.Events;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 
 namespace Elite
@@ -125,6 +126,88 @@ namespace Elite
             Logger.Instance.LogMessage(TracingLevel.INFO, $"Reloading Key Bindings");
 
             keywatcherjob.QueueUserWorkItem(GetKeyBindings, null);
+        }
+        private static void WatchJournalForSignals(string journalPath)
+        {
+            Task.Run(() =>
+            {
+                try
+                {
+                    // Find the most recent journal file
+                    string currentFile = null;
+                    long filePosition = 0;
+
+                    while (true)
+                    {
+                        try
+                        {
+                            // Always watch the most recent journal file
+                            var latestFile = Directory.GetFiles(journalPath, "Journal.*.log")
+                                .OrderByDescending(f => f)
+                                .FirstOrDefault();
+
+                            if (latestFile != currentFile)
+                            {
+                                currentFile = latestFile;
+                                filePosition = 0;
+                                Logger.Instance.LogMessage(TracingLevel.INFO, $"SignalWatcher: watching {currentFile}");
+                            }
+
+                            if (currentFile == null) { System.Threading.Thread.Sleep(1000); continue; }
+
+                            using (var fs = new FileStream(currentFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                            {
+                                fs.Seek(filePosition, SeekOrigin.Begin);
+                                using (var reader = new StreamReader(fs))
+                                {
+                                    string line;
+                                    while ((line = reader.ReadLine()) != null)
+                                    {
+                                        if (string.IsNullOrWhiteSpace(line)) continue;
+                                        if (!line.Contains("FSSBodySignals") && !line.Contains("SAASignalsFound")) continue;
+
+                                        try
+                                        {
+                                            var obj = JObject.Parse(line);
+                                            var evt = obj.Value<string>("event");
+                                            var bodyName = obj.Value<string>("BodyName");
+                                            var signals = obj["Signals"];
+
+                                            if (string.IsNullOrEmpty(bodyName) || signals == null) continue;
+
+                                            EliteData.SignalCache.TryGetValue(bodyName, out var existing);
+                                            int bio = existing.BiologyCount, geo = existing.GeologyCount;
+
+                                            foreach (var sig in signals)
+                                            {
+                                                var sigType = sig.Value<string>("Type") ?? "";
+                                                var sigCount = sig.Value<int>("Count");
+                                                if (sigType.Contains("Biological")) bio = sigCount;
+                                                else if (sigType.Contains("Geological")) geo = sigCount;
+                                            }
+
+                                            EliteData.SignalCache[bodyName] = (bio, geo);
+                                            Logger.Instance.LogMessage(TracingLevel.INFO, $"SignalWatcher: {bodyName} bio={bio} geo={geo}");
+                                        }
+                                        catch { }
+                                    }
+                                    filePosition = fs.Position;
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Instance.LogMessage(TracingLevel.WARN, $"SignalWatcher error: {ex.Message}");
+                        }
+
+                        System.Threading.Thread.Sleep(1000);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.LogMessage(TracingLevel.FATAL, $"SignalWatcher fatal: {ex}");
+                }
+            });
         }
 
         private static bool IsFileLocked(FileInfo file)
@@ -544,22 +627,46 @@ namespace Elite
                                     ?? obj.Value<string>("AtmosphereType") ?? "";
                                 var surfaceTemperature = obj.Value<double?>("SurfaceTemperature") ?? 0;
 
-                                if (!string.IsNullOrEmpty(bodyName) 
-                                    && surfaceGravity.HasValue 
-                                    && radius.HasValue 
+                                if (!string.IsNullOrEmpty(bodyName)
+                                    && surfaceGravity.HasValue
+                                    && radius.HasValue
                                     && surfaceGravity.Value > 0
                                     && !EliteData.GravityCache.ContainsKey(bodyName))
                                 {
-                                    EliteData.GravityCache[bodyName] = (
-                                        surfaceGravity.Value / 9.81,
-                                        radius.Value,
-                                        atmosphere,
-                                        surfaceTemperature);
-
-                                    Logger.Instance.LogMessage(TracingLevel.INFO, 
-                                        $"BackfillScanCache: cached '{bodyName}' g={surfaceGravity.Value / 9.81:F2}");
+                                    var planetClass = obj.Value<string>("PlanetClass") ?? "";
+                                    var terraformState = obj.Value<string>("TerraformState") ?? "";
+                                    EliteData.GravityCache[bodyName] = (surfaceGravity.Value / 9.81, radius.Value, atmosphere, surfaceTemperature, planetClass, terraformState);
                                 }
                             }
+                            // --- New Signal Cache Backfill Block Starts Here ---
+                            else if (evt == "FSSBodySignals" || evt == "SAASignalsFound") 
+                            {
+                                var fssBody = obj.Value<string>("BodyName");
+                                var signals = obj["Signals"];
+
+                                if (!string.IsNullOrEmpty(fssBody) && signals != null)
+                                {
+                                    // Check if we already have partial data for this body to avoid overwriting existing counts
+                                    EliteData.SignalCache.TryGetValue(fssBody, out var existing);
+                                    int bio = existing.BiologyCount;
+                                    int geo = existing.GeologyCount;
+
+                                    foreach (var sig in signals)
+                                    {
+                                        var sigType = sig.Value<string>("Type") ?? "";
+                                        var sigCount = sig.Value<int>("Count");
+
+                                        if (sigType.Contains("Biological")) 
+                                            bio = sigCount;
+                                        else if (sigType.Contains("Geological")) 
+                                            geo = sigCount;
+                                    }
+
+                                    // Update the static cache with the new bio/geo tallies
+                                    EliteData.SignalCache[fssBody] = (bio, geo);
+                                    Logger.Instance.LogMessage(TracingLevel.INFO, $"BackfillSignalCache: {fssBody} bio={bio} geo={geo}");
+                                }
+                            }                        
                         }
                     }
                     catch (Exception ex)
@@ -617,6 +724,9 @@ namespace Elite
 
                 // Backfill scan cache from recent journal files for current star system
                 BackfillScanCache(journalPath);
+
+                // Watch journal for FSSBodySignals and SAASignalsFound independently
+                WatchJournalForSignals(journalPath);
 
                 CargoWatcher = new CargoWatcher(journalPath);
 

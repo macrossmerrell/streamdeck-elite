@@ -32,6 +32,21 @@
     },
     {
       "Icon": "Images/icon",
+      "Name": "(New) Navigation Target Info",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "bottom",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Elite Dangerous Navigation Target - displays currently targeted planet info",
+      "UUID": "com.mhwlng.elite.navtarget",
+      "PropertyInspectorPath": "PropertyInspector/Elite/NavTarget.html"
+    },
+    {
+      "Icon": "Images/icon",
       "Name": "(New) Planet Info Button",
       "States": [
         {
@@ -59,6 +74,21 @@
       "Tooltip": "Elite Dangerous Alert Button - displays active alerts and warnings",
       "UUID": "com.mhwlng.elite.alert",
       "PropertyInspectorPath": "PropertyInspector/Elite/Alert.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "(New) Lat/Long Info Button",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "bottom",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Elite Dangerous Lat/Long Info Button - displays current latitude and longitude",
+      "UUID": "com.mhwlng.elite.latlonginfo",
+      "PropertyInspectorPath": "PropertyInspector/Elite/LatLongInfo.html"
     },
     {
       "Icon": "Images/icon",
@@ -256,7 +286,7 @@
   "Name": "Elite Dangerous",
   "Icon": "Images/pluginIcon",
   "URL": "https://github.com/macrossmerrell/streamdeck-elite",
-  "Version": "2.8.0",
+  "Version": "2.9.0",
   "CodePath": "com.mhwlng.elite",
   "Category": "Elite Dangerous",
   "CategoryIcon": "Images/categoryIcon",

@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using BarRaider.SdTools;
 using EliteJournalReader;
 using EliteJournalReader.Events;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 
 namespace Elite
@@ -23,8 +24,12 @@ namespace Elite
         public static int LimpetCount { get; set; }
 
         // Cache of planet data per body name, populated from Scan journal events
-        public static Dictionary<string, (double SurfaceGravity, double PlanetRadius, string Atmosphere, double SurfaceTemperature)> GravityCache = new Dictionary<string, (double, double, string, double)>(); 
+        public static Dictionary<string, (double SurfaceGravity, double PlanetRadius, string Atmosphere, double SurfaceTemperature, string PlanetClass, string TerraformState)> GravityCache
+            = new Dictionary<string, (double, double, string, double, string, string)>(StringComparer.OrdinalIgnoreCase);
 
+        // Cache of bio/geo signal counts per body name, populated from FSSBodySignals and SAASignalsFound
+        public static Dictionary<string, (int BiologyCount, int GeologyCount)> SignalCache
+            = new Dictionary<string, (int, int)>(StringComparer.OrdinalIgnoreCase);
         public class Status
         {
             public bool Docked { get; set; }
@@ -101,6 +106,7 @@ namespace Elite
             public bool Fsdhyperdrivecharging { get; set; }
             public string SelectedWeapon { get; set; }
             public double Temperature { get; set; }
+            public string DestinationName { get; set; }
         }
 
         public static Status StatusData = new Status();
@@ -217,24 +223,26 @@ namespace Elite
             StatusData.Fsdhyperdrivecharging = (evt.Flags2 & MoreStatusFlags.Fsdhyperdrivecharging) != 0;
             StatusData.SelectedWeapon = evt.SelectedWeapon;
             StatusData.Temperature = evt.Temperature;
+            StatusData.DestinationName = evt.Destination.Name ?? string.Empty;
         }
 
 
         public static void HandleEliteEvents(object sender, JournalEventArgs e)
         {
-            var evt = ((JournalEventArgs) e).OriginalEvent.Value<string>("event");
+            var evt = ((JournalEventArgs)e).OriginalEvent.Value<string>("event");
 
             if (string.IsNullOrWhiteSpace(evt))
             {
                 return;
             }
-
+            if (evt == "FSSBodySignals" || evt == "SAASignalsFound")
+                Logger.Instance.LogMessage(TracingLevel.INFO, $"JournalEvent: {evt}");
             switch (evt)
             {
                 case "Location":
                     //When written: at startup, or when being resurrected at a station
 
-                    var locationInfo = (LocationEvent.LocationEventArgs) e;
+                    var locationInfo = (LocationEvent.LocationEventArgs)e;
 
                     EliteData.StarSystem = locationInfo.StarSystem;
                     break;
@@ -342,24 +350,67 @@ namespace Elite
                     break;
 
                 case "Scan":
-                    // Cache planet data for gravity and planet info buttons
+                    // Cache planet data for gravity, planet info, and nav target buttons
                     var scanEvent = ((JournalEventArgs)e).OriginalEvent;
                     var bodyName = scanEvent.Value<string>("BodyName");
                     var surfaceGravity = scanEvent.Value<double?>("SurfaceGravity");
                     var planetRadius = scanEvent.Value<double?>("Radius");
                     var atmosphere = scanEvent.Value<string>("Atmosphere") ?? scanEvent.Value<string>("AtmosphereType") ?? "";
                     var surfaceTemperature = scanEvent.Value<double?>("SurfaceTemperature") ?? 0;
+                    var planetClass = scanEvent.Value<string>("PlanetClass") ?? "";
+                    var terraformState = scanEvent.Value<string>("TerraformState") ?? "";
 
                     if (!string.IsNullOrEmpty(bodyName) && surfaceGravity.HasValue && planetRadius.HasValue && surfaceGravity.Value > 0)
                     {
                         // SurfaceGravity in journal is in m/s², divide by 9.81 to get g
-                        EliteData.GravityCache[bodyName] = (surfaceGravity.Value / 9.81, planetRadius.Value, atmosphere, surfaceTemperature);
+                        EliteData.GravityCache[bodyName] = (surfaceGravity.Value / 9.81, planetRadius.Value, atmosphere, surfaceTemperature, planetClass, terraformState);
                     }
                     break;
 
+                case "FSSBodySignals":
+                    {
+                        var fssScan = ((JournalEventArgs)e).OriginalEvent;
+                        var fssBody = fssScan.Value<string>("BodyName");
+                        var signals = fssScan["Signals"];
+                        if (!string.IsNullOrEmpty(fssBody) && signals != null)
+                        {
+                            EliteData.SignalCache.TryGetValue(fssBody, out var existing);
+                            int bio = existing.BiologyCount, geo = existing.GeologyCount;
+                            foreach (var sig in signals)
+                            {
+                                var sigType = sig.Value<string>("Type") ?? "";
+                                var sigCount = sig.Value<int>("Count");
+                                if (sigType.Contains("Biological")) bio = sigCount;
+                                else if (sigType.Contains("Geological")) geo = sigCount;
+                            }
+                            EliteData.SignalCache[fssBody] = (bio, geo);
+                        }
+                        break;
+                    }
+
+                case "SAASignalsFound":
+                    {
+                        var saaScan = ((JournalEventArgs)e).OriginalEvent;
+                        var saaBody = saaScan.Value<string>("BodyName");
+                        var saaSignals = saaScan["Signals"];
+                        if (!string.IsNullOrEmpty(saaBody) && saaSignals != null)
+                        {
+                            EliteData.SignalCache.TryGetValue(saaBody, out var existing);
+                            int bio = existing.BiologyCount, geo = existing.GeologyCount;
+                            foreach (var sig in saaSignals)
+                            {
+                                var sigType = sig.Value<string>("Type") ?? "";
+                                var sigCount = sig.Value<int>("Count");
+                                if (sigType.Contains("Biological")) bio = sigCount;
+                                else if (sigType.Contains("Geological")) geo = sigCount;
+                            }
+                            EliteData.SignalCache[saaBody] = (bio, geo);
+                        }
+                        break;
+                    }
+
             }
-
         }
-    }
 
+    }
 }
