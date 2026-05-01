@@ -17,7 +17,8 @@ Once you take your first biological sample, the button displays the genus (and s
 - The button background changes across four configurable zones based on how much of the colony range you've covered: too close (0–20%), moving away (21–70%), almost there (71–99%), and ready to scan (100%+).
 - Each zone has fully configurable background images, text colors, and text positions, giving you complete freedom to design the button around your own artwork and layout preferences.
 - Three pip indicators show your progress through the three-scan sequence at a glance - position and color configurable.
-- The button stays active across all game states — on foot, in your ship, in an SRV — so you can monitor your colony range distance while flying back to land or repositioning between samples. Scan state and coordinates are restored automatically when the Stream Deck software restarts, so you won't lose your place mid-sequence.
+- The button stays active across all game states — on foot, in your ship, in an SRV — so you can monitor your colony range distance while flying back to land or repositioning between samples.
+- Scan state and coordinates are restored automatically when the Stream Deck software or Elite Dangerous restarts, so you won't lose your place mid-sequence.
 
 ### ✏️ Updated: Planet Info Button now activates when a planet is targeted.
 
@@ -134,10 +135,10 @@ When no alerts are active, the button shows a configurable default state (image 
 
 ---
 ### New Explorer Buttons Information
- ![Explorer Button Additions](images/optional/explorerbuttons.png)
+ ![Explorer Button Additions](https://github.com/macrossmerrell/streamdeck-elite/blob/1412442d1d655c865bf145daa1678e90e840be25/Elite/Images/Optional/explorerbuttons.png)
 
 ## Sample Ship Status / States  
- ![Ship ](images/optional/shipstatusstates.png)
+ ![Ship Status](https://github.com/macrossmerrell/streamdeck-elite/blob/1412442d1d655c865bf145daa1678e90e840be25/Elite/Images/Optional/shipstatusstates.png)
  
 ---
 
