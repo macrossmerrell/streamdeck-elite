@@ -28,7 +28,8 @@ Once you take your first biological sample, the button displays the genus (and s
 - Targeted planet shows FSS scan gravity information (no longer just in orbit / on planet), and still updates in realtime during deorbit.
 - Offers a High Gravity Warning State that is configurable based on your ship's capabilities, which defaults to 1.0G.  Offers custom button image settings to make a visually distinct warning.
 - Targeted Planet Gravity and High Gravity Warning states have independent text color settings to work with custom images / backgrounds.
- ![Gravity Example] (https://github.com/macrossmerrell/streamdeck-elite/blob/d25031eb1ae25039aa0389b0475f9ae3cb868295/Elite/Images/Examples/GravitySample.png)
+
+![Gravity Example](https://github.com/macrossmerrell/streamdeck-elite/blob/d25031eb1ae25039aa0389b0475f9ae3cb868295/Elite/Images/Examples/GravitySample.png)
 
 
 ## New & Update Features (v2.9.0)
@@ -48,7 +49,8 @@ Displays current planetary Latitude and Longitude in Ship, SRV, Fighter, and on 
 - Supports any text color for both Latitude and Longitude informational text
 - Support button text placement with 11 selectable positions
 - Provides option for bold text
- ![Latitude & Longitude](https://github.com/macrossmerrell/streamdeck-elite/blob/d25031eb1ae25039aa0389b0475f9ae3cb868295/Elite/Images/Examples/latlong.png) 
+
+![Latitude & Longitude](https://github.com/macrossmerrell/streamdeck-elite/blob/d25031eb1ae25039aa0389b0475f9ae3cb868295/Elite/Images/Examples/latlong.png) 
 
 ## New & Update Features (v2.8.0)
 
