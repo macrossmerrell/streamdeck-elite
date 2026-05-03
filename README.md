@@ -19,6 +19,7 @@ Once you take your first biological sample, the button displays the genus (and s
 - Three pip indicators show your progress through the three-scan sequence at a glance - position and color configurable.
 - The button stays active across all game states — on foot, in your ship, in an SRV — so you can monitor your colony range distance while flying back to land or repositioning between samples.
 - Scan state and coordinates are restored automatically when the Stream Deck software or Elite Dangerous restarts, so you won't lose your place mid-sequence.
+ ![Exobiology Example](https://github.com/macrossmerrell/streamdeck-elite/blob/d25031eb1ae25039aa0389b0475f9ae3cb868295/Elite/Images/Examples/Bioscan.png)
 
 ### ✏️ Updated: Planet Info Button now activates when a planet is targeted.
 
@@ -27,6 +28,7 @@ Once you take your first biological sample, the button displays the genus (and s
 - Targeted planet shows FSS scan gravity information (no longer just in orbit / on planet), and still updates in realtime during deorbit.
 - Offers a High Gravity Warning State that is configurable based on your ship's capabilities, which defaults to 1.0G.  Offers custom button image settings to make a visually distinct warning.
 - Targeted Planet Gravity and High Gravity Warning states have independent text color settings to work with custom images / backgrounds.
+ ![Gravity Example] (https://github.com/macrossmerrell/streamdeck-elite/blob/d25031eb1ae25039aa0389b0475f9ae3cb868295/Elite/Images/Examples/GravitySample.png)
 
 
 ## New & Update Features (v2.9.0)
@@ -45,7 +47,8 @@ Displays current planetary Latitude and Longitude in Ship, SRV, Fighter, and on 
 - Supports Near Planet and Not Active background images
 - Supports any text color for both Latitude and Longitude informational text
 - Support button text placement with 11 selectable positions
-- Provides option for bold text 
+- Provides option for bold text
+ ![Latitude & Longitude](https://github.com/macrossmerrell/streamdeck-elite/blob/d25031eb1ae25039aa0389b0475f9ae3cb868295/Elite/Images/Examples/latlong.png) 
 
 ## New & Update Features (v2.8.0)
 
@@ -135,10 +138,10 @@ When no alerts are active, the button shows a configurable default state (image 
 
 ---
 ### New Explorer Buttons Information
- ![Explorer Button Additions](https://github.com/macrossmerrell/streamdeck-elite/blob/1412442d1d655c865bf145daa1678e90e840be25/Elite/Images/Optional/explorerbuttons.png)
+ ![Explorer Button Additions](https://github.com/macrossmerrell/streamdeck-elite/blob/d25031eb1ae25039aa0389b0475f9ae3cb868295/Elite/Images/Examples/explorerbuttons.png)
 
 ## Sample Ship Status / States  
- ![Ship Status](https://github.com/macrossmerrell/streamdeck-elite/blob/1412442d1d655c865bf145daa1678e90e840be25/Elite/Images/Optional/shipstatusstates.png)
+ ![Ship Status](https://github.com/macrossmerrell/streamdeck-elite/blob/d25031eb1ae25039aa0389b0475f9ae3cb868295/Elite/Images/Examples/shipstatusstates.png)
  
 ---
 
