@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover">
+    <meta name=apple-mobile-web-app-capable content=yes>
+    <meta name=apple-mobile-web-app-status-bar-style content=black>
+    <title>Mhwlng's Elite</title>
+    <link rel="stylesheet" href="../sdpi.css">
+    <script src="../sdtools.common.js"></script>
+    <script src="../jquery-3.3.1.min.js"></script>
+</head>
+<body>
+    <div class="sdpi-wrapper">
+
+        <!-- Background image -->
+        <div class="sdpi-item" id="dvBackgroundImage">
+            <div class="sdpi-item-label" onclick="clearFileName('backgroundImage');">Background</div>
+            <div class="sdpi-item-group file" id="filepickergroup1">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="backgroundImage"
+                       accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info" for="backgroundImage" id="backgroundImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="backgroundImage">Choose file...</label>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Service selector -->
+        <div class="sdpi-item" id="dvService">
+            <div class="sdpi-item-label">Service</div>
+            <select class="sdpi-item-value select sdProperty" id="service" oninput="setSettings()">
+                <option value="inara">INARA.CZ</option>
+                <option value="edsm">EDSM.NET</option>
+                <option value="spansh">SPANSH.CO.UK</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- Service label row -->
+        <div type="group" class="sdpi-item" id="servicegroup">
+            <div class="sdpi-item-label">Service Label</div>
+            <div class="sdpi-item-group" id="servicegroup_items">
+
+                <div type="color" class="sdpi-item" id="dvServiceColor">
+                    <div class="sdpi-item-label">Color</div>
+                    <input class="sdpi-item-value sdProperty" type="color" id="serviceColor" oninput="setSettings()">
+                </div>
+
+                <div class="sdpi-item" id="dvServiceVerticalPosition">
+                    <div class="sdpi-item-label">Position</div>
+                    <select class="sdpi-item-value select sdProperty" id="serviceVerticalPosition" oninput="setSettings()">
+                        <option value="5">Very Top</option>
+                        <option value="14">Top</option>
+                        <option value="34">Top-Middle</option>
+                        <option value="60">Upper Middle</option>
+                        <option value="80">Center</option>
+                        <option value="100">Lower Middle</option>
+                        <option value="128">Bottom</option>
+                        <option value="144">Lower Bottom</option>
+                        <option value="160">Very Bottom</option>
+                        <option value="175">Near Edge</option>
+                        <option value="190">Edge</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Location label row -->
+        <div type="group" class="sdpi-item" id="locationgroup">
+            <div class="sdpi-item-label">Location Label</div>
+            <div class="sdpi-item-group" id="locationgroup_items">
+
+                <div type="color" class="sdpi-item" id="dvLocationColor">
+                    <div class="sdpi-item-label">Color</div>
+                    <input class="sdpi-item-value sdProperty" type="color" id="locationColor" oninput="setSettings()">
+                </div>
+
+                <div class="sdpi-item" id="dvLocationVerticalPosition">
+                    <div class="sdpi-item-label">Position</div>
+                    <select class="sdpi-item-value select sdProperty" id="locationVerticalPosition" oninput="setSettings()">
+                        <option value="5">Very Top</option>
+                        <option value="14">Top</option>
+                        <option value="34">Top-Middle</option>
+                        <option value="60">Upper Middle</option>
+                        <option value="80">Center</option>
+                        <option value="100">Lower Middle</option>
+                        <option value="128">Bottom</option>
+                        <option value="144">Lower Bottom</option>
+                        <option value="160">Very Bottom</option>
+                        <option value="175">Near Edge</option>
+                        <option value="190">Edge</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Bold -->
+        <div class="sdpi-item" id="dvTextBold">
+            <div class="sdpi-item-label">Bold</div>
+            <select class="sdpi-item-value select sdProperty" id="textBold" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+    </div>
+</body>
+</html>

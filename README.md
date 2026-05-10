@@ -8,6 +8,30 @@ Latest Release: https://github.com/macrossmerrell/streamdeck-elite/releases
 
 ---
 
+## New & Update Features (v3.0.1)
+
+### 🔭 🆕 (BETA( Galaxy Search Button
+Opens a web browser to an external database page for your current location. Automatically detects context — docked at a station, approaching a body, or just flying through a system — and opens the most relevant page.
+Priority logic:
+
+Docked at a station → opens the station page
+Approaching a body → opens the system page (body context)
+Default (always available) → opens the star system page
+
+Supported services (selectable per button):
+- INARA.cz
+- EDSM.net
+- Spansh.co.uk
+
+Setting Options: 
+- Service selector
+- Optional background image
+- Separate color and position controls for the service name and location label
+- Bold text toggle.
+
+Fun note:
+You can place multiple Galaxy Search buttons side by side, each set to a different service, for one-press access to all three databases.
+
 ## New & Update Features (v3.0.0)
 
 ### 🆕 Exobiology Button

@@ -1,5 +1,20 @@
 {
   "Actions": [
+        {
+      "Icon": "Images/icon",
+      "Name": "(BETA) Galaxy Search Button",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "middle",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Opens INARA, EDSM, or Spansh for current system, station, or body",
+      "UUID": "com.mhwlng.elite.galaxysearch",
+      "PropertyInspectorPath": "PropertyInspector/Elite/GalaxySearch.html"
+    },
     {
       "Icon": "Images/icon",
       "Name": "(New) Ship Status Button",
@@ -301,7 +316,7 @@
   "Name": "Elite Dangerous",
   "Icon": "Images/pluginIcon",
   "URL": "https://github.com/macrossmerrell/streamdeck-elite",
-  "Version": "3.0.0",
+  "Version": "3.0.1",
   "CodePath": "com.mhwlng.elite",
   "Category": "Elite Dangerous",
   "CategoryIcon": "Images/categoryIcon",

@@ -171,6 +171,11 @@ namespace Elite.Buttons
         private string _zoneCFile   = null;
         private string _zoneDFile   = null;
 
+        // Guard against concurrent HandleDisplay calls — bitmap operations are not thread-safe.
+        // Journal events fire on a background thread; OnTick fires on another. Without this,
+        // rapid journal activity causes multiple simultaneous draws that block each other.
+        private volatile bool _isDrawing = false;
+
         // ── Distance helpers ──────────────────────────────────────────────────────
 
         private static double HaversineMetres(double lat1, double lon1,
@@ -187,44 +192,43 @@ namespace Elite.Buttons
         }
 
         /// <summary>
-        /// Resolves planet radius in metres. Priority:
-        ///   1. Already stored from a previous resolution (ExoBioSamplePlanetRadius > 0)
-        ///   2. Live StatusData.PlanetRadius (set when player has lat/long on a body)
-        ///   3. GravityCache keyed by ExoBioSampleBodyName (set at sample time / by backfill)
-        ///   4. GravityCache keyed by current StatusData BodyName or DestinationName
-        /// Writes the resolved value back to ExoBioSamplePlanetRadius so subsequent calls are free.
+        /// Resolves planet radius in metres for the Haversine distance calculation.
+        ///
+        /// Always prefers the live StatusData.PlanetRadius (written by the status file every ~1s)
+        /// because it reflects the actual body the player is currently on or near. This matches
+        /// what the Windows companion app does — reading PlanetRadius fresh from Status.json on
+        /// every update rather than caching a value that could have come from a different body.
+        ///
+        /// Falls back to GravityCache (from journal Scan events) only when StatusData has no value,
+        /// such as when the player is in deep space or the status file hasn't updated yet.
+        ///
+        /// ExoBioSamplePlanetRadius is only used as a last-resort backfill fallback — it is not
+        /// written here so it stays available for that purpose without polluting live calculations.
         /// </summary>
         private static double ResolvePlanetRadius()
         {
-            if (EliteData.ExoBioSamplePlanetRadius > 0)
-                return EliteData.ExoBioSamplePlanetRadius;
-
             var s = EliteData.StatusData;
 
+            // Always use live StatusData first — same source as the Windows app, refreshed every ~1s
             if (s.PlanetRadius > 0)
-            {
-                EliteData.ExoBioSamplePlanetRadius = s.PlanetRadius;
                 return s.PlanetRadius;
-            }
 
-            // Try the body name recorded when the sample was taken
+            // GravityCache: keyed by the body name recorded at sample time
             if (!string.IsNullOrEmpty(EliteData.ExoBioSampleBodyName) &&
                 EliteData.GravityCache.TryGetValue(EliteData.ExoBioSampleBodyName, out var sampledBody) &&
                 sampledBody.PlanetRadius > 0)
-            {
-                EliteData.ExoBioSamplePlanetRadius = sampledBody.PlanetRadius;
                 return sampledBody.PlanetRadius;
-            }
 
-            // Fall back to current body name from StatusData
+            // GravityCache: current body from StatusData
             var bodyName = !string.IsNullOrEmpty(s.BodyName) ? s.BodyName : s.DestinationName;
             if (!string.IsNullOrEmpty(bodyName) &&
                 EliteData.GravityCache.TryGetValue(bodyName, out var currentBody) &&
                 currentBody.PlanetRadius > 0)
-            {
-                EliteData.ExoBioSamplePlanetRadius = currentBody.PlanetRadius;
                 return currentBody.PlanetRadius;
-            }
+
+            // Last resort: backfill-resolved value
+            if (EliteData.ExoBioSamplePlanetRadius > 0)
+                return EliteData.ExoBioSamplePlanetRadius;
 
             return 0;
         }
@@ -243,12 +247,6 @@ namespace Elite.Buttons
             bool haveCurrentPos = !double.IsNaN(s.Latitude)
                                && !double.IsNaN(s.Longitude)
                                && !(s.Latitude == 0.0 && s.Longitude == 0.0);
-
-            Logger.Instance.LogMessage(TracingLevel.INFO,
-                $"ExoBiology dist check: haveSamplePos={haveSamplePos} haveCurrentPos={haveCurrentPos} " +
-                $"radius={radius:F0} hasLatLong={s.HasLatLong} " +
-                $"sLat={EliteData.ExoBioSampleLat:F4} sLon={EliteData.ExoBioSampleLon:F4} " +
-                $"cLat={s.Latitude:F4} cLon={s.Longitude:F4}");
 
             if (!haveSamplePos || !haveCurrentPos || radius <= 0)
                 return double.NaN;
@@ -397,14 +395,11 @@ namespace Elite.Buttons
 
         private async Task HandleDisplay()
         {
-            // Verbose startup diagnostic — helps trace backfill and distance issues in the log
-            Logger.Instance.LogMessage(TracingLevel.INFO,
-                $"ExoBiology state: genus={EliteData.ExoBioGenus} species={EliteData.ExoBioSpecies} " +
-                $"scan={EliteData.ExoBioScanCount} body='{EliteData.ExoBioSampleBodyName}' " +
-                $"sLat={EliteData.ExoBioSampleLat:F6} sLon={EliteData.ExoBioSampleLon:F6} " +
-                $"radius={EliteData.ExoBioSamplePlanetRadius:F0}m " +
-                $"curLat={EliteData.StatusData.Latitude:F6} curLon={EliteData.StatusData.Longitude:F6} " +
-                $"hasLatLong={EliteData.StatusData.HasLatLong}");
+            // Skip if a draw is already in progress — the in-flight draw will show current state.
+            if (_isDrawing) return;
+            _isDrawing = true;
+            try
+            {
 
             int    colonyRange = GetColonyRange(EliteData.ExoBioGenus, EliteData.ExoBioSpecies);
             double distMetres  = DistanceFromLastSampleMetres();
@@ -413,9 +408,6 @@ namespace Elite.Buttons
                                      : double.NaN;
 
             Zone zone = CurrentZone(distPct);
-
-            Logger.Instance.LogMessage(TracingLevel.INFO,
-                $"ExoBiology display: colonyRange={colonyRange}m dist={distMetres:F1}m pct={distPct:F1}% zone={zone}");
 
             Bitmap     background;
             string     backgroundFile;
@@ -513,6 +505,12 @@ namespace Elite.Buttons
 
             if (!string.IsNullOrEmpty(imgBase64))
                 await Connection.SetImageAsync(imgBase64);
+
+            } // end try
+            finally
+            {
+                _isDrawing = false;
+            }
         }
 
         private static double ParsePos(string value, double fallback) =>
@@ -590,6 +588,12 @@ namespace Elite.Buttons
                 // Liftoff, LeaveBody, boarding the ship, entering SRV etc. do NOT reset —
                 // the player needs genus and meter visible while repositioning between samples.
                 EliteData.ResetExoBioState();
+            }
+            else
+            {
+                // Not an event this button cares about — skip the redraw entirely.
+                // OnTick fires every second and will keep the distance meter current.
+                return;
             }
 
             AsyncHelper.RunSync(HandleDisplay);
