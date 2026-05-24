@@ -290,7 +290,9 @@ namespace Elite.Buttons
         /// </summary>
         private static Zone CurrentZone(double distPct)
         {
-            if (EliteData.ExoBioScanCount == 0 || EliteData.ExoBioScanCount >= 3) return Zone.Default;
+            // ScanCount 0 = no active scan (default). ScanCount 1/2/3 = active sequence.
+            // Analyse resets to 0, so >= 3 here means all pips filled, still tracking.
+            if (EliteData.ExoBioScanCount == 0) return Zone.Default;
             if (double.IsNaN(distPct))                                            return Zone.A;
 
             if (distPct >= 100.0) return Zone.D;
@@ -588,24 +590,27 @@ namespace Elite.Buttons
                     if (!string.IsNullOrEmpty(genusLocal))  EliteData.ExoBioGenus   = genusLocal;
                     if (!string.IsNullOrEmpty(speciesWord)) EliteData.ExoBioSpecies = speciesWord;
 
-                    EliteData.ExoBioScanCount          = 2;
-                    // Store scan 2 position — Log position is preserved so both are tracked
+                    // Increment scan count: first Sample → 2 (pip 2), second Sample → 3 (pip 3)
+                    EliteData.ExoBioScanCount          = Math.Min(EliteData.ExoBioScanCount + 1, 3);
+                    // Store sample position — Log position is preserved so both are tracked
                     EliteData.ExoBioSampleLat          = raw.Value<double?>("Latitude")  ?? s.Latitude;
                     EliteData.ExoBioSampleLon          = raw.Value<double?>("Longitude") ?? s.Longitude;
                     EliteData.ExoBioSampleBodyName     = !string.IsNullOrEmpty(s.BodyName) ? s.BodyName : s.DestinationName;
                     EliteData.ExoBioSamplePlanetRadius = ResolvePlanetRadius();
 
                     Logger.Instance.LogMessage(TracingLevel.INFO,
-                        $"ExoBiology Sample: genus={EliteData.ExoBioGenus} species={EliteData.ExoBioSpecies} " +
+                        $"ExoBiology Sample (scan {EliteData.ExoBioScanCount}): genus={EliteData.ExoBioGenus} species={EliteData.ExoBioSpecies} " +
                         $"sampleLat={EliteData.ExoBioSampleLat:F4} sampleLon={EliteData.ExoBioSampleLon:F4} " +
                         $"logLat={EliteData.ExoBioLogLat:F4} logLon={EliteData.ExoBioLogLon:F4} " +
                         $"body={EliteData.ExoBioSampleBodyName}");
                 }
                 else if (scanType == "Analyse")
                 {
-                    EliteData.ExoBioScanCount = 3;
+                    // All three pips already filled by the second Sample event.
+                    // Analyse completes the sequence — reset to default state.
                     Logger.Instance.LogMessage(TracingLevel.INFO,
                         $"ExoBiology Analyse complete: genus={EliteData.ExoBioGenus} species={EliteData.ExoBioSpecies}");
+                    EliteData.ResetExoBioState();
                 }
             }
             else if (evt == "SellOrganicData")

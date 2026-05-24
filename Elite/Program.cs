@@ -923,18 +923,20 @@ namespace Elite
                                     {
                                         if (!string.IsNullOrEmpty(genusLocal))  EliteData.ExoBioGenus   = genusLocal;
                                         if (!string.IsNullOrEmpty(speciesWord)) EliteData.ExoBioSpecies = speciesWord;
-                                        EliteData.ExoBioScanCount      = 2;
-                                        // Store scan 2 position — Log position is preserved so both are tracked
+                                        // Increment: first Sample → 2, second Sample → 3
+                                        EliteData.ExoBioScanCount      = Math.Min(EliteData.ExoBioScanCount + 1, 3);
                                         EliteData.ExoBioSampleLat      = obj.Value<double?>("Latitude")  ?? lastKnownLat;
                                         EliteData.ExoBioSampleLon      = obj.Value<double?>("Longitude") ?? lastKnownLon;
                                         EliteData.ExoBioSampleBodyName = currentBodyName;
                                         EliteData.ExoBioSamplePlanetRadius = 0;
                                         Logger.Instance.LogMessage(TracingLevel.INFO,
-                                            $"BackfillExoBio Sample stored: sampleLat={EliteData.ExoBioSampleLat} sampleLon={EliteData.ExoBioSampleLon} logLat={EliteData.ExoBioLogLat} logLon={EliteData.ExoBioLogLon} body={EliteData.ExoBioSampleBodyName} (lastKnown={lastKnownLat:F4},{lastKnownLon:F4})");
+                                            $"BackfillExoBio Sample (scan {EliteData.ExoBioScanCount}) stored: sampleLat={EliteData.ExoBioSampleLat} sampleLon={EliteData.ExoBioSampleLon} logLat={EliteData.ExoBioLogLat} logLon={EliteData.ExoBioLogLon} body={EliteData.ExoBioSampleBodyName} (lastKnown={lastKnownLat:F4},{lastKnownLon:F4})");
                                     }
                                     else if (scanType == "Analyse")
                                     {
-                                        EliteData.ExoBioScanCount = 3;
+                                        // Analyse completes the sequence — reset state entirely
+                                        EliteData.ResetExoBioState();
+                                        fileHasScanState = true;
                                     }
                                     break;
                                 }
