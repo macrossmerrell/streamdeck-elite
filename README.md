@@ -28,6 +28,8 @@ Altitude Color — text color for the altitude display
 Altitude Position — vertical position of the altitude text on the button
 Bold — toggle bold text on or off
 
+ ![Heading and Altitude Example](https://github.com/macrossmerrell/streamdeck-elite/blob/59a524d1a1d7b0db09d36c955ec8f0ab7fa6cacd/Elite/Images/Examples/altandhead.png)
+
 ### ✏️ (Updated) Static Button
 Added missing features to the original Static Button:
 
