@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover">
+    <meta name=apple-mobile-web-app-capable content=yes>
+    <meta name=apple-mobile-web-app-status-bar-style content=black>
+    <title>Mhwlng's Elite</title>
+    <link rel="stylesheet" href="../sdpi.css">
+    <link rel="stylesheet" href="../jquery.highlight-within-textarea.css">
+    <script src="../sdtools.common.js"></script>
+    <script src="../jquery-3.3.1.min.js"></script>
+    <script src="../jquery.highlight-within-textarea.js"></script>
+</head>
+<body>
+    <div class="sdpi-wrapper">
+
+        <div class="sdpi-item" id="dvAutoRotateEnabled">
+            <div class="sdpi-item-label">Auto Rotate</div>
+            <select class="sdpi-item-value select sdProperty" id="autoRotateEnabled" oninput="setSettings()">
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvAutoRotateSeconds">
+            <div class="sdpi-item-label">Rotate Every (sec)</div>
+            <input class="sdpi-item-value sdProperty" type="number" id="autoRotateSeconds"
+                   min="1" max="120" step="1" oninput="setSettings()">
+        </div>
+
+        <hr>
+
+        <!-- ===================== Jumps Remaining ===================== -->
+
+        <div class="sdpi-item" id="dvJumpsEnabled">
+            <div class="sdpi-item-label">Jumps Remaining Enabled</div>
+            <select class="sdpi-item-value select sdProperty" id="jumpsEnabled" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvJumpsLabelText">
+            <div class="sdpi-item-label">Jumps Remaining Label Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="jumpsLabelText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvJumpsLabelTextVerticalPosition">
+            <div class="sdpi-item-label">Jumps Remaining Label Position</div>
+            <select class="sdpi-item-value select sdProperty" id="jumpsLabelTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvJumpsLabelColor">
+            <div class="sdpi-item-label">Jumps Remaining Label Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="jumpsLabelColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvJumpsImage">
+            <div class="sdpi-item-label" onclick="clearFileName('jumpsImage');">Jumps Remaining Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupJumps">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="jumpsImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="jumpsImage" id="jumpsImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="jumpsImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvJumpsColor">
+            <div class="sdpi-item-label">Jumps Remaining Value Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="jumpsColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvJumpsTextVerticalPosition">
+            <div class="sdpi-item-label">Jumps Remaining Value Position</div>
+            <select class="sdpi-item-value select sdProperty" id="jumpsTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvJumpsTextBold">
+            <div class="sdpi-item-label">Jumps Remaining Bold</div>
+            <select class="sdpi-item-value select sdProperty" id="jumpsTextBold" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- ===================== Destination (Remaining LY) ===================== -->
+
+        <div class="sdpi-item" id="dvRemainingEnabled">
+            <div class="sdpi-item-label">Destination Enabled</div>
+            <select class="sdpi-item-value select sdProperty" id="remainingEnabled" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvRemainingLabelText">
+            <div class="sdpi-item-label">Destination Label Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="remainingLabelText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvRemainingLabelTextVerticalPosition">
+            <div class="sdpi-item-label">Destination Label Position</div>
+            <select class="sdpi-item-value select sdProperty" id="remainingLabelTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvRemainingLabelColor">
+            <div class="sdpi-item-label">Destination Label Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="remainingLabelColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvRemainingImage">
+            <div class="sdpi-item-label" onclick="clearFileName('remainingImage');">Destination Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupRemaining">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="remainingImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="remainingImage" id="remainingImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="remainingImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvRemainingColor">
+            <div class="sdpi-item-label">Destination Value Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="remainingColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvRemainingTextVerticalPosition">
+            <div class="sdpi-item-label">Destination Value Position</div>
+            <select class="sdpi-item-value select sdProperty" id="remainingTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvRemainingTextBold">
+            <div class="sdpi-item-label">Destination Bold</div>
+            <select class="sdpi-item-value select sdProperty" id="remainingTextBold" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- ===================== Next System ===================== -->
+
+        <div class="sdpi-item" id="dvNextEnabled">
+            <div class="sdpi-item-label">Next System Enabled</div>
+            <select class="sdpi-item-value select sdProperty" id="nextEnabled" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvNextLabelText">
+            <div class="sdpi-item-label">Next System Label Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="nextLabelText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvNextLabelTextVerticalPosition">
+            <div class="sdpi-item-label">Next System Label Position</div>
+            <select class="sdpi-item-value select sdProperty" id="nextLabelTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvNextLabelColor">
+            <div class="sdpi-item-label">Next System Label Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="nextLabelColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvNextImage">
+            <div class="sdpi-item-label" onclick="clearFileName('nextImage');">Next System Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupNext">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="nextImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="nextImage" id="nextImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="nextImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvNextColor">
+            <div class="sdpi-item-label">Next System Value Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="nextColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvNextTextVerticalPosition">
+            <div class="sdpi-item-label">Next System Value Position</div>
+            <select class="sdpi-item-value select sdProperty" id="nextTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvNextTextBold">
+            <div class="sdpi-item-label">Next System Bold</div>
+            <select class="sdpi-item-value select sdProperty" id="nextTextBold" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- ===================== Trip Progress ===================== -->
+
+        <div class="sdpi-item" id="dvProgressEnabled">
+            <div class="sdpi-item-label">Trip Progress Enabled</div>
+            <select class="sdpi-item-value select sdProperty" id="progressEnabled" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvProgressLabelText">
+            <div class="sdpi-item-label">Trip Progress Label Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="progressLabelText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvProgressLabelTextVerticalPosition">
+            <div class="sdpi-item-label">Trip Progress Label Position</div>
+            <select class="sdpi-item-value select sdProperty" id="progressLabelTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvProgressLabelColor">
+            <div class="sdpi-item-label">Trip Progress Label Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="progressLabelColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvProgressImage">
+            <div class="sdpi-item-label" onclick="clearFileName('progressImage');">Trip Progress Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupProgress">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="progressImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="progressImage" id="progressImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="progressImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvProgressColor">
+            <div class="sdpi-item-label">Trip Progress Value Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="progressColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvProgressTextVerticalPosition">
+            <div class="sdpi-item-label">Trip Progress Value Position</div>
+            <select class="sdpi-item-value select sdProperty" id="progressTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvProgressTextBold">
+            <div class="sdpi-item-label">Trip Progress Bold</div>
+            <select class="sdpi-item-value select sdProperty" id="progressTextBold" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- ===================== Fuel Status ===================== -->
+
+        <div class="sdpi-item" id="dvFuelEnabled">
+            <div class="sdpi-item-label">Fuel Status Enabled</div>
+            <select class="sdpi-item-value select sdProperty" id="fuelEnabled" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvFuelLabelText">
+            <div class="sdpi-item-label">Fuel Status Label Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="fuelLabelText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvFuelLabelTextVerticalPosition">
+            <div class="sdpi-item-label">Fuel Status Label Position</div>
+            <select class="sdpi-item-value select sdProperty" id="fuelLabelTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvFuelLabelColor">
+            <div class="sdpi-item-label">Fuel Status Label Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="fuelLabelColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvFuelImage">
+            <div class="sdpi-item-label" onclick="clearFileName('fuelImage');">Fuel Status Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupFuel">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="fuelImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="fuelImage" id="fuelImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="fuelImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvFuelColor">
+            <div class="sdpi-item-label">Fuel Status Value Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="fuelColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvFuelTextVerticalPosition">
+            <div class="sdpi-item-label">Fuel Status Value Position</div>
+            <select class="sdpi-item-value select sdProperty" id="fuelTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvFuelTextBold">
+            <div class="sdpi-item-label">Fuel Status Bold</div>
+            <select class="sdpi-item-value select sdProperty" id="fuelTextBold" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- ===================== Jump Range ===================== -->
+
+        <div class="sdpi-item" id="dvJumpRangeEnabled">
+            <div class="sdpi-item-label">Jump Range Enabled</div>
+            <select class="sdpi-item-value select sdProperty" id="jumpRangeEnabled" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvJumpRangeLabelText">
+            <div class="sdpi-item-label">Jump Range Label Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="jumpRangeLabelText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvJumpRangeLabelTextVerticalPosition">
+            <div class="sdpi-item-label">Jump Range Label Position</div>
+            <select class="sdpi-item-value select sdProperty" id="jumpRangeLabelTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvJumpRangeLabelColor">
+            <div class="sdpi-item-label">Jump Range Label Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="jumpRangeLabelColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvJumpRangeImage">
+            <div class="sdpi-item-label" onclick="clearFileName('jumpRangeImage');">Jump Range Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupJumpRange">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="jumpRangeImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="jumpRangeImage" id="jumpRangeImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="jumpRangeImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvJumpRangeColor">
+            <div class="sdpi-item-label">Jump Range Value Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="jumpRangeColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvJumpRangeTextVerticalPosition">
+            <div class="sdpi-item-label">Jump Range Value Position</div>
+            <select class="sdpi-item-value select sdProperty" id="jumpRangeTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvJumpRangeTextBold">
+            <div class="sdpi-item-label">Jump Range Bold</div>
+            <select class="sdpi-item-value select sdProperty" id="jumpRangeTextBold" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <div class="sdpi-item" id="dvNoRouteImage">
+            <div class="sdpi-item-label" onclick="clearFileName('noRouteImage');">No Route Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupNoRoute">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="noRouteImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="noRouteImage" id="noRouteImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="noRouteImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div class="sdpi-item" id="dvClickSound">
+            <div class="sdpi-item-label" onclick="clearFileName('clickSound');">Sound</div>
+            <div class="sdpi-item-group file" id="filepickergroup4">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="clickSound" accept=".wav" oninput="setSettings()">
+                <label class="sdpi-file-info " for="clickSound" id="clickSoundFilename">No file...</label>
+                <label class="sdpi-file-label" for="clickSound">Choose file...</label>
+            </div>
+        </div>
+
+        <div class="sdpi-item" id="dvErrorSound">
+            <div class="sdpi-item-label" onclick="clearFileName('errorSound');">Disabled Sound</div>
+            <div class="sdpi-item-group file" id="filepickergroup5">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="errorSound" accept=".wav" oninput="setSettings()">
+                <label class="sdpi-file-info " for="errorSound" id="errorSoundFilename">No file...</label>
+                <label class="sdpi-file-label" for="errorSound">Choose file...</label>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -285,7 +285,7 @@ namespace Elite.Buttons
         // EliteData.HandleEliteEvents already caches Scan / FSSBodySignals /
         // SAASignalsFound into GravityCache and SignalCache, so we just redraw.
 
-        public void HandleEliteEvents(object sender, JournalEventArgs e)
+        public void HandleEliteEvents(object sender, MessageReceivedEventArgs args)
         {
             System.Threading.Thread.Sleep(100);
             AsyncHelper.RunSync(HandleDisplay);
@@ -307,7 +307,7 @@ namespace Elite.Buttons
                 AsyncHelper.RunSync(HandleDisplay);
             }
 
-            Program.JournalWatcher.AllEventHandler += HandleEliteEvents;
+            Program.JournalWatcher.MessageReceived += HandleEliteEvents;
         }
 
         public override void KeyPressed(KeyPayload payload) { }
@@ -316,7 +316,7 @@ namespace Elite.Buttons
         public override void Dispose()
         {
             base.Dispose();
-            Program.JournalWatcher.AllEventHandler -= HandleEliteEvents;
+            Program.JournalWatcher.MessageReceived -= HandleEliteEvents;
         }
 
         public override async void OnTick()

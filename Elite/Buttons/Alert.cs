@@ -564,12 +564,13 @@ namespace Elite.Buttons
                 AsyncHelper.RunSync(HandleDisplay);
             }
 
-            Program.JournalWatcher.AllEventHandler += HandleEliteEvents;
+            Program.JournalWatcher.MessageReceived += HandleEliteEvents;
         }
 
-        public void HandleEliteEvents(object sender, JournalEventArgs e)
+        public void HandleEliteEvents(object sender, MessageReceivedEventArgs args)
         {
-            var evt = ((JournalEventArgs)e).OriginalEvent.Value<string>("event");
+            var e = args.EventArgs;
+                        var evt = ((JournalEventArgs)e).OriginalEvent.Value<string>("event");
             if (string.IsNullOrWhiteSpace(evt))
             {
                 AsyncHelper.RunSync(HandleDisplay);
@@ -636,7 +637,7 @@ namespace Elite.Buttons
         public override void Dispose()
         {
             base.Dispose();
-            Program.JournalWatcher.AllEventHandler -= HandleEliteEvents;
+            Program.JournalWatcher.MessageReceived -= HandleEliteEvents;
             _defaultBitmap?.Dispose();
             foreach (var bmp in _alertBitmaps.Values)
                 bmp?.Dispose();

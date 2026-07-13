@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //When Written: when requesting a ship at another station be transported to this station
@@ -24,11 +17,12 @@ namespace EliteJournalReader.Events
             public long MarketID { get; set; }
             public string ShipType { get; set; }
             public string ShipType_Localised { get; set; }
-            public string ShipId { get; set; }
+            public long ShipID { get; set; }
             public string System { get; set; }
             public double Distance { get; set; }
             public int TransferPrice { get; set; }
             public int TransferTime { get; set; }
+            public long ShipMarketID { get; set; }
         }
     }
 }

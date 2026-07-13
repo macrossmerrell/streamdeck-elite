@@ -1,15 +1,15 @@
 ﻿using System;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 
 namespace EliteJournalReader
 {
     [JsonConverter(typeof(EngineeringModifiersCoverter))]
-    public struct EngineeringModifiers
+    public class EngineeringModifiers
     {
         [JsonConverter(typeof(ExtendedStringEnumConverter<ModuleAttribute>))]
         public ModuleAttribute Label { get; set; }
+        public string Label_Localised { get; set; }
 
         public double Value { get; set; }
         public string ValueStr { get; set; }
@@ -29,7 +29,21 @@ namespace EliteJournalReader
             var mod = new EngineeringModifiers();
             var obj = JObject.Load(reader);
 
-            mod.Label = (ModuleAttribute)Enum.Parse(typeof(ModuleAttribute), obj.Value<string>(nameof(mod.Label)));
+            var rawLabel = obj.Value<string>(nameof(mod.Label));
+            if (string.Equals(rawLabel, "$Kinetic", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(rawLabel, "$Kinetic;", StringComparison.OrdinalIgnoreCase))
+            {
+                mod.Label = ModuleAttribute.Kinetic;
+            }
+            else if (string.Equals(rawLabel, "$Thermic", StringComparison.OrdinalIgnoreCase)
+                     || string.Equals(rawLabel, "$Thermic;", StringComparison.OrdinalIgnoreCase))
+            {
+                mod.Label = ModuleAttribute.Thermic;
+            }
+            else
+            {
+                mod.Label = Enum.Parse<ModuleAttribute>(rawLabel);
+            }
             mod.LessIsGood = obj.Value<bool>(nameof(mod.LessIsGood));
 
             var valueToken = obj[nameof(mod.Value)];

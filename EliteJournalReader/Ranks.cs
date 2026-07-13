@@ -1,48 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace EliteJournalReader
 {
-    public enum SoldierRank
-    {
-        Defenceless = 0,
-        [Description("Mostly Defenceless")] MostlyDefenceless,
-        Rookie,
-        Soldier,
-        Gunslinger,
-        Warrior,
-        Gladiator,
-        Deadeye,
-        Elite,
-        [Description("Elite I")] Elite1,
-        [Description("Elite II")] Elite2,
-        [Description("Elite III")] Elite3,
-        [Description("Elite IV")] Elite4,
-        [Description("Elite V")] Elite5
-    }
-
-    public enum ExobiologistRank
-    {
-        Directionless = 0,
-        [Description("Mostly Directionless")] MostlyDirectionless,
-        Compiler,
-        Collector,
-        Cataloguer,
-        Taxonomist,
-        Ecologist,
-        Geneticist,
-        Elite,
-        [Description("Elite I")] Elite1,
-        [Description("Elite II")] Elite2,
-        [Description("Elite III")] Elite3,
-        [Description("Elite IV")] Elite4,
-        [Description("Elite V")] Elite5
-    }
-
     public enum CombatRank
     {
         Harmless = 0,
@@ -53,12 +12,7 @@ namespace EliteJournalReader
         Master,
         Dangerous,
         Deadly,
-        Elite,
-        [Description("Elite I")] Elite1,
-        [Description("Elite II")] Elite2,
-        [Description("Elite III")] Elite3,
-        [Description("Elite IV")] Elite4,
-        [Description("Elite V")] Elite5
+        Elite
     }
 
     public enum TradeRank
@@ -71,12 +25,7 @@ namespace EliteJournalReader
         Broker,
         Entrepreneur,
         Tycoon,
-        Elite,
-        [Description("Elite I")] Elite1,
-        [Description("Elite II")] Elite2,
-        [Description("Elite III")] Elite3,
-        [Description("Elite IV")] Elite4,
-        [Description("Elite V")] Elite5
+        Elite
     }
 
     public enum ExplorationRank
@@ -89,12 +38,7 @@ namespace EliteJournalReader
         Pathfinder,
         Ranger,
         Pioneer,
-        Elite,
-        [Description("Elite I")] Elite1,
-        [Description("Elite II")] Elite2,
-        [Description("Elite III")] Elite3,
-        [Description("Elite IV")] Elite4,
-        [Description("Elite V")] Elite5
+        Elite
     }
 
     public enum FederationRank
@@ -103,16 +47,16 @@ namespace EliteJournalReader
         Recruit,
         Cadet,
         Midshipman,
-        [Description("Petty Officer")] PettyOfficer,
-        [Description("Chief Petty Officer")] ChiefPettyOfficer,
-        [Description("Warrant Officer")] WarrantOfficer,
+        PettyOfficer,
+        ChiefPettyOfficer,
+        WarrantOfficer,
         Ensign,
         Lieutenant,
         LtCommander,
-        [Description("Post Commander")] PostCommander,
-        [Description("Post Captain")] PostCaptain,
-        [Description("Rear Admiral")] RearAdmiral,
-        [Description("Vice Admiral")] ViceAdmiral,
+        PostCommander,
+        PostCaptain,
+        RearAdmiral,
+        ViceAdmiral,
         Admiral
     }
 
@@ -138,18 +82,39 @@ namespace EliteJournalReader
     public enum CQCRank
     {
         Helpless = 0,
-        [Description("Mostly Helpless")] MostlyHelpless,
+        MostlyHelpless,
         Amateur,
-        [Description("Semi Professional")] SemiProfessional,
+        SemiProfessional,
         Professional,
         Champion,
         Hero,
         Legend,
-        Elite,
-        [Description("Elite I")] Elite1,
-        [Description("Elite II")] Elite2,
-        [Description("Elite III")] Elite3,
-        [Description("Elite IV")] Elite4,
-        [Description("Elite V")] Elite5
+        Elite
+    }
+
+    public enum SoldierRank
+    {
+        Defenceless = 0,
+        MostlyDefenceLess,
+        Rookie,
+        Soldier,
+        Gunslinger,
+        Warrior,
+        Gladiator,
+        Deadeye,
+        Elite
+    }
+
+    public enum ExobiologistRank
+    {
+        DirectionLess = 0,
+        MostlyDirectionLess,
+        Compiler,
+        Collector,
+        Cataloguer,
+        Taxonomist,
+        Ecologist,
+        Geneticist,
+        Elite
     }
 }

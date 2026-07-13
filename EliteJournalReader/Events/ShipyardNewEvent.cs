@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //When written: after a new ship has been purchased
@@ -20,7 +13,7 @@ namespace EliteJournalReader.Events
             public long MarketID { get; set; }
             public string ShipType { get; set; }
             public string ShipType_Localised { get; set; }
-            public string NewShipID { get; set; }
+            public long NewShipID { get; set; }
         }
     }
 }

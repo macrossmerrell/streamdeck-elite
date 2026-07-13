@@ -28,14 +28,19 @@ namespace Elite.Buttons
             { "water",                  "WATER" },
             { "sulphur dioxide",        "SULPHUR\nDIOXIDE" },
             { "sulfur dioxide",         "SULPHUR\nDIOXIDE" },
-            { "neon rich",              "NEON" },
-            { "argon rich",             "ARGON" },
-            { "carbon dioxide rich",    "CARBON\nDIOXIDE" },
+            { "neon rich",              "NEON\nRICH" },
+            { "argon rich",             "ARGON\nRICH" },
+            { "carbon dioxide rich",    "CARBON\nDIOXIDE\nRICH" },
             { "carbon dioxide",         "CARBON\nDIOXIDE" },
             { "helium",                 "HELIUM" },
             { "neon",                   "NEON" },
             { "metallic vapour",        "METALLIC\nVAPOUR" },
             { "metallic vapor",         "METALLIC\nVAPOUR" },
+            { "water rich",             "WATER\nRICH" },
+            { "methane rich",           "METHANE\nRICH" },
+            { "ammonia rich",           "AMMONIA\nRICH" },
+            { "ammonia and oxygen",     "AMMONIA\nOXYGEN" },
+            { "suitable for water-based life", "WATER\nBASED\nLIFE" },
             { "no atmosphere",          "NONE" },
             { "",                       "NONE" }
         };
@@ -44,24 +49,61 @@ namespace Elite.Buttons
         {
             if (string.IsNullOrWhiteSpace(atmosphere)) return "NONE";
 
-            // Strip "thin " and "atmosphere" variations
+            // Capture "hot " / "thin " as a prefix line instead of discarding them
             var cleaned = atmosphere.Trim();
-            if (cleaned.StartsWith("thin ", StringComparison.OrdinalIgnoreCase))
-                cleaned = cleaned.Substring(5).Trim();
+            var prefixWords = new List<string>();
+
+            bool strippedOne = true;
+            while (strippedOne)
+            {
+                strippedOne = false;
+                if (cleaned.StartsWith("hot ", StringComparison.OrdinalIgnoreCase))
+                {
+                    prefixWords.Add("HOT");
+                    cleaned = cleaned.Substring(4).Trim();
+                    strippedOne = true;
+                }
+                else if (cleaned.StartsWith("thin ", StringComparison.OrdinalIgnoreCase))
+                {
+                    prefixWords.Add("THIN");
+                    cleaned = cleaned.Substring(5).Trim();
+                    strippedOne = true;
+                }
+            }
+
             if (cleaned.EndsWith(" atmosphere", StringComparison.OrdinalIgnoreCase))
                 cleaned = cleaned.Substring(0, cleaned.Length - 11).Trim();
-            if (cleaned.Equals("atmosphere", StringComparison.OrdinalIgnoreCase))
-                return "NONE";
+            if (cleaned.Equals("atmosphere", StringComparison.OrdinalIgnoreCase) || cleaned.Length == 0)
+                return prefixWords.Count > 0 ? string.Join(" ", prefixWords) + "\nNONE" : "NONE";
 
+            string body;
             if (AtmosphereAbbreviations.TryGetValue(cleaned, out var abbr))
-                return abbr;
+            {
+                body = abbr;
+            }
+            else
+            {
+                // Fallback - uppercase, split at first space if multi-word
+                var upper = cleaned.ToUpper();
+                var spaceIdx = upper.IndexOf(' ');
+                body = spaceIdx > 0
+                    ? upper.Substring(0, spaceIdx) + "\n" + upper.Substring(spaceIdx + 1)
+                    : upper;
+            }
 
-            // Fallback - uppercase, split at first space if multi-word
-            var upper = cleaned.ToUpper();
-            var spaceIdx = upper.IndexOf(' ');
-            if (spaceIdx > 0)
-                return upper.Substring(0, spaceIdx) + "\n" + upper.Substring(spaceIdx + 1);
-            return upper;
+            if (prefixWords.Count == 0) return body;
+
+            // Combine prefix + body lines, then merge from the front until we're at 3 lines max
+            var allLines = new List<string> { string.Join(" ", prefixWords) };
+            allLines.AddRange(body.Split('\n'));
+
+            while (allLines.Count > 3)
+            {
+                allLines[1] = allLines[0] + " " + allLines[1];
+                allLines.RemoveAt(0);
+            }
+
+            return string.Join("\n", allLines);
         }
 
         protected class PluginSettings
@@ -121,17 +163,22 @@ namespace Elite.Buttons
             var fontStyle = isBold ? FontStyle.Bold : FontStyle.Regular;
             var lines = text.Split('\n');
 
-            for (int adjustedSize = 25; adjustedSize >= 10; adjustedSize -= 1)
+            // Cap total block height so 3-line text (e.g. "HOT\nSULPHUR\nDIOXIDE") can't
+            // grow past the top half of the button and crowd the temperature line.
+            float maxBlockHeight = width * 0.46f;
+
+            for (int adjustedSize = 25; adjustedSize >= 8; adjustedSize -= 1)
             {
                 var testFont = new Font("Arial", adjustedSize, fontStyle);
                 bool fits = true;
                 var lineWidths = new float[lines.Length];
                 var lineHeights = new float[lines.Length];
+                float totalHeight = 0f;
 
                 for (int i = 0; i < lines.Length; i++)
                 {
                     var line = lines[i];
-                    if (string.IsNullOrEmpty(line)) { lineWidths[i] = 0; lineHeights[i] = testFont.Height; continue; }
+                    if (string.IsNullOrEmpty(line)) { lineWidths[i] = 0; lineHeights[i] = testFont.Height; totalHeight += testFont.Height * 1.1f; continue; }
 
                     var sf = new StringFormat(StringFormat.GenericTypographic);
                     sf.SetMeasurableCharacterRanges(new[] { new CharacterRange(0, line.Length) });
@@ -139,6 +186,7 @@ namespace Elite.Buttons
                     var bounds = regions[0].GetBounds(graphics);
                     lineWidths[i] = bounds.Width;
                     lineHeights[i] = bounds.Height;
+                    totalHeight += bounds.Height * 1.1f;
 
                     if (bounds.Width > width * 0.90f)
                     {
@@ -146,6 +194,9 @@ namespace Elite.Buttons
                         break;
                     }
                 }
+
+                if (fits && totalHeight > maxBlockHeight)
+                    fits = false;
 
                 if (fits)
                 {
@@ -288,10 +339,10 @@ namespace Elite.Buttons
                 AsyncHelper.RunSync(HandleDisplay);
             }
 
-            Program.JournalWatcher.AllEventHandler += HandleEliteEvents;
+            Program.JournalWatcher.MessageReceived += HandleEliteEvents;
         }
 
-        public void HandleEliteEvents(object sender, JournalEventArgs e)
+        public void HandleEliteEvents(object sender, MessageReceivedEventArgs args)
         {
             AsyncHelper.RunSync(HandleDisplay);
         }
@@ -302,7 +353,7 @@ namespace Elite.Buttons
         public override void Dispose()
         {
             base.Dispose();
-            Program.JournalWatcher.AllEventHandler -= HandleEliteEvents;
+            Program.JournalWatcher.MessageReceived -= HandleEliteEvents;
         }
 
         public override async void OnTick()

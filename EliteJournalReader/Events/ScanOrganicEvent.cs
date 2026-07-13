@@ -1,11 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     public class ScanOrganicEvent : JournalEvent<ScanOrganicEvent.ScanOrganicEventArgs>
@@ -14,14 +6,15 @@ namespace EliteJournalReader.Events
 
         public class ScanOrganicEventArgs : JournalEventArgs
         {
-            [JsonConverter(typeof(ExtendedStringEnumConverter<OrganicScanType>))]
-            public OrganicScanType ScanType { get; set; }
-
+            public string ScanType { get; set; }
             public string Genus { get; set; }
+            public string Genus_Localised { get; set; }
             public string Species { get; set; }
+            public string Species_Localised { get; set; }
+            public string Variant { get; set; }
+            public string Variant_Localised { get; set; }
             public long SystemAddress { get; set; }
-            public string Body { get; set; }
-
+            public long Body { get; set; }
         }
     }
 }

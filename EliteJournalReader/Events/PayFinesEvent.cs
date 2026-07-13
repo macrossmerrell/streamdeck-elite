@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //When Written: when paying fines
@@ -26,7 +19,7 @@ namespace EliteJournalReader.Events
             public bool AllFines { get; set; }
             public string Faction { get; set; }
             public string Faction_Localised { get; set; }
-            public string ShipID { get; set; }
+            public long ShipID { get; set; }
 
         }
     }

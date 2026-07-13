@@ -1,17 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
-    //When written: when performing a full system scan(“Honk”)
+    //When written: when performing a full system scan(ï¿½Honkï¿½)
     //Parameters:
-    //•	Progress: (a value in range 0-1 showing how completely the system has been scanned)
-    //•	BodyCount: number of stellar bodies in system
-    //•	NonBodyCount: Number of non-body signals found
+    //ï¿½	Progress: (a value in range 0-1 showing how completely the system has been scanned)
+    //ï¿½	BodyCount: number of stellar bodies in system
+    //ï¿½	NonBodyCount: Number of non-body signals found
     public class FSSSignalDiscoveredEvent : JournalEvent<FSSSignalDiscoveredEvent.FSSSignalDiscoveredEventArgs>
     {
         public FSSSignalDiscoveredEvent() : base("FSSSignalDiscovered") { }
@@ -20,6 +13,8 @@ namespace EliteJournalReader.Events
         {
             public string SignalName { get; set; }
             public string SignalName_Localised { get; set; }
+            public string SignalType { get; set; }
+            public string SignalType_Localised { get; set; }
             public string SpawningState { get; set; }
             public string SpawningFaction { get; set; }
             public double TimeRemaining { get; set; }
@@ -27,6 +22,8 @@ namespace EliteJournalReader.Events
             public int ThreatLevel { get; set; } = 0;
             public long SystemAddress { get; set; }
             public string USSType { get; set; }
+            public string SpawningPower { get; set; }
+            public string OpposingPower { get; set; }
         }
     }
 }

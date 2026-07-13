@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //When Written: when switching to another ship already stored at this station
@@ -24,12 +17,12 @@ namespace EliteJournalReader.Events
             public long MarketID { get; set; }
             public string ShipType { get; set; }
             public string ShipType_Localised { get; set; }
-            public string ShipID { get; set; }
+            public long ShipID { get; set; }
             public string StoreOldShip { get; set; }
-            public string StoreShipID { get; set; }
+            public int? StoreShipId { get; set; }
             public string SellOldShip { get; set; }
-            public string SellShipID { get; set; }
-            public int? SellPrice { get; set; }  
+            public int? SellShipId { get; set; }
+            public int? SellPrice { get; set; }
         }
     }
 }

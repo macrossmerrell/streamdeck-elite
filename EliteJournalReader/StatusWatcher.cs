@@ -2,15 +2,9 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace EliteJournalReader
 {
@@ -33,6 +27,8 @@ namespace EliteJournalReader
         /// Token to signal that we are no longer watching
         /// </summary>
         private CancellationTokenSource cancellationTokenSource;
+
+        public StatusFileEvent LastEvent { get; protected set; }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="T:System.Object" /> class.
@@ -126,28 +122,29 @@ namespace EliteJournalReader
             }
         }
 
-        protected void UpdateStatus(object sender, FileSystemEventArgs e)
-        {
-            UpdateStatus(e.FullPath, 0);
-        }
+        protected void UpdateStatus(object sender, FileSystemEventArgs e) => UpdateStatus(e.FullPath, 0);
 
         private DateTime lastTimestamp = DateTime.MinValue;
         protected void UpdateStatus(string fullPath, int attempt)
         {
             try
             {
-                Thread.Sleep(50); // give it a wee bit
+                //Thread.Sleep(50); // give it a wee bit
                 var streamReader = new StreamReader(new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
-                using (JsonTextReader jsonTextReader = new JsonTextReader(streamReader))
+                using (var jsonTextReader = new JsonTextReader(streamReader))
                 {
-                    var evt = JToken.ReadFrom(jsonTextReader).ToObject<StatusFileEvent>();
-                    if (evt == null)
-                        throw new ArgumentNullException($"Unexpected empty status.json file");
+                    if (streamReader.EndOfStream)
+                        return; // nothing to read
+
+                    var jToken = JToken.ReadFrom(jsonTextReader);
+                    var evt = jToken.ToObject<StatusFileEvent>() ?? throw new ArgumentNullException($"Unexpected empty status.json file");
+                    evt.OriginalEvent = jToken;
 
                     // only fire the event if it's new data
                     if (evt.Timestamp > lastTimestamp)
                     {
                         lastTimestamp = evt.Timestamp;
+                        LastEvent = evt;
                         FireStatusUpdatedEvent(evt);
                     }
                 }
@@ -162,6 +159,7 @@ namespace EliteJournalReader
             catch (Exception)
             {
 #endif
+                FireFailedStatusUpdateEvent();
             }
         }
 
@@ -175,11 +173,25 @@ namespace EliteJournalReader
             {
                 Trace.TraceWarning($"{ex.GetType().Name} while reading from status.json: {ex.Message}");
                 Trace.TraceInformation(ex.StackTrace);
+                FireFailedStatusUpdateEvent();
             }
         }
 
 
         protected void FireStatusUpdatedEvent(StatusFileEvent evt) => StatusUpdated?.Invoke(this, evt);
+
+        /// <summary>
+        /// When an error occurs, set some status flags to signal that the status is not valid
+        /// And to prevent logic from sending data to EDSM/Inara.
+        /// </summary>
+        protected void FireFailedStatusUpdateEvent()
+        {
+            FireStatusUpdatedEvent(new StatusFileEvent
+            {
+                Flags = StatusFlags.None,
+                Flags2 = MoreStatusFlags.InMulticrew & MoreStatusFlags.PhysicalMulticrew & MoreStatusFlags.TelepresenceMulticrew,
+            });
+        }
     }
 
 }

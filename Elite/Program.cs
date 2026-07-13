@@ -695,6 +695,168 @@ namespace Elite
         }
 
         /// <summary>
+        /// Reconstructs the active route's waypoint list (EliteData.RouteList) on startup by
+        /// reading NavRoute.json directly, so RouteAdv's Next System / Destination options work
+        /// right away instead of staying empty until the player replots.
+        ///
+        /// Important: the "NavRoute" line in the journal LOG is just a short notification stub -
+        /// the actual route waypoints (with coordinates) are written to a separate snapshot file,
+        /// NavRoute.json, in the same folder as the journal. That file holds whatever route is
+        /// CURRENTLY active (it's overwritten on replot, and cleared to an empty Route array by
+        /// NavRouteClear), so we just read it directly instead of searching journal history.
+        ///
+        /// Note: this intentionally does NOT try to trim off already-completed waypoints - the
+        /// list read here always starts at the route's second system (the game's NavRoute.json
+        /// never removes visited legs). RouteAdv.cs realigns this against the live
+        /// RemainingJumpsInRoute count on every single read instead, which self-corrects no matter
+        /// how stale this backfilled list becomes as jumps happen.
+        /// </summary>
+        private static void BackfillRouteState(string journalPath)
+        {
+            try
+            {
+                var navRouteFilePath = Path.Combine(journalPath, "NavRoute.json");
+
+                if (!File.Exists(navRouteFilePath))
+                {
+                    Logger.Instance.LogMessage(TracingLevel.INFO, "BackfillRoute: NavRoute.json not found - no active route");
+                    return;
+                }
+
+                JObject navRouteObj;
+                try
+                {
+                    string json;
+                    using (var fs = new FileStream(navRouteFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    using (var reader = new StreamReader(fs))
+                        json = reader.ReadToEnd();
+
+                    navRouteObj = JObject.Parse(json);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.LogMessage(TracingLevel.FATAL, $"BackfillRoute: failed to read/parse NavRoute.json: {ex}");
+                    return;
+                }
+
+                NavRouteEvent.NavRouteEventArgs navRouteArgs;
+                try
+                {
+                    navRouteArgs = navRouteObj.ToObject<NavRouteEvent.NavRouteEventArgs>();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.LogMessage(TracingLevel.FATAL, $"BackfillRoute: failed to parse NavRoute.json contents: {ex}");
+                    return;
+                }
+
+                if (navRouteArgs?.Route == null || navRouteArgs.Route.Length < 2)
+                {
+                    Logger.Instance.LogMessage(TracingLevel.INFO, "BackfillRoute: NavRoute.json has no active route");
+                    return;
+                }
+
+                // Reuse the same handler the live journal watcher uses, so RouteList, TotalJumpsInRoute,
+                // and the on-disk progress cache all end up exactly as they would from a live NavRoute event.
+                EliteData.HandleNavRouteEvents(null, navRouteArgs);
+
+                Logger.Instance.LogMessage(TracingLevel.INFO,
+                    $"BackfillRoute: backfilled route with {EliteData.RouteList?.Count ?? 0} waypoint(s)");
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.LogMessage(TracingLevel.FATAL, $"BackfillRoute: {ex}");
+            }
+        }
+
+        /// <summary>
+        /// Reconstructs the current ship's UnladenMass and BaseJumpRange from the most recent
+        /// Loadout event on startup, so RouteAdv's Jump Range option works right away instead of
+        /// staying at zero until the player swaps ships or visits Outfitting this session.
+        ///
+        /// Strategy:
+        ///   • Walks journal files newest→oldest (up to 10 files), same approach as the other
+        ///     backfill methods in this file.
+        ///   • Within each file, scans forward and keeps the LAST Loadout event seen (a player may
+        ///     have swapped ships more than once in that file - we only want the most recent one).
+        ///   • Stops at the first file that contains a Loadout event - older files are ignored.
+        /// </summary>
+        private static void BackfillLoadoutState(string journalPath)
+        {
+            try
+            {
+                var journalFiles = Directory.GetFiles(journalPath, "Journal.*.log")
+                    .OrderByDescending(f => f)
+                    .Take(10)
+                    .ToArray();
+
+                if (journalFiles.Length == 0)
+                {
+                    Logger.Instance.LogMessage(TracingLevel.INFO, "BackfillLoadout: no journal files found");
+                    return;
+                }
+
+                foreach (var file in journalFiles)
+                {
+                    try
+                    {
+                        string[] lines;
+                        using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        using (var reader = new StreamReader(fs))
+                            lines = reader.ReadToEnd().Split('\n');
+
+                        JObject lastLoadout = null;
+
+                        foreach (var raw in lines)
+                        {
+                            var line = raw.Trim();
+                            if (string.IsNullOrEmpty(line)) continue;
+
+                            JObject obj;
+                            try { obj = JObject.Parse(line); } catch { continue; }
+
+                            if (obj.Value<string>("event") == "Loadout")
+                            {
+                                lastLoadout = obj;
+                            }
+                        }
+
+                        if (lastLoadout != null)
+                        {
+                            var unladenMass = lastLoadout.Value<double?>("UnladenMass") ?? 0.0;
+                            var maxJumpRange = lastLoadout.Value<double?>("MaxJumpRange") ?? 0.0;
+
+                            if (unladenMass > 0)
+                            {
+                                EliteData.UnladenMass = unladenMass;
+                            }
+
+                            if (maxJumpRange > 0)
+                            {
+                                EliteData.BaseJumpRange = maxJumpRange;
+                            }
+
+                            Logger.Instance.LogMessage(TracingLevel.INFO,
+                                $"BackfillLoadout: found Loadout in {file} - UnladenMass={unladenMass}, MaxJumpRange={maxJumpRange}");
+
+                            return;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Instance.LogMessage(TracingLevel.FATAL, $"BackfillLoadout: error reading {file}: {ex}");
+                    }
+                }
+
+                Logger.Instance.LogMessage(TracingLevel.INFO, "BackfillLoadout: no Loadout event found in recent journal files");
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.LogMessage(TracingLevel.FATAL, $"BackfillLoadout: {ex}");
+            }
+        }
+
+        /// <summary>
         /// Reconstructs ExoBiology scan state from recent journal files on startup, so the button
         /// shows the correct genus, scan count, zone, and distance immediately.
         ///
@@ -1061,9 +1223,9 @@ namespace Elite
 
                 StatusWatcher.StartWatching();
 
-                JournalWatcher = new JournalWatcher(journalPath, defaultFilter);
+                JournalWatcher = new JournalWatcher(journalPath);
 
-                JournalWatcher.AllEventHandler += EliteData.HandleEliteEvents;
+                JournalWatcher.MessageReceived += EliteData.HandleEliteEvents;
 
                 JournalWatcher.StartWatching().Wait();
 
@@ -1072,6 +1234,17 @@ namespace Elite
 
                 // Backfill exobiology scan state from the current session journal
                 BackfillExoBiologyState(journalPath);
+
+                // Backfill current ship's mass/jump-range data from the most recent Loadout event,
+                // so RouteAdv's Jump Range option works immediately instead of waiting for the
+                // player to swap ships or visit Outfitting this session.
+                BackfillLoadoutState(journalPath);
+
+                // Backfill the active route's waypoint list from the most recent NavRoute event,
+                // trimmed to match jumps already completed - NavRoute only fires once when a route
+                // is plotted, so a route plotted in an earlier session would otherwise leave
+                // RouteAdv's Next System / Destination options stuck at 0.0 ly forever.
+                BackfillRouteState(journalPath);
 
                 // Watch journal for FSSBodySignals and SAASignalsFound independently
                 WatchJournalForSignals(journalPath);

@@ -186,11 +186,11 @@ namespace Elite.Buttons
                 AsyncHelper.RunSync(HandleDisplay);
             }
 
-            Program.JournalWatcher.AllEventHandler += HandleEliteEvents;
+            Program.JournalWatcher.MessageReceived += HandleEliteEvents;
 
         }
 
-        public void HandleEliteEvents(object sender, JournalEventArgs e)
+        public void HandleEliteEvents(object sender, MessageReceivedEventArgs args)
         {
             AsyncHelper.RunSync(HandleDisplay);
         }
@@ -319,7 +319,7 @@ namespace Elite.Buttons
 
             //Logger.Instance.LogMessage(TracingLevel.DEBUG, "Destructor called #1");
 
-            Program.JournalWatcher.AllEventHandler -= HandleEliteEvents;
+            Program.JournalWatcher.MessageReceived -= HandleEliteEvents;
         }
 
         public override async void OnTick()

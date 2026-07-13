@@ -1,45 +1,36 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
 
 namespace EliteJournalReader.Events
 {
     //When Written: when starting a mission
     //Parameters:
-    //•	Name: name of mission
-    //•	Faction: faction offering mission
-    //•	MissionID
-    //•	Influence: effect on influence(None/Low/Med/High)
-    //•	Reputation: effect on reputation(None/Low/Med/High)
-    //•	Reward: expected cash reward
-    //•	Wing: bool
+    //ï¿½	Name: name of mission
+    //ï¿½	Faction: faction offering mission
+    //ï¿½	MissionID
+    //ï¿½	Influence: effect on influence(None/Low/Med/High)
+    //ï¿½	Reputation: effect on reputation(None/Low/Med/High)
+    //ï¿½	Reward: expected cash reward
+    //ï¿½	Wing: bool
     //Optional Parameters (depending on mission type)
-    //•	Commodity: commodity type
-    //•	Count: number required / to deliver
-    //•	Target: name of target
-    //•	TargetType: type of target
-    //•	TargetFaction: target’s faction
+    //ï¿½	Commodity: commodity type
+    //ï¿½	Count: number required / to deliver
+    //ï¿½	Target: name of target
+    //ï¿½	TargetType: type of target
+    //ï¿½	TargetFaction: targetï¿½s faction
     public class MissionAcceptedEvent : JournalEvent<MissionAcceptedEvent.MissionAcceptedEventArgs>
     {
         public MissionAcceptedEvent() : base("MissionAccepted") { }
 
         public class MissionAcceptedEventArgs : JournalEventArgs
         {
-            public string MissionID { get; set; }
+            public long MissionID { get; set; }
             public string Name { get; set; }
             public string LocalisedName { get; set; }
             public string Faction { get; set; }
 
-            [JsonConverter(typeof(ExtendedStringEnumConverter<InfluenceLevel>))]
-            public InfluenceLevel Influence { get; set; }
+            public string Influence { get; set; }
 
-            [JsonConverter(typeof(ExtendedStringEnumConverter<ReputationLevel>))]
-            public ReputationLevel Reputation { get; set; }
+            public string Reputation { get; set; }
 
             public int Reward { get; set; }
             public bool Wing { get; set; }

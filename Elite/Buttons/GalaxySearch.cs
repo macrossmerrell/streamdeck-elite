@@ -196,15 +196,16 @@ namespace Elite.Buttons
             // Clear any SD-native title so our bitmap is always in control
             Connection.SetTitleAsync(null).Wait();
 
-            Program.JournalWatcher.AllEventHandler += HandleEliteEvents;
+            Program.JournalWatcher.MessageReceived += HandleEliteEvents;
             AsyncHelper.RunSync(HandleDisplay);
         }
 
         // ── Journal events ────────────────────────────────────────────────────────
 
-        public void HandleEliteEvents(object sender, JournalEventArgs e)
+        public void HandleEliteEvents(object sender, MessageReceivedEventArgs args)
         {
-            var evt = ((JournalEventArgs)e).OriginalEvent.Value<string>("event");
+            var e = args.EventArgs;
+                        var evt = ((JournalEventArgs)e).OriginalEvent.Value<string>("event");
             if (string.IsNullOrWhiteSpace(evt)) return;
 
             switch (evt)
@@ -263,7 +264,7 @@ namespace Elite.Buttons
         public override void Dispose()
         {
             base.Dispose();
-            Program.JournalWatcher.AllEventHandler -= HandleEliteEvents;
+            Program.JournalWatcher.MessageReceived -= HandleEliteEvents;
         }
 
         public override async void OnTick()

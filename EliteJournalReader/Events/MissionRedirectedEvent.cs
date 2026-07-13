@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //When written: when a mission is updated with a new destination
@@ -22,8 +15,9 @@ namespace EliteJournalReader.Events
 
         public class MissionRedirectedEventArgs : JournalEventArgs
         {
-            public string MissionID { get; set; }
-            public string MissionName { get; set; }
+            public long MissionID { get; set; }
+            public string Name { get; set; }
+            public string LocalisedName { get; set; }
             public string NewDestinationStation { get; set; }
             public string OldDestinationStation { get; set; }
             public string NewDestinationSystem { get; set; }

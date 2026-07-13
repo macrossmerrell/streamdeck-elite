@@ -1,12 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //When written: If you should ever reset your game
@@ -22,7 +13,7 @@ namespace EliteJournalReader.Events
             public string SystemName { get; set; }
             public long SystemID { get; set; }
             public string Body { get; set; }
-            public long BodyID { get; set; }
+            public int BodyID { get; set; }
         }
     }
 }

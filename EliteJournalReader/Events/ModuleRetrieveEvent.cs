@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //When Written: when fetching a previously stored module
@@ -25,7 +18,7 @@ namespace EliteJournalReader.Events
             public long MarketID { get; set; }
             public string Slot { get; set; }
             public string Ship { get; set; }
-            public string ShipId { get; set; }
+            public long ShipID { get; set; }
             public string RetrievedItem { get; set; }
             public string RetrievedItem_Localised { get; set; }
             public string EngineerModifications { get; set; }

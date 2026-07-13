@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //When written: when using SAA scanner on a planet or rings
@@ -23,8 +16,9 @@ namespace EliteJournalReader.Events
         {
             public long SystemAddress { get; set; }
             public string BodyName { get; set; }
-            public long BodyID { get; set; }
+            public int BodyID { get; set; }
             public SAASignal[] Signals { get; set; }
+            public SAAGenus[] Genuses { get; set; }
         }
     }
 }

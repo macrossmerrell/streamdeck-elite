@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EliteJournalReader
+﻿namespace EliteJournalReader
 {
     public class Economy
     {
@@ -20,15 +14,7 @@ namespace EliteJournalReader
 
         public override int GetHashCode()
         {
-            //https://stackoverflow.com/a/892640/3131828
-            unchecked
-            {
-                int h = 23;
-                h *= 31 + (Name?.GetHashCode() ?? 0);
-                h *= 31 + Proportion.GetHashCode();
-
-                return h;
-            }
+            return System.HashCode.Combine(Name, Proportion);
         }
 
         public Economy Clone() => (Economy)MemberwiseClone();

@@ -540,9 +540,10 @@ namespace Elite.Buttons
 
         // ── Journal events ────────────────────────────────────────────────────────
 
-        public void HandleEliteEvents(object sender, JournalEventArgs e)
+        public void HandleEliteEvents(object sender, MessageReceivedEventArgs args)
         {
-            var raw = ((JournalEventArgs)e).OriginalEvent;
+            var e = args.EventArgs;
+                        var raw = ((JournalEventArgs)e).OriginalEvent;
             var evt = raw?.Value<string>("event");
 
             if (evt == "ScanOrganic")
@@ -646,7 +647,7 @@ namespace Elite.Buttons
                 AsyncHelper.RunSync(HandleDisplay);
             }
 
-            Program.JournalWatcher.AllEventHandler += HandleEliteEvents;
+            Program.JournalWatcher.MessageReceived += HandleEliteEvents;
         }
 
         public override void KeyPressed(KeyPayload payload)  { }
@@ -655,7 +656,7 @@ namespace Elite.Buttons
         public override void Dispose()
         {
             base.Dispose();
-            Program.JournalWatcher.AllEventHandler -= HandleEliteEvents;
+            Program.JournalWatcher.MessageReceived -= HandleEliteEvents;
         }
 
         public override async void OnTick()

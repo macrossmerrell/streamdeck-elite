@@ -1,11 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
 
 namespace EliteJournalReader.Events
 {
@@ -35,10 +28,11 @@ namespace EliteJournalReader.Events
             public string Commander { get; set; }
             public string FID { get; set; }
             public bool Horizons { get; set; }
+
             public bool Odyssey { get; set; }
             public string Ship { get; set; }
-            public string ShipID { get; set; }
             public string Ship_Localised { get; set; }
+            public long ShipID { get; set; }
             public bool StartLanded { get; set; } = false;
             public bool StartDead { get; set; } = false;
 
@@ -54,7 +48,7 @@ namespace EliteJournalReader.Events
             public double FuelCapacity { get; set; }
 
             public string Language { get; set; }
-            public string Gameversion { get; set; }
+            public string GameVersion { get; set; }
             public string Build { get; set; }
         }
     }

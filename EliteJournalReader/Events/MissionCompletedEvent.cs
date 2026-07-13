@@ -1,28 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //When Written: when a mission is completed
     //Parameters:
-    //•	Name: mission type
-    //•	Faction: faction name
-    //•	MissionID
+    //ï¿½	Name: mission type
+    //ï¿½	Faction: faction name
+    //ï¿½	MissionID
     //Optional parameters (depending on mission type)
-    //•	Commodity
-    //•	Count
-    //•	Target
-    //•	TargetType
-    //•	TargetFaction
-    //•	Reward: value of reward
-    //•	Donation: donation offered (for altruism missions)
-    //•	PermitsAwarded:[] (names of any permits awarded, as a JSON array)
-    //•	MaterialsReward:[] (name, category and count)
-    //•	FactionEffects: array of records
+    //ï¿½	Commodity
+    //ï¿½	Count
+    //ï¿½	Target
+    //ï¿½	TargetType
+    //ï¿½	TargetFaction
+    //ï¿½	Reward: value of reward
+    //ï¿½	Donation: donation offered (for altruism missions)
+    //ï¿½	PermitsAwarded:[] (names of any permits awarded, as a JSON array)
+    //ï¿½	MaterialsReward:[] (name, category and count)
+    //ï¿½	FactionEffects: array of records
     //    o   Faction
     //    o   Effects: array of Effect and Trend value pairs
     //    o   Influence: array of SystemAddress and Trend value pairs
@@ -34,60 +27,62 @@ namespace EliteJournalReader.Events
 
         public class MissionCompletedEventArgs : JournalEventArgs
         {
-            public struct CommodityRewardItem
+            public class CommodityRewardItem
             {
-                public string Name;
-                public string Name_Localised;
-                public int Count;
+                public string Name { get; set; }
+                public string Name_Localised { get; set; }
+                public int Count { get; set; }
             }
 
-            public struct MaterialRewardItem
+            public class MaterialRewardItem
             {
-                public string Name;
-                public string Name_Localised;
-                public string Category;
-                public string Category_Localised;
-                public int Count;
+                public string Name { get; set; }
+                public string Name_Localised { get; set; }
+                public string Category { get; set; }
+                public string Category_Localised { get; set; }
+                public int Count { get; set; }
             }
 
-            public struct FactionEffectsDesc
+            public class FactionEffectsDesc
             {
-                public string Faction;
-                public FactionEffect[] Effects;
-                public FactionInfluenceEffect[] Influence;
-                public string Reputation;
-                public string ReputationTrend;
+                public string Faction { get; set; }
+                public FactionEffect[] Effects { get; set; }
+                public FactionInfluenceEffect[] Influence { get; set; }
+                public string Reputation { get; set; }
             }
 
-            public struct FactionEffect
+            public class FactionEffect
             {
-                public string Effect;
-                public string Effect_Localised;
-                public string Trend;
+                public string Effect { get; set; }
+                public string Effect_Localised { get; set; }
+                public string Trend { get; set; }
             }
 
-            public struct FactionInfluenceEffect
+            public class FactionInfluenceEffect
             {
-                public long SystemAddress;
-                public string Trend;
-                public string Influence;
+                public long SystemAddress { get; set; }
+                public string Trend { get; set; }
+                public string Influence { get; set; }
             }
 
             public string Faction { get; set; }
             public string Name { get; set; }
-            public string MissionID { get; set; }
+            public string LocalisedName { get; set; }
+            public long MissionID { get; set; }
             public string Commodity { get; set; }
             public string Commodity_Localised { get; set; }
             public int? Count { get; set; }
             public string Target { get; set; }
             public string TargetType { get; set; }
             public string TargetFaction { get; set; }
+            public string DestinationSystem { get; set; }
+            public string DestinationStation { get; set; }
             public int Reward { get; set; }
             public string Donation { get; set; }
             public int? Donated { get; set; }
             public string[] PermitsAwarded { get; set; }
             public CommodityRewardItem[] CommodityReward { get; set; }
-            public MaterialRewardItem[] MaterialsReward { get; set; }
+            public MaterialRewardItem[] MaterialReward { get; set; }
             public FactionEffectsDesc[] FactionEffects { get; set; }
         }
     }

@@ -1,24 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //When written: at startup
     //This line contains the information displayed in the statistics panel on the right side of the cockpit
 
     //Parameters:
-    //•	Bank_Account
+    //ï¿½	Bank_Account
     //o   Current_Wealth Spent_On_Ships
     //o Spent_On_Outfitting Spent_On_Repairs
     //o   Spent_On_Fuel
     //o   Spent_On_Ammo_Consumables
     //o   Insurance_Claims
     //o   Spent_On_Insurance
-    //•	Combat
+    //ï¿½	Combat
     //o   Bounties_Claimed
     //o   Bounty_Hunting_Profit
     //o   Combat_Bonds
@@ -27,29 +20,29 @@ namespace EliteJournalReader.Events
     //o   Assassination_Profits
     //o   Highest_Single_Reward
     //o   Skimmers_Killed 
-    //•	Crime
+    //ï¿½	Crime
     //o   Fines
     //o   Total_Fines
     //o   Bounties_Received
     //o   Total_Bounties
     //o   Highest_Bounty
-    //•	Smuggling
+    //ï¿½	Smuggling
     //o   Black_Markets_Traded_With
     //o   Black_Markets_Profits
     //o   Resources_Smuggled
     //o   Average_Profit
     //o   Highest_Single_Transaction 
-    //•	Trading
+    //ï¿½	Trading
     //o   Markets_Traded_With
     //o   Market_Profits
     //o   Resources_Traded
     //o   Average_Profit
     //o   Highest_Single_Transaction 
-    //•	Mining
+    //ï¿½	Mining
     //o   Mining_Profits
     //o   Quantity_Mined
     //o   Materials_Collected 
-    //•	Exploration
+    //ï¿½	Exploration
     //o   Systems_Visited
     //o   Fuel_Scooped
     //o   Fuel_Purchased
@@ -61,16 +54,16 @@ namespace EliteJournalReader.Events
     //o   Total_Hyperspace_Jumps
     //o   Greatest_Distance_From_Start
     //o   Time_Played 
-    //•	Passengers
+    //ï¿½	Passengers
     //o   Passengers_Missions_Bulk
     //o   Passengers_Missions_VIP
     //o   Passengers_Missions_Delivered
     //o   Passengers_Missions_Ejected 
-    //•	Search_And_Rescue
+    //ï¿½	Search_And_Rescue
     //o   SearchRescue_Traded
     //o   SearchRescue_Profit
     //o   SearchRescue_Count 
-    //•	Crafting
+    //ï¿½	Crafting
     //o   Spent_On_Crafting
     //o   Count_Of_Used_Engineers
     //o   Recipes_Generated
@@ -86,12 +79,12 @@ namespace EliteJournalReader.Events
     //o   Recipes_Applied_Rank_4
     //o   Recipes_Applied_Rank_5
     //o   Recipes_Applied_On_Previously_Modified_Modules 
-    //•	Crew
+    //ï¿½	Crew
     //o   NpcCrew_TotalWages
     //o   NpcCrew_Hired
     //o   NpcCrew_Fired
     //o   NpcCrew_Died
-    //•	Multicrew
+    //ï¿½	Multicrew
     //o   Multicrew_Time_Total
     //o   Multicrew_Gunner_Time_Total
     //o   Multicrew_Fighter_Time_Total
@@ -120,9 +113,11 @@ namespace EliteJournalReader.Events
             public ThargoidEncounters TG_Encounters { get; set; }
             public CQC CQC { get; set; }
             public MaterialsTrader Material_Trader_Stats { get; set; }
+            public Exobiology Exobiology { get; set; }
+            public Squadron Squadron { get; set; }
         }
 
-        public struct BankAccount
+        public class BankAccount
         {
             public long Current_Wealth_Spent_On_Ships { get; set; }
             public long Spent_On_Outfitting { get; set; }
@@ -133,7 +128,7 @@ namespace EliteJournalReader.Events
             public long Spent_On_Insurance { get; set; }
         }
 
-        public struct Combat
+        public class Combat
         {
             public long Bounties_Claimed { get; set; }
             public long Bounty_Hunting_Profit { get; set; }
@@ -145,7 +140,7 @@ namespace EliteJournalReader.Events
             public long Skimmers_Killed { get; set; }
         }
 
-        public struct Crime
+        public class Crime
         {
             public long Fines { get; set; }
             public long Total_Fines { get; set; }
@@ -154,7 +149,7 @@ namespace EliteJournalReader.Events
             public long Highest_Bounty { get; set; }
         }
 
-        public struct Smuggling
+        public class Smuggling
         {
             public long Black_Markets_Traded_With { get; set; }
             public long Black_Markets_Profit { get; set; }
@@ -163,7 +158,7 @@ namespace EliteJournalReader.Events
             public long Highest_Single_Transaction { get; set; }
         }
 
-        public struct Trading
+        public class Trading
         {
             public long Markets_Traded_With { get; set; }
             public long Markets_Profits { get; set; }
@@ -172,14 +167,14 @@ namespace EliteJournalReader.Events
             public long Highest_Single_Transaction { get; set; }
         }
 
-        public struct Mining
+        public class Mining
         {
             public long Mining_Profits { get; set; }
             public long Quantity_Mined { get; set; }
             public long Materials_Collected { get; set; }
         }
 
-        public struct Exploration
+        public class Exploration
         {
             public long Systems_Visited { get; set; }
             public double Fuel_Scooped { get; set; }
@@ -193,7 +188,7 @@ namespace EliteJournalReader.Events
             public long Time_Played { get; set; }
         }
 
-        public struct Passengers
+        public class Passengers
         {
             public long Passengers_Missions_Bulk { get; set; }
             public long Passengers_Missions_VIP { get; set; }
@@ -201,19 +196,19 @@ namespace EliteJournalReader.Events
             public long Passengers_Missions_Ejected { get; set; }
         }
 
-        public struct SearchAndRescue
+        public class SearchAndRescue
         {
             public long SearchRescue_Traded { get; set; }
             public long SearchRescue_Profit { get; set; }
             public long SearchResuce_Count { get; set; }
         }
 
-        public struct ThargoidEncounters
+        public class ThargoidEncounters
         {
             public long TG_Encounter_Wakes { get; set; }
         }
 
-        public struct Crafting
+        public class Crafting
         {
             public long Spent_On_Crafting { get; set; }
             public long Count_Of_Used_Engineers { get; set; }
@@ -232,7 +227,7 @@ namespace EliteJournalReader.Events
             public long Recipes_Applied_On_Previously_Modified_Modules { get; set; }
         }
 
-        public struct Crew
+        public class Crew
         {
             public long NpcCrew_TotalWages { get; set; }
             public long NpcCrew_Hired { get; set; }
@@ -240,7 +235,7 @@ namespace EliteJournalReader.Events
             public long NpcCrew_Died { get; set; }
         }
 
-        public struct Multicrew
+        public class Multicrew
         {
             public long Multicrew_Time_Total { get; set; }
             public long Multicrew_Gunner_Time_Total { get; set; }
@@ -249,7 +244,7 @@ namespace EliteJournalReader.Events
             public long Multicrew_Fines_Total { get; set; }
         }
 
-        public struct CQC
+        public class CQC
         {
             public long CQC_Credits_Earned { get; set; }
             public long CQC_Time_Played { get; set; }
@@ -258,10 +253,53 @@ namespace EliteJournalReader.Events
             public double CQC_WL { get; set; }
         }
 
-        public struct MaterialsTrader
+        public class MaterialsTrader
         {
             public long Trades_Completed { get; set; }
             public long Materials_Traded { get; set; }
+        }
+
+        public class Exobiology
+        {
+            public long Organic_Genus_Encountered { get; set; }
+            public long Organic_Species_Encountered { get; set; }
+            public long Organic_Variant_Encountered { get; set; }
+            public long Organic_Data_Profits { get; set; }
+            public long Organic_Data { get; set; }
+            public long First_Logged_Profits { get; set; }
+            public long First_Logged { get; set; }
+            public long Organic_Systems { get; set; }
+            public long Organic_Planets { get; set; }
+            public long Organic_Genus { get; set; }
+            public long Organic_Species { get; set; }
+        }
+
+        public class Squadron
+        {
+            public long Squadron_Bank_Credits_Deposited { get; set; }
+            public long Squadron_Bank_Credits_Withdrawn { get; set; }
+            public long Squadron_Bank_Commodities_Deposited_Num { get; set; }
+            public long Squadron_Bank_Commodities_Deposited_Value { get; set; }
+            public long Squadron_Bank_Commodities_Withdrawn_Num { get; set; }
+            public long Squadron_Bank_Commodities_Withdrawn_Value { get; set; }
+            public long Squadron_Bank_PersonalAssets_Deposited_Num { get; set; }
+            public long Squadron_Bank_PersonalAssets_Deposited_Value { get; set; }
+            public long Squadron_Bank_PersonalAssets_Withdrawn_Num { get; set; }
+            public long Squadron_Bank_PersonalAssets_Withdrawn_Value { get; set; }
+            public long Squadron_Bank_Ships_Deposited_Num { get; set; }
+            public long Squadron_Bank_Ships_Deposited_Value { get; set; }
+            public long Squadron_Leaderboard_aegis_highestcontribution { get; set; }
+            public long Squadron_Leaderboard_bgs_highestcontribution { get; set; }
+            public long Squadron_Leaderboard_bounty_highestcontribution { get; set; }
+            public long Squadron_Leaderboard_colonisation_contribution_highestcontribution { get; set; }
+            public long Squadron_Leaderboard_combat_highestcontribution { get; set; }
+            public long Squadron_Leaderboard_cqc_highestcontribution { get; set; }
+            public long Squadron_Leaderboard_exploration_highestcontribution { get; set; }
+            public long Squadron_Leaderboard_mining_highestcontribution { get; set; }
+            public long Squadron_Leaderboard_powerplay_highestcontribution { get; set; }
+            public long Squadron_Leaderboard_trade_highestcontribution { get; set; }
+            public long Squadron_Leaderboard_trade_illicit_highestcontribution { get; set; }
+            public long Squadron_Leaderboard_podiums { get; set; }
         }
     }
 }

@@ -1,15 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //When written: when approaching a planetary settlement
     //Parameters:
-    //•	Name
+    //ï¿½	Name
     public class ApproachSettlementEvent : JournalEvent<ApproachSettlementEvent.ApproachSettlementEventArgs>
     {
         public ApproachSettlementEvent() : base("ApproachSettlement") { }
@@ -22,7 +15,15 @@ namespace EliteJournalReader.Events
             public double Longitude { get; set; }
             public long SystemAddress { get; set; }
             public string BodyName { get; set; }
-            public long BodyID { get; set; }
+            public int BodyID { get; set; }
+            public Faction StationFaction { get; set; }
+            public string StationGovernment { get; set; }
+            public string StationGovernment_Localised { get; set; }
+            public string StationAllegiance { get; set; }
+            public string[] StationServices { get; set; }
+            public string StationEconomy { get; set; }
+            public string StationEconomy_Localised { get; set; }
+            public Economy[] StationEconomies { get; set; }
         }
     }
 }

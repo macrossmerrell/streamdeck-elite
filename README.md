@@ -4,9 +4,154 @@ This is a custom fork of [mhwlng's original project](https://github.com/mhwlng/s
 
 **Ensure .NET 10 Desktop Runtime is installed** for proper operation: https://dotnet.microsoft.com/en-us/download/dotnet/10.0
 
+## ⚠️ Important — EliteJournalReader Library Upgrade (v4.0.0)
+
+**If you've forked this project and added your own buttons or features, please read this before updating.**
+
+This release upgrades the plugin's underlying `EliteJournalReader` library (the piece that reads Elite Dangerous's journal and status files) to the current upstream version, targeting .NET 10. This brings access to newer game data — including flags for Supercruise Overcharge — but it also changes some core APIs that custom buttons commonly plug into. If your fork adds its own buttons, there's a good chance you'll need to update them. Thank you [MagicMau](https://github.com/MagicMau/EliteJournalReader) for all your hard work!
+
 Latest Release: https://github.com/macrossmerrell/streamdeck-elite/releases
 
 ---
+## New & Updated Features (v4.0.0)
+
+### 🆕 Replacement of outdated EliteJournalReader - Thank you MagicMau!
+This project now incorporates the latest Odyssey Flags/Flags2 events!
+- Buttons have been updated to work with 'Program.JournalWatcher.MessageReceived' events.
+- Addresses changes in flag names and incorrect values in the originally packaged EliteJournalReader.
+- Build environment bump, using a new Newtonsoft.Json package for .NET 10.
+
+### 🧑‍🚀 🆕 (NEW) On Foot Exploration Button
+A cycling on-foot status button for surface exploration. Only active while on foot on a planet surface — automatically shows an "Inactive" image the rest of the time (in your ship, in a station, etc.).
+
+![On Foot Button Example](https://github.com/macrossmerrell/streamdeck-elite/blob/b8ddf42be943f6240e54219dfcef30688d53d651/Elite/Images/Examples/Onfootbutton.png)
+
+**Displays (6 configurable options):**
+- **Oxygen** — current suit oxygen level as a percentage
+- **Health** — current suit health as a percentage
+- **Temperature** — live ambient temperature reading in Kelvin
+- **Gravity** — live gravity reading in g at your current location
+- **Atmosphere** — shows whether the local atmosphere is breathable
+- **Thermal Status** — shows your current thermal state: Safe, Cold, Very Cold, Hot, or Very Hot
+
+**Cycling behaviour:**
+- Pressing the button advances to the next enabled option (wraps back to the start)
+- **Auto Rotate** mode advances through enabled options automatically on a configurable timer (1–120 seconds)
+- Button starts on Oxygen by default
+
+**Every option is independently configurable - Can be used to create multiple buttons for static readouts:**
+- Enabled / Disabled toggle
+- Custom label text, label position, and label color
+- Value position and color (Oxygen, Health, Atmosphere, and Thermal default to the Edge position to avoid overlapping the label)
+- Background image
+- Bold text toggle
+
+**Oxygen & Health warnings:**
+- Each has its own warning color *and* its own warning image, triggered automatically by the game's own LowOxygen/LowHealth flags — the button can visually transform (not just change color) the moment either drops critical
+- Falls back to the normal image if no warning image is set
+
+**Atmosphere — grouped by state:**
+- Two fully independent states: **Breathable** and **No Oxygen**
+- Each state has its own text, its own image, and its own color, grouped together in settings so it's clear which belongs to which
+- The correct state is detected automatically and updates live as you move between locations
+
+**Thermal Status — grouped by state:**
+- Five fully independent states: **Safe, Cold, Very Cold, Hot, Very Hot**
+- Each state has its own label text, its own image, its own label color, *and* its own temperature color — so both the state name and the live temperature reading can be color-matched (or contrasted) to whichever image is showing
+- The state name is shown as the label (position configurable, defaults to Very Top); the live temperature reading (`123°K` format) is shown as the value below it (position configurable, defaults to Edge)
+- Falls back to the Safe-state image for any state that doesn't have its own image set
+
+**Additional settings:**
+- Inactive Image — shown whenever you're not on foot on a planet surface
+- Click sound
+
+### 🗺️ 🆕 (NEW) Advanced Route Button
+A cycling route information button designed for long-distance exploration. Displays one stat at a time and advances through your enabled options on button press or automatically on a timer.
+
+![Advanced Routing Button Example](https://github.com/macrossmerrell/streamdeck-elite/blob/b8ddf42be943f6240e54219dfcef30688d53d651/Elite/Images/Examples/AdvancedRouteButton.png)
+
+**Displays (6 configurable options):**
+- **Jumps Remaining** — whole number of jumps left in the active route
+- **Destination** — total light year distance from your current position through every remaining waypoint to your final destination
+- **Next System** — straight-line distance in light years to the next system in your route
+- **Trip Progress** — percentage of the route completed, based on jumps done vs. total jumps when the route was plotted
+- **Fuel Status** — current main tank fuel level in tons
+- **Jump Range** — estimated current jump range in light years, calculated from your ship's base range and current fuel/cargo mass
+
+**Cycling behaviour:**
+- Pressing the button advances to the next enabled option (wraps back to the start)
+- **Auto Rotate** mode advances through enabled options automatically on a configurable timer (1–120 seconds)
+- Button starts on Jumps Remaining by default
+
+**Persistence:**
+- Trip Progress is saved to disk and survives plugin and game restarts — progress is correctly restored even after relaunching and reopening the Galaxy Map mid-trip
+- Route waypoints and Jump Range baseline are backfilled from your journal files on startup, so all options display correct values immediately without needing to replot your route or visit Outfitting
+
+**Each option is independently configurable - Can be used to create multiple buttons for static readouts:**
+- Enabled / Disabled toggle
+- Custom label text (shown at top of button, e.g. rename "Destination" to whatever makes sense to you)
+- Label text position and color
+- Value position and color
+- Background image
+- Bold text toggle
+
+**Additional settings:**
+- No Route Image — shown when no route is active
+- Click sound and disabled sound
+
+> **Note:** Jump Range is an estimate based on your ship's unladen mass and base jump range, scaled by current fuel and cargo weight. It updates in near real-time as you burn fuel. It does not account for FSD engineering modifiers, but it's close enough :smiley:.
+
+### 🆕 (NEW) Odyssey Ship Status Button
+
+Replaces the old Ship Status Button (now deprecated) with a fully customizable version: every flight/ship state gets its own optional image plus independent top and bottom text, each with its own color and vertical position. Leave the text fields blank on any state to use it as a pure image button, exactly like before.
+
+**States covered (21 total):**
+Supercruise Charging, Supercruise Activation, Supercruise (Active), Supercruise Overcharge, Supercruise Assist, Normal Space, Hyperspace Charging, Hyperspace Jump, Fuel Scooping, Planet Approach, Orbital Cruise, Glide/Deorbit, Planetary Flight, Landed, Liftoff, Leaving Planet, No-Fire Zone, Station Approach, Docked at Station, On Foot In Station, and Station Interior.
+
+**New this version:**
+- Supercruise Overcharge and Supercruise Assist are now tracked as their own states — while either is active, the button shows whatever you've configured for it instead of plain Supercruise, and drops back the moment it ends.
+- Not Active Image — a global fallback image shown whenever the current state doesn't have its own image configured, so the button never falls back to a blank/generic Stream Deck key.
+
+**Settings per state:**
+- Image (optional)
+- Top Text, Top Text Color, Top Text Position
+- Bottom Text, Bottom Text Color, Bottom Text Position
+- Bold (applies to both text fields for that state)
+
+**Bug fixes carried over from the original Ship Status Button:**
+- Station Approach was previously unreachable (always shadowed by No-Fire Zone) — fixed so it displays correctly once docking is granted.
+- Fixed a case where climbing away from a planet without a full landing/liftoff cycle (e.g. pulling up straight out of Planet Approach) would incorrectly show Supercruise (Active) instead of Leaving Planet.
+
+### ✏️ Updated: Planet Info Button — Atmosphere Display
+
+The atmosphere display on the Planet Info button has been improved to handle a wider range of atmosphere types more accurately.
+
+![Full Atmosphere Text Example](https://github.com/macrossmerrell/streamdeck-elite/blob/b8ddf42be943f6240e54219dfcef30688d53d651/Elite/Images/Examples/planetinfo.png)
+
+**Hot / Thin prefix handling:**
+Atmosphere descriptions that include temperature or pressure prefixes (e.g. `"hot sulfur dioxide atmosphere"`, `"thin carbon dioxide atmosphere"`) now display the prefix as part of the button text rather than being stripped and discarded. For example, a Hot Sulfur Dioxide atmosphere now displays as:
+
+```
+HOT
+SULPHUR
+DIOXIDE
+```
+
+**Three-line layout with auto-sizing:**
+The button now supports up to three lines of atmosphere text. Font size automatically scales down to ensure all three lines fit within the top half of the button, keeping the temperature reading clear and unobstructed.
+
+**Rich atmosphere types:**
+Atmosphere types with a "rich" qualifier (Neon Rich, Argon Rich, Water Rich, Methane Rich, Ammonia Rich, Carbon Dioxide Rich) now include the RICH label in the display rather than showing only the base gas name.
+
+**Expanded atmosphere coverage:**
+Added dictionary entries for several rare atmosphere types that previously fell through to a generic fallback display: Water Rich, Methane Rich, Ammonia Rich, Ammonia and Oxygen, and Suitable for Water-Based Life.
+
+### 🗑️ Removed: (Deprecated) Hyperspace Button
+
+The old `(Deprecated) Hyperspace Button` has been removed from the plugin entirely. It's been superseded by the **Ship Status Button** (and now the new **Odyssey Ship Status Button**), which cover the same states more reliably.
+
+If you still have this button placed on a Stream Deck profile, it will show up as unrecognized/blank after updating — just remove it and replace it with the Ship Status or Odyssey Ship Status button instead.
+
 ## New & Update Features (v3.2.0)
 
 ### 🆕 (NEW) Heading / Altitude Button

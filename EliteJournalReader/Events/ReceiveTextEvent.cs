@@ -1,18 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
 
 namespace EliteJournalReader.Events
 {
     //When written: when a text message is received from another player
     //Parameters:
-    //•	From
-    //•	Message
+    //ï¿½	From
+    //ï¿½	Message
     public class ReceiveTextEvent : JournalEvent<ReceiveTextEvent.ReceiveTextEventArgs>
     {
         public ReceiveTextEvent() : base("ReceiveText") { }
@@ -31,9 +24,6 @@ namespace EliteJournalReader.Events
 
     public static class TextChannelExtensions
     {
-        public static bool IsPlayerChannel(this TextChannel channel)
-        {
-            return channel != TextChannel.Unknown && channel != TextChannel.NPC;
-        }
+        public static bool IsPlayerChannel(this TextChannel channel) => channel != TextChannel.Unknown && channel != TextChannel.NPC;
     }
 }

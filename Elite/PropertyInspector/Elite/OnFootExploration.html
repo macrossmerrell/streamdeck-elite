@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover">
+    <meta name=apple-mobile-web-app-capable content=yes>
+    <meta name=apple-mobile-web-app-status-bar-style content=black>
+    <title>Mhwlng's Elite</title>
+    <link rel="stylesheet" href="../sdpi.css">
+    <link rel="stylesheet" href="../jquery.highlight-within-textarea.css">
+    <script src="../sdtools.common.js"></script>
+    <script src="../jquery-3.3.1.min.js"></script>
+    <script src="../jquery.highlight-within-textarea.js"></script>
+</head>
+<body>
+    <div class="sdpi-wrapper">
+
+        <div class="sdpi-item" id="dvAutoRotateEnabled">
+            <div class="sdpi-item-label">Auto Rotate</div>
+            <select class="sdpi-item-value select sdProperty" id="autoRotateEnabled" oninput="setSettings()">
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvAutoRotateSeconds">
+            <div class="sdpi-item-label">Rotate Every (sec)</div>
+            <input class="sdpi-item-value sdProperty" type="number" id="autoRotateSeconds"
+                   min="1" max="120" step="1" oninput="setSettings()">
+        </div>
+
+        <hr>
+
+        <!-- ===================== Oxygen ===================== -->
+
+        <div class="sdpi-item" id="dvOxygenEnabled">
+            <div class="sdpi-item-label">Oxygen Enabled</div>
+            <select class="sdpi-item-value select sdProperty" id="oxygenEnabled" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvOxygenLabelText">
+            <div class="sdpi-item-label">Oxygen Label Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="oxygenLabelText" oninput="setSettings()" rows="1" style="resize:vertical;">OXYGEN</textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvOxygenLabelTextVerticalPosition">
+            <div class="sdpi-item-label">Oxygen Label Position</div>
+            <select class="sdpi-item-value select sdProperty" id="oxygenLabelTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvOxygenLabelColor">
+            <div class="sdpi-item-label">Oxygen Label Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="oxygenLabelColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvOxygenImage">
+            <div class="sdpi-item-label" onclick="clearFileName('oxygenImage');">Oxygen Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupOxygen">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="oxygenImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="oxygenImage" id="oxygenImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="oxygenImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div class="sdpi-item" id="dvOxygenWarningImage">
+            <div class="sdpi-item-label" onclick="clearFileName('oxygenWarningImage');">Oxygen Warning Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupOxygenWarning">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="oxygenWarningImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="oxygenWarningImage" id="oxygenWarningImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="oxygenWarningImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvOxygenColor">
+            <div class="sdpi-item-label">Oxygen Value Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="oxygenColor" oninput="setSettings()">
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvOxygenWarningColor">
+            <div class="sdpi-item-label">Oxygen Warning Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="oxygenWarningColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvOxygenTextVerticalPosition">
+            <div class="sdpi-item-label">Oxygen Value Position</div>
+            <select class="sdpi-item-value select sdProperty" id="oxygenTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvOxygenTextBold">
+            <div class="sdpi-item-label">Oxygen Bold</div>
+            <select class="sdpi-item-value select sdProperty" id="oxygenTextBold" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- ===================== Health ===================== -->
+
+        <div class="sdpi-item" id="dvHealthEnabled">
+            <div class="sdpi-item-label">Health Enabled</div>
+            <select class="sdpi-item-value select sdProperty" id="healthEnabled" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvHealthLabelText">
+            <div class="sdpi-item-label">Health Label Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="healthLabelText" oninput="setSettings()" rows="1" style="resize:vertical;">HEALTH</textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvHealthLabelTextVerticalPosition">
+            <div class="sdpi-item-label">Health Label Position</div>
+            <select class="sdpi-item-value select sdProperty" id="healthLabelTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvHealthLabelColor">
+            <div class="sdpi-item-label">Health Label Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="healthLabelColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvHealthImage">
+            <div class="sdpi-item-label" onclick="clearFileName('healthImage');">Health Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupHealth">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="healthImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="healthImage" id="healthImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="healthImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div class="sdpi-item" id="dvHealthWarningImage">
+            <div class="sdpi-item-label" onclick="clearFileName('healthWarningImage');">Health Warning Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupHealthWarning">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="healthWarningImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="healthWarningImage" id="healthWarningImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="healthWarningImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvHealthColor">
+            <div class="sdpi-item-label">Health Value Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="healthColor" oninput="setSettings()">
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvHealthWarningColor">
+            <div class="sdpi-item-label">Health Warning Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="healthWarningColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvHealthTextVerticalPosition">
+            <div class="sdpi-item-label">Health Value Position</div>
+            <select class="sdpi-item-value select sdProperty" id="healthTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvHealthTextBold">
+            <div class="sdpi-item-label">Health Bold</div>
+            <select class="sdpi-item-value select sdProperty" id="healthTextBold" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- ===================== Temperature ===================== -->
+
+        <div class="sdpi-item" id="dvTemperatureEnabled">
+            <div class="sdpi-item-label">Temperature Enabled</div>
+            <select class="sdpi-item-value select sdProperty" id="temperatureEnabled" oninput="setSettings()">
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvTemperatureLabelText">
+            <div class="sdpi-item-label">Temperature Label Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="temperatureLabelText" oninput="setSettings()" rows="1" style="resize:vertical;">TEMPERATURE</textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvTemperatureLabelTextVerticalPosition">
+            <div class="sdpi-item-label">Temperature Label Position</div>
+            <select class="sdpi-item-value select sdProperty" id="temperatureLabelTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvTemperatureLabelColor">
+            <div class="sdpi-item-label">Temperature Label Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="temperatureLabelColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvTemperatureImage">
+            <div class="sdpi-item-label" onclick="clearFileName('temperatureImage');">Temperature Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupTemperature">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="temperatureImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="temperatureImage" id="temperatureImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="temperatureImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvTemperatureColor">
+            <div class="sdpi-item-label">Temperature Value Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="temperatureColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvTemperatureTextVerticalPosition">
+            <div class="sdpi-item-label">Temperature Value Position</div>
+            <select class="sdpi-item-value select sdProperty" id="temperatureTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvTemperatureTextBold">
+            <div class="sdpi-item-label">Temperature Bold</div>
+            <select class="sdpi-item-value select sdProperty" id="temperatureTextBold" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- ===================== Gravity ===================== -->
+
+        <div class="sdpi-item" id="dvGravityEnabled">
+            <div class="sdpi-item-label">Gravity Enabled</div>
+            <select class="sdpi-item-value select sdProperty" id="gravityEnabled" oninput="setSettings()">
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvGravityLabelText">
+            <div class="sdpi-item-label">Gravity Label Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="gravityLabelText" oninput="setSettings()" rows="1" style="resize:vertical;">GRAVITY</textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvGravityLabelTextVerticalPosition">
+            <div class="sdpi-item-label">Gravity Label Position</div>
+            <select class="sdpi-item-value select sdProperty" id="gravityLabelTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvGravityLabelColor">
+            <div class="sdpi-item-label">Gravity Label Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="gravityLabelColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvGravityImage">
+            <div class="sdpi-item-label" onclick="clearFileName('gravityImage');">Gravity Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupGravity">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="gravityImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="gravityImage" id="gravityImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="gravityImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvGravityColor">
+            <div class="sdpi-item-label">Gravity Value Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="gravityColor" oninput="setSettings()">
+        </div>
+
+        <div class="sdpi-item" id="dvGravityTextVerticalPosition">
+            <div class="sdpi-item-label">Gravity Value Position</div>
+            <select class="sdpi-item-value select sdProperty" id="gravityTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvGravityTextBold">
+            <div class="sdpi-item-label">Gravity Bold</div>
+            <select class="sdpi-item-value select sdProperty" id="gravityTextBold" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- ===================== Atmosphere ===================== -->
+
+        <div class="sdpi-item" id="dvAtmosphereEnabled">
+            <div class="sdpi-item-label">Atmosphere Enabled</div>
+            <select class="sdpi-item-value select sdProperty" id="atmosphereEnabled" oninput="setSettings()">
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvAtmosphereLabelText">
+            <div class="sdpi-item-label">Atmosphere Label Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="atmosphereLabelText" oninput="setSettings()" rows="1" style="resize:vertical;">ATMOSPHERE</textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvAtmosphereLabelTextVerticalPosition">
+            <div class="sdpi-item-label">Atmosphere Label Position</div>
+            <select class="sdpi-item-value select sdProperty" id="atmosphereLabelTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvAtmosphereTextVerticalPosition">
+            <div class="sdpi-item-label">Atmosphere Value Position</div>
+            <select class="sdpi-item-value select sdProperty" id="atmosphereTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvAtmosphereTextBold">
+            <div class="sdpi-item-label">Atmosphere Bold</div>
+            <select class="sdpi-item-value select sdProperty" id="atmosphereTextBold" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <!-- Breathable state -->
+        <div class="sdpi-item" id="dvAtmosphereOkText">
+            <div class="sdpi-item-label">Breathable Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="atmosphereOkText" oninput="setSettings()" rows="1" style="resize:vertical;">BREATHABLE</textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvAtmosphereImage">
+            <div class="sdpi-item-label" onclick="clearFileName('atmosphereImage');">Breathable Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupAtmosphere">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="atmosphereImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="atmosphereImage" id="atmosphereImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="atmosphereImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvAtmosphereColor">
+            <div class="sdpi-item-label">Breathable Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="atmosphereColor" oninput="setSettings()">
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvAtmosphereLabelOkColor">
+            <div class="sdpi-item-label">Breathable Label Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="atmosphereLabelOkColor" oninput="setSettings()">
+        </div>
+
+        <!-- No Oxygen state -->
+        <div class="sdpi-item" id="dvAtmosphereWarningText">
+            <div class="sdpi-item-label">No Oxygen Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="atmosphereWarningText" oninput="setSettings()" rows="1" style="resize:vertical;">NO OXYGEN</textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvAtmosphereWarningImage">
+            <div class="sdpi-item-label" onclick="clearFileName('atmosphereWarningImage');">No Oxygen Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupAtmosphereWarning">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="atmosphereWarningImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="atmosphereWarningImage" id="atmosphereWarningImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="atmosphereWarningImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvAtmosphereWarningColor">
+            <div class="sdpi-item-label">No Oxygen Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="atmosphereWarningColor" oninput="setSettings()">
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvAtmosphereLabelWarningColor">
+            <div class="sdpi-item-label">No Oxygen Label Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="atmosphereLabelWarningColor" oninput="setSettings()">
+        </div>
+
+        <hr>
+
+        <!-- ===================== Thermal Status ===================== -->
+
+        <div class="sdpi-item" id="dvThermalEnabled">
+            <div class="sdpi-item-label">Thermal Status Enabled</div>
+            <select class="sdpi-item-value select sdProperty" id="thermalEnabled" oninput="setSettings()">
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvThermalLabelTextVerticalPosition">
+            <div class="sdpi-item-label">Label Position</div>
+            <select class="sdpi-item-value select sdProperty" id="thermalLabelTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+        <div class="sdpi-item" id="dvThermalTextVerticalPosition">
+            <div class="sdpi-item-label">Temperature Position</div>
+            <select class="sdpi-item-value select sdProperty" id="thermalTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+        </div>
+
+
+        <div class="sdpi-item" id="dvThermalTextBold">
+            <div class="sdpi-item-label">Thermal Bold</div>
+            <select class="sdpi-item-value select sdProperty" id="thermalTextBold" oninput="setSettings()">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <!-- Safe state -->
+        <div class="sdpi-item" id="dvThermalOkText">
+            <div class="sdpi-item-label">Safe Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="thermalOkText" oninput="setSettings()" rows="1" style="resize:vertical;">SAFE</textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvThermalImage">
+            <div class="sdpi-item-label" onclick="clearFileName('thermalImage');">Safe Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupThermal">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="thermalImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="thermalImage" id="thermalImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="thermalImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvThermalOkColor">
+            <div class="sdpi-item-label">Safe Label Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="thermalOkColor" oninput="setSettings()">
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvThermalTempOkColor">
+            <div class="sdpi-item-label">Safe Temperature Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="thermalTempOkColor" oninput="setSettings()">
+        </div>
+
+        <!-- Cold state -->
+        <div class="sdpi-item" id="dvThermalColdText">
+            <div class="sdpi-item-label">Cold Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="thermalColdText" oninput="setSettings()" rows="1" style="resize:vertical;">COLD</textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvThermalColdImage">
+            <div class="sdpi-item-label" onclick="clearFileName('thermalColdImage');">Cold Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupThermalCold">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="thermalColdImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="thermalColdImage" id="thermalColdImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="thermalColdImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvThermalColdColor">
+            <div class="sdpi-item-label">Cold Label Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="thermalColdColor" oninput="setSettings()">
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvThermalTempColdColor">
+            <div class="sdpi-item-label">Cold Temperature Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="thermalTempColdColor" oninput="setSettings()">
+        </div>
+
+        <!-- Very Cold state -->
+        <div class="sdpi-item" id="dvThermalVeryColdText">
+            <div class="sdpi-item-label">Very Cold Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="thermalVeryColdText" oninput="setSettings()" rows="1" style="resize:vertical;">VERY COLD</textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvThermalVeryColdImage">
+            <div class="sdpi-item-label" onclick="clearFileName('thermalVeryColdImage');">Very Cold Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupThermalVeryCold">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="thermalVeryColdImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="thermalVeryColdImage" id="thermalVeryColdImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="thermalVeryColdImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvThermalVeryColdColor">
+            <div class="sdpi-item-label">Very Cold Label Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="thermalVeryColdColor" oninput="setSettings()">
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvThermalTempVeryColdColor">
+            <div class="sdpi-item-label">Very Cold Temperature Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="thermalTempVeryColdColor" oninput="setSettings()">
+        </div>
+
+        <!-- Hot state -->
+        <div class="sdpi-item" id="dvThermalHotText">
+            <div class="sdpi-item-label">Hot Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="thermalHotText" oninput="setSettings()" rows="1" style="resize:vertical;">HOT</textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvThermalHotImage">
+            <div class="sdpi-item-label" onclick="clearFileName('thermalHotImage');">Hot Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupThermalHot">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="thermalHotImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="thermalHotImage" id="thermalHotImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="thermalHotImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvThermalHotColor">
+            <div class="sdpi-item-label">Hot Label Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="thermalHotColor" oninput="setSettings()">
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvThermalTempHotColor">
+            <div class="sdpi-item-label">Hot Temperature Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="thermalTempHotColor" oninput="setSettings()">
+        </div>
+
+        <!-- Very Hot state -->
+        <div class="sdpi-item" id="dvThermalVeryHotText">
+            <div class="sdpi-item-label">Very Hot Text</div>
+            <textarea class="sdpi-item-value sdProperty" id="thermalVeryHotText" oninput="setSettings()" rows="1" style="resize:vertical;">VERY HOT</textarea>
+        </div>
+
+        <div class="sdpi-item" id="dvThermalVeryHotImage">
+            <div class="sdpi-item-label" onclick="clearFileName('thermalVeryHotImage');">Very Hot Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupThermalVeryHot">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="thermalVeryHotImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="thermalVeryHotImage" id="thermalVeryHotImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="thermalVeryHotImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvThermalVeryHotColor">
+            <div class="sdpi-item-label">Very Hot Label Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="thermalVeryHotColor" oninput="setSettings()">
+        </div>
+
+        <div type="color" class="sdpi-item" id="dvThermalTempVeryHotColor">
+            <div class="sdpi-item-label">Very Hot Temperature Color</div>
+            <input class="sdpi-item-value sdProperty" type="color" id="thermalTempVeryHotColor" oninput="setSettings()">
+        </div>
+
+        <hr>
+
+        <div class="sdpi-item" id="dvInactiveImage">
+            <div class="sdpi-item-label" onclick="clearFileName('inactiveImage');">Inactive Image</div>
+            <div class="sdpi-item-group file" id="filepickergroupInactive">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="inactiveImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="inactiveImage" id="inactiveImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="inactiveImage">Choose file...</label>
+            </div>
+        </div>
+
+        <div class="sdpi-item" id="dvClickSound">
+            <div class="sdpi-item-label" onclick="clearFileName('clickSound');">Sound</div>
+            <div class="sdpi-item-group file" id="filepickergroup1">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="clickSound" accept=".wav" oninput="setSettings()">
+                <label class="sdpi-file-info " for="clickSound" id="clickSoundFilename">No file...</label>
+                <label class="sdpi-file-label" for="clickSound">Choose file...</label>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

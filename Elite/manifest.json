@@ -2,7 +2,7 @@
   "Actions": [
     {
       "Icon": "Images/icon",
-      "Name": "(New) Heading/Altitude Button",
+      "Name": "Heading/Altitude Button",
       "States": [
         {
           "Image": "Images/Default",
@@ -14,115 +14,10 @@
       "Tooltip": "Elite Dangerous Heading/Altitude Button - displays current heading and altitude",
       "UUID": "com.mhwlng.elite.headingaltitude",
       "PropertyInspectorPath": "PropertyInspector/Elite/HeadingAltitude.html"
-    },  
-    {
-      "Icon": "Images/icon",
-      "Name": "(New) Galaxy Search Button",
-      "States": [
-        {
-          "Image": "Images/Default",
-          "TitleAlignment": "middle",
-          "FontSize": "8"
-        }
-      ],
-      "SupportedInMultiActions": false,
-      "Tooltip": "Opens INARA, EDSM, or Spansh for current system, station, or body",
-      "UUID": "com.mhwlng.elite.galaxysearch",
-      "PropertyInspectorPath": "PropertyInspector/Elite/GalaxySearch.html"
     },
     {
       "Icon": "Images/icon",
-      "Name": "(New) Ship Status Button",
-      "States": [
-        {
-          "Image": "Images/Default",
-          "TitleAlignment": "bottom",
-          "FontSize": "8"
-        }
-      ],
-      "SupportedInMultiActions": false,
-      "Tooltip": "Elite Dangerous Ship Status Button - displays current flight state image",
-      "UUID": "com.mhwlng.elite.shipstatus",
-      "PropertyInspectorPath": "PropertyInspector/Elite/ShipStatus.html"
-    },
-    {
-      "Icon": "Images/icon",
-      "Name": "(New) Planetary Gravity Button",
-      "States": [
-        {
-          "Image": "Images/Default",
-          "TitleAlignment": "bottom",
-          "FontSize": "8"
-        }
-      ],
-      "SupportedInMultiActions": false,
-      "Tooltip": "Elite Dangerous Planetary Gravity Button - displays current planet gravity",
-      "UUID": "com.mhwlng.elite.gravity",
-      "PropertyInspectorPath": "PropertyInspector/Elite/Gravity.html"
-    },
-    {
-      "Icon": "Images/icon",
-      "Name": "(New) Navigation Target Info",
-      "States": [
-        {
-          "Image": "Images/Default",
-          "TitleAlignment": "bottom",
-          "FontSize": "8"
-        }
-      ],
-      "SupportedInMultiActions": false,
-      "Tooltip": "Elite Dangerous Navigation Target - displays currently targeted planet info",
-      "UUID": "com.mhwlng.elite.navtarget",
-      "PropertyInspectorPath": "PropertyInspector/Elite/NavTarget.html"
-    },
-    {
-      "Icon": "Images/icon",
-      "Name": "(New) Planet Info Button",
-      "States": [
-        {
-          "Image": "Images/Default",
-          "TitleAlignment": "bottom",
-          "FontSize": "8"
-        }
-      ],
-      "SupportedInMultiActions": false,
-      "Tooltip": "Elite Dangerous Planet Info Button - displays atmosphere type and surface temperature",
-      "UUID": "com.mhwlng.elite.planetinfo",
-      "PropertyInspectorPath": "PropertyInspector/Elite/PlanetInfo.html"
-    },
-    {
-      "Icon": "Images/icon",
-      "Name": "(Updated) Exobiology Button",
-      "States": [
-        {
-          "Image": "Images/Default",
-          "TitleAlignment": "bottom",
-          "FontSize": "8"
-        }
-      ],
-      "SupportedInMultiActions": false,
-      "Tooltip": "Elite Dangerous Exobiology Button - tracks biological scan colony range and progress",
-      "UUID": "com.mhwlng.elite.exobiology",
-      "PropertyInspectorPath": "PropertyInspector/Elite/ExoBiology.html"
-    },
-    {
-      "Icon": "Images/icon",
-      "Name": "(New) Alert Button",
-      "States": [
-        {
-          "Image": "Images/Default",
-          "TitleAlignment": "bottom",
-          "FontSize": "8"
-        }
-      ],
-      "SupportedInMultiActions": false,
-      "Tooltip": "Elite Dangerous Alert Button - displays active alerts and warnings",
-      "UUID": "com.mhwlng.elite.alert",
-      "PropertyInspectorPath": "PropertyInspector/Elite/Alert.html"
-    },
-    {
-      "Icon": "Images/icon",
-      "Name": "(New) Lat/Long Info Button",
+      "Name": "Lat/Long Info Button",
       "States": [
         {
           "Image": "Images/Default",
@@ -137,7 +32,142 @@
     },
     {
       "Icon": "Images/icon",
-      "Name": "(Updated) Route Button",
+      "Name": "Galaxy Search Button",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "middle",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Opens INARA, EDSM, or Spansh for current system, station, or body",
+      "UUID": "com.mhwlng.elite.galaxysearch",
+      "PropertyInspectorPath": "PropertyInspector/Elite/GalaxySearch.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "(New) Odyssey Ship Status Button",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "bottom",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Elite Dangerous Odyssey Ship Status Button - flight state image plus configurable top/bottom text",
+      "UUID": "com.mhwlng.elite.odysseyshipstatus",
+      "PropertyInspectorPath": "PropertyInspector/Elite/OdysseyShipStatus.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "(New) On Foot Exploration Button",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "bottom",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Elite Dangerous On Foot Exploration - oxygen, health, temperature, gravity, atmosphere, thermal",
+      "UUID": "com.mhwlng.elite.onfootexploration",
+      "PropertyInspectorPath": "PropertyInspector/Elite/OnFootExploration.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "(New) Route Advanced Button",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "bottom",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Elite Dangerous Route Advanced Button - LY remaining, next system distance, fuel, progress %",
+      "UUID": "com.mhwlng.elite.routeadv",
+      "PropertyInspectorPath": "PropertyInspector/Elite/RouteAdv.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "Planetary Gravity Button",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "bottom",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Elite Dangerous Planetary Gravity Button - displays current planet gravity",
+      "UUID": "com.mhwlng.elite.gravity",
+      "PropertyInspectorPath": "PropertyInspector/Elite/Gravity.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "Navigation Target Info",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "bottom",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Elite Dangerous Navigation Target - displays currently targeted planet info",
+      "UUID": "com.mhwlng.elite.navtarget",
+      "PropertyInspectorPath": "PropertyInspector/Elite/NavTarget.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "Planet Info Button",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "bottom",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Elite Dangerous Planet Info Button - displays atmosphere type and surface temperature",
+      "UUID": "com.mhwlng.elite.planetinfo",
+      "PropertyInspectorPath": "PropertyInspector/Elite/PlanetInfo.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "Exobiology Button",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "bottom",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Elite Dangerous Exobiology Button - tracks biological scan colony range and progress",
+      "UUID": "com.mhwlng.elite.exobiology",
+      "PropertyInspectorPath": "PropertyInspector/Elite/ExoBiology.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "Alert Button",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "bottom",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Elite Dangerous Alert Button - displays active alerts and warnings",
+      "UUID": "com.mhwlng.elite.alert",
+      "PropertyInspectorPath": "PropertyInspector/Elite/Alert.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "Route Button",
       "States": [
         {
           "Image": "Images/Default",
@@ -149,6 +179,21 @@
       "Tooltip": "Elite Dangerous Route Button",
       "UUID": "com.mhwlng.elite.route",
       "PropertyInspectorPath": "PropertyInspector/Elite/Route.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "(Depreciated) Ship Status Button",
+      "States": [
+        {
+          "Image": "Images/Default",
+          "TitleAlignment": "bottom",
+          "FontSize": "8"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Elite Dangerous Ship Status Button - displays current flight state image",
+      "UUID": "com.mhwlng.elite.shipstatus",
+      "PropertyInspectorPath": "PropertyInspector/Elite/ShipStatus.html"
     },
     {
       "Icon": "Images/icon",
@@ -309,21 +354,6 @@
       "Tooltip": "Elite Dangerous FireGroup Dial",
       "UUID": "com.mhwlng.elite.firegroupdial",
       "PropertyInspectorPath": "PropertyInspector/Elite/FireGroupDial.html"
-    },
-    {
-      "Icon": "Images/icon",
-      "Name": "(Deprecated) Hyperspace Button",
-      "States": [
-        {
-          "Image": "Images/Default",
-          "TitleAlignment": "bottom",
-          "FontSize": "8"
-        }
-      ],
-      "SupportedInMultiActions": false,
-      "Tooltip": "Elite Dangerous Hyperspace Button (deprecated - use Ship Status Button instead)",
-      "UUID": "com.mhwlng.elite.hyperspace",
-      "PropertyInspectorPath": "PropertyInspector/Elite/Hyperspace.html"
     }
   ],
   "Author": "mhwlng, DrFr33ze, macrossmerrell",
@@ -331,7 +361,7 @@
   "Name": "Elite Dangerous",
   "Icon": "Images/pluginIcon",
   "URL": "https://github.com/macrossmerrell/streamdeck-elite",
-  "Version": "3.2.0",
+  "Version": "4.0.0",
   "CodePath": "com.mhwlng.elite",
   "Category": "Elite Dangerous",
   "CategoryIcon": "Images/categoryIcon",

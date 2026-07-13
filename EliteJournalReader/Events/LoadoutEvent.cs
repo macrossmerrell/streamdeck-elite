@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+﻿using System.Linq;
 
 namespace EliteJournalReader.Events
 {
@@ -56,7 +51,7 @@ namespace EliteJournalReader.Events
         public class LoadoutEventArgs : JournalEventArgs
         {
             public string Ship { get; set; }
-            public string ShipID { get; set; }
+            public long ShipID { get; set; }
             public string ShipName { get; set; }
             public string ShipIdent { get; set; }
             public int HullValue { get; set; }
@@ -78,7 +73,7 @@ namespace EliteJournalReader.Events
             }
         }
 
-        public struct FuelCapacity
+        public class FuelCapacity
         {
             public double Main { get; set; }
             public double Reserve { get; set; }

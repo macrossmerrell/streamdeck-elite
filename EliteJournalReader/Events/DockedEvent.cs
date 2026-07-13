@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //    When written: when landing at landing pad in a space station, outpost, or surface settlement
@@ -32,9 +25,6 @@ namespace EliteJournalReader.Events
 
         public class DockedEventArgs : JournalEventArgs
         {
-            public bool Taxi { get; set; }
-            public bool Multicrew { get; set; }
-
             public string StarSystem { get; set; }
             public string StationName { get; set; }
             public long SystemAddress { get; set; }
@@ -52,22 +42,18 @@ namespace EliteJournalReader.Events
             public string[] StationServices { get; set; }
             public bool Wanted { get; set; } = false;
             public bool ActiveFine { get; set; } = false;
-            public LandingPad LandingPads { get; set; }
+            public LandingPads LandingPads { get; set; }
 
-            public struct Economy
+            public bool Taxi { get; set; }
+
+            public bool Multicrew { get; set; }
+
+            public class Economy
             {
                 public string Name { get; set; }
                 public string Name_Localised { get; set; }
                 public double Proportion { get; set; }
             }
-
-            public struct LandingPad
-            {
-                public int Small { get; set; }
-                public int Medium { get; set; }
-                public int Large { get; set; }
-            }
-
 
             public override JournalEventArgs Clone()
             {

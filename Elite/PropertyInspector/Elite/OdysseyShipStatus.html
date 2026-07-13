@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover">
+    <meta name=apple-mobile-web-app-capable content=yes>
+    <meta name=apple-mobile-web-app-status-bar-style content=black>
+    <title>Mhwlng's Elite - Odyssey Ship Status</title>
+    <link rel="stylesheet" href="../sdpi.css">
+    <link rel="stylesheet" href="../jquery.highlight-within-textarea.css">
+    <script src="../sdtools.common.js"></script>
+    <script src="../jquery-3.3.1.min.js"></script>
+    <script src="../jquery.highlight-within-textarea.js"></script>
+</head>
+<body>
+<div class="sdpi-wrapper">
+
+    <!-- Not Active fallback image -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Not Active Image (fallback)</div>
+    </div>
+
+    <div class="sdpi-item" id="dvNotActiveImage">
+        <div class="sdpi-item-label" onclick="clearFileName('notActiveImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroupNotActive">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="notActiveImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="notActiveImage" id="notActiveImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="notActiveImage">Choose file...</label>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Supercruise Charging -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Supercruise Charging</div>
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseChargingImage">
+        <div class="sdpi-item-label" onclick="clearFileName('supercruiseChargingImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup1">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="supercruiseChargingImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="supercruiseChargingImage" id="supercruiseChargingImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="supercruiseChargingImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseChargingTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="supercruiseChargingTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvSupercruiseChargingTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="supercruiseChargingTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseChargingTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="supercruiseChargingTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseChargingBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="supercruiseChargingBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvSupercruiseChargingBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="supercruiseChargingBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseChargingBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="supercruiseChargingBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseChargingBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="supercruiseChargingBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Supercruise Activation -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Supercruise Activation</div>
+    </div>
+
+    <div class="sdpi-item" id="dvFsdSupercruiseJumpingImage">
+        <div class="sdpi-item-label" onclick="clearFileName('fsdSupercruiseJumpingImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup2">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="fsdSupercruiseJumpingImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="fsdSupercruiseJumpingImage" id="fsdSupercruiseJumpingImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="fsdSupercruiseJumpingImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvFsdSupercruiseJumpingTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="fsdSupercruiseJumpingTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvFsdSupercruiseJumpingTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="fsdSupercruiseJumpingTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvFsdSupercruiseJumpingTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="fsdSupercruiseJumpingTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvFsdSupercruiseJumpingBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="fsdSupercruiseJumpingBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvFsdSupercruiseJumpingBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="fsdSupercruiseJumpingBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvFsdSupercruiseJumpingBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="fsdSupercruiseJumpingBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvFsdSupercruiseJumpingBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="fsdSupercruiseJumpingBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Supercruise (Active) -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Supercruise (Active)</div>
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseImage">
+        <div class="sdpi-item-label" onclick="clearFileName('supercruiseImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup3">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="supercruiseImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="supercruiseImage" id="supercruiseImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="supercruiseImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="supercruiseTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvSupercruiseTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="supercruiseTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="supercruiseTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="supercruiseBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvSupercruiseBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="supercruiseBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="supercruiseBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="supercruiseBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Supercruise Overcharge -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Supercruise Overcharge</div>
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseOverchargeImage">
+        <div class="sdpi-item-label" onclick="clearFileName('supercruiseOverchargeImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup4">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="supercruiseOverchargeImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="supercruiseOverchargeImage" id="supercruiseOverchargeImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="supercruiseOverchargeImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseOverchargeTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="supercruiseOverchargeTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvSupercruiseOverchargeTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="supercruiseOverchargeTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseOverchargeTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="supercruiseOverchargeTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseOverchargeBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="supercruiseOverchargeBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvSupercruiseOverchargeBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="supercruiseOverchargeBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseOverchargeBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="supercruiseOverchargeBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseOverchargeBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="supercruiseOverchargeBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Supercruise Assist -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Supercruise Assist</div>
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseAssistImage">
+        <div class="sdpi-item-label" onclick="clearFileName('supercruiseAssistImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup5">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="supercruiseAssistImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="supercruiseAssistImage" id="supercruiseAssistImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="supercruiseAssistImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseAssistTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="supercruiseAssistTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvSupercruiseAssistTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="supercruiseAssistTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseAssistTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="supercruiseAssistTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseAssistBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="supercruiseAssistBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvSupercruiseAssistBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="supercruiseAssistBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseAssistBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="supercruiseAssistBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvSupercruiseAssistBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="supercruiseAssistBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Normal Space (Supercruise Off) -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Normal Space (Supercruise Off)</div>
+    </div>
+
+    <div class="sdpi-item" id="dvNormalSpaceImage">
+        <div class="sdpi-item-label" onclick="clearFileName('normalSpaceImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup6">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="normalSpaceImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="normalSpaceImage" id="normalSpaceImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="normalSpaceImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvNormalSpaceTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="normalSpaceTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvNormalSpaceTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="normalSpaceTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvNormalSpaceTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="normalSpaceTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvNormalSpaceBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="normalSpaceBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvNormalSpaceBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="normalSpaceBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvNormalSpaceBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="normalSpaceBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvNormalSpaceBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="normalSpaceBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Hyperspace Charging -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Hyperspace Charging</div>
+    </div>
+
+    <div class="sdpi-item" id="dvHyperspaceChargingImage">
+        <div class="sdpi-item-label" onclick="clearFileName('hyperspaceChargingImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup7">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="hyperspaceChargingImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="hyperspaceChargingImage" id="hyperspaceChargingImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="hyperspaceChargingImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvHyperspaceChargingTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="hyperspaceChargingTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvHyperspaceChargingTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="hyperspaceChargingTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvHyperspaceChargingTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="hyperspaceChargingTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvHyperspaceChargingBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="hyperspaceChargingBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvHyperspaceChargingBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="hyperspaceChargingBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvHyperspaceChargingBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="hyperspaceChargingBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvHyperspaceChargingBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="hyperspaceChargingBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Hyperspace Jump -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Hyperspace Jump</div>
+    </div>
+
+    <div class="sdpi-item" id="dvFsdHyperspaceJumpingImage">
+        <div class="sdpi-item-label" onclick="clearFileName('fsdHyperspaceJumpingImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup8">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="fsdHyperspaceJumpingImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="fsdHyperspaceJumpingImage" id="fsdHyperspaceJumpingImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="fsdHyperspaceJumpingImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvFsdHyperspaceJumpingTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="fsdHyperspaceJumpingTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvFsdHyperspaceJumpingTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="fsdHyperspaceJumpingTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvFsdHyperspaceJumpingTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="fsdHyperspaceJumpingTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvFsdHyperspaceJumpingBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="fsdHyperspaceJumpingBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvFsdHyperspaceJumpingBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="fsdHyperspaceJumpingBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvFsdHyperspaceJumpingBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="fsdHyperspaceJumpingBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvFsdHyperspaceJumpingBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="fsdHyperspaceJumpingBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Fuel Scooping -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Fuel Scooping</div>
+    </div>
+
+    <div class="sdpi-item" id="dvFuelScoopingImage">
+        <div class="sdpi-item-label" onclick="clearFileName('fuelScoopingImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup9">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="fuelScoopingImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="fuelScoopingImage" id="fuelScoopingImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="fuelScoopingImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvFuelScoopingTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="fuelScoopingTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvFuelScoopingTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="fuelScoopingTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvFuelScoopingTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="fuelScoopingTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvFuelScoopingBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="fuelScoopingBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvFuelScoopingBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="fuelScoopingBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvFuelScoopingBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="fuelScoopingBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvFuelScoopingBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="fuelScoopingBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Planet Approach -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Planet Approach</div>
+    </div>
+
+    <div class="sdpi-item" id="dvPlanetApproachImage">
+        <div class="sdpi-item-label" onclick="clearFileName('planetApproachImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup10">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="planetApproachImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="planetApproachImage" id="planetApproachImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="planetApproachImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvPlanetApproachTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="planetApproachTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvPlanetApproachTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="planetApproachTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvPlanetApproachTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="planetApproachTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvPlanetApproachBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="planetApproachBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvPlanetApproachBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="planetApproachBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvPlanetApproachBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="planetApproachBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvPlanetApproachBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="planetApproachBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Orbital Cruise -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Orbital Cruise</div>
+    </div>
+
+    <div class="sdpi-item" id="dvOrbitalCruiseImage">
+        <div class="sdpi-item-label" onclick="clearFileName('orbitalCruiseImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup11">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="orbitalCruiseImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="orbitalCruiseImage" id="orbitalCruiseImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="orbitalCruiseImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvOrbitalCruiseTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="orbitalCruiseTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvOrbitalCruiseTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="orbitalCruiseTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvOrbitalCruiseTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="orbitalCruiseTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvOrbitalCruiseBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="orbitalCruiseBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvOrbitalCruiseBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="orbitalCruiseBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvOrbitalCruiseBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="orbitalCruiseBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvOrbitalCruiseBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="orbitalCruiseBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Glide / Deorbit -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Glide / Deorbit</div>
+    </div>
+
+    <div class="sdpi-item" id="dvDeorbitingImage">
+        <div class="sdpi-item-label" onclick="clearFileName('deorbitingImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup12">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="deorbitingImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="deorbitingImage" id="deorbitingImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="deorbitingImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvDeorbitingTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="deorbitingTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvDeorbitingTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="deorbitingTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvDeorbitingTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="deorbitingTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvDeorbitingBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="deorbitingBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvDeorbitingBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="deorbitingBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvDeorbitingBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="deorbitingBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvDeorbitingBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="deorbitingBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Planetary Flight -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Planetary Flight</div>
+    </div>
+
+    <div class="sdpi-item" id="dvPlanetFlightImage">
+        <div class="sdpi-item-label" onclick="clearFileName('planetFlightImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup13">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="planetFlightImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="planetFlightImage" id="planetFlightImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="planetFlightImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvPlanetFlightTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="planetFlightTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvPlanetFlightTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="planetFlightTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvPlanetFlightTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="planetFlightTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvPlanetFlightBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="planetFlightBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvPlanetFlightBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="planetFlightBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvPlanetFlightBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="planetFlightBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvPlanetFlightBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="planetFlightBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Landed -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Landed</div>
+    </div>
+
+    <div class="sdpi-item" id="dvLandedImage">
+        <div class="sdpi-item-label" onclick="clearFileName('landedImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup14">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="landedImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="landedImage" id="landedImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="landedImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvLandedTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="landedTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvLandedTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="landedTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvLandedTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="landedTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvLandedBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="landedBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvLandedBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="landedBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvLandedBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="landedBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvLandedBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="landedBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Liftoff -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Liftoff</div>
+    </div>
+
+    <div class="sdpi-item" id="dvLiftoffImage">
+        <div class="sdpi-item-label" onclick="clearFileName('liftoffImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup15">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="liftoffImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="liftoffImage" id="liftoffImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="liftoffImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvLiftoffTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="liftoffTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvLiftoffTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="liftoffTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvLiftoffTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="liftoffTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvLiftoffBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="liftoffBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvLiftoffBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="liftoffBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvLiftoffBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="liftoffBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvLiftoffBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="liftoffBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Leaving Planet -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Leaving Planet</div>
+    </div>
+
+    <div class="sdpi-item" id="dvLeavingPlanetImage">
+        <div class="sdpi-item-label" onclick="clearFileName('leavingPlanetImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup16">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="leavingPlanetImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="leavingPlanetImage" id="leavingPlanetImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="leavingPlanetImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvLeavingPlanetTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="leavingPlanetTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvLeavingPlanetTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="leavingPlanetTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvLeavingPlanetTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="leavingPlanetTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvLeavingPlanetBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="leavingPlanetBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvLeavingPlanetBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="leavingPlanetBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvLeavingPlanetBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="leavingPlanetBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvLeavingPlanetBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="leavingPlanetBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- No-Fire Zone -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">No-Fire Zone</div>
+    </div>
+
+    <div class="sdpi-item" id="dvNoFireZoneImage">
+        <div class="sdpi-item-label" onclick="clearFileName('noFireZoneImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup17">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="noFireZoneImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="noFireZoneImage" id="noFireZoneImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="noFireZoneImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvNoFireZoneTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="noFireZoneTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvNoFireZoneTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="noFireZoneTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvNoFireZoneTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="noFireZoneTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvNoFireZoneBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="noFireZoneBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvNoFireZoneBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="noFireZoneBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvNoFireZoneBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="noFireZoneBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvNoFireZoneBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="noFireZoneBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Station Approach -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Station Approach</div>
+    </div>
+
+    <div class="sdpi-item" id="dvStationApproachImage">
+        <div class="sdpi-item-label" onclick="clearFileName('stationApproachImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup18">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="stationApproachImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="stationApproachImage" id="stationApproachImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="stationApproachImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvStationApproachTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="stationApproachTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvStationApproachTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="stationApproachTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvStationApproachTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="stationApproachTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvStationApproachBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="stationApproachBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvStationApproachBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="stationApproachBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvStationApproachBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="stationApproachBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvStationApproachBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="stationApproachBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Docked at Station -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Docked at Station</div>
+    </div>
+
+    <div class="sdpi-item" id="dvDockedAtStationImage">
+        <div class="sdpi-item-label" onclick="clearFileName('dockedAtStationImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup19">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="dockedAtStationImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="dockedAtStationImage" id="dockedAtStationImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="dockedAtStationImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvDockedAtStationTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="dockedAtStationTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvDockedAtStationTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="dockedAtStationTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvDockedAtStationTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="dockedAtStationTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvDockedAtStationBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="dockedAtStationBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvDockedAtStationBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="dockedAtStationBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvDockedAtStationBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="dockedAtStationBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvDockedAtStationBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="dockedAtStationBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- On Foot In Station -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">On Foot In Station</div>
+    </div>
+
+    <div class="sdpi-item" id="dvOnFootInStationImage">
+        <div class="sdpi-item-label" onclick="clearFileName('onFootInStationImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup20">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="onFootInStationImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="onFootInStationImage" id="onFootInStationImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="onFootInStationImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvOnFootInStationTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="onFootInStationTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvOnFootInStationTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="onFootInStationTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvOnFootInStationTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="onFootInStationTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvOnFootInStationBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="onFootInStationBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvOnFootInStationBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="onFootInStationBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvOnFootInStationBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="onFootInStationBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvOnFootInStationBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="onFootInStationBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Station Interior -->
+    <div type="group" class="sdpi-item">
+        <div class="sdpi-item-label">Station Interior</div>
+    </div>
+
+    <div class="sdpi-item" id="dvStationInteriorImage">
+        <div class="sdpi-item-label" onclick="clearFileName('stationInteriorImage');">Image</div>
+        <div class="sdpi-item-group file" id="filepickergroup21">
+            <input class="sdpi-item-value sdProperty sdFile" type="file" id="stationInteriorImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+            <label class="sdpi-file-info" for="stationInteriorImage" id="stationInteriorImageFilename">No file...</label>
+            <label class="sdpi-file-label" for="stationInteriorImage">Choose file...</label>
+        </div>
+    </div>
+
+    <div class="sdpi-item" id="dvStationInteriorTopText">
+        <div class="sdpi-item-label">Top Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="stationInteriorTopText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvStationInteriorTopColor">
+        <div class="sdpi-item-label">Top Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="stationInteriorTopColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvStationInteriorTopTextVerticalPosition">
+        <div class="sdpi-item-label">Top Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="stationInteriorTopTextVerticalPosition" oninput="setSettings()">
+                <option value="5" selected>Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190">Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvStationInteriorBottomText">
+        <div class="sdpi-item-label">Bottom Text</div>
+        <textarea class="sdpi-item-value sdProperty" id="stationInteriorBottomText" oninput="setSettings()" rows="1" style="resize:vertical;"></textarea>
+    </div>
+
+    <div type="color" class="sdpi-item" id="dvStationInteriorBottomColor">
+        <div class="sdpi-item-label">Bottom Text Color</div>
+        <input class="sdpi-item-value sdProperty" type="color" id="stationInteriorBottomColor" oninput="setSettings()">
+    </div>
+
+    <div class="sdpi-item" id="dvStationInteriorBottomTextVerticalPosition">
+        <div class="sdpi-item-label">Bottom Text Position</div>
+            <select class="sdpi-item-value select sdProperty" id="stationInteriorBottomTextVerticalPosition" oninput="setSettings()">
+                <option value="5">Very Top</option>
+                <option value="14">Top</option>
+                <option value="34">Top-Middle</option>
+                <option value="60">Upper Middle</option>
+                <option value="80">Center</option>
+                <option value="100">Lower Middle</option>
+                <option value="128">Bottom</option>
+                <option value="144">Lower Bottom</option>
+                <option value="160">Very Bottom</option>
+                <option value="175">Near Edge</option>
+                <option value="190" selected>Edge</option>
+            </select>
+    </div>
+
+    <div class="sdpi-item" id="dvStationInteriorBold">
+        <div class="sdpi-item-label">Bold</div>
+        <select class="sdpi-item-value select sdProperty" id="stationInteriorBold" oninput="setSettings()">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <hr>
+
+</div>
+</body>
+</html>

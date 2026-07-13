@@ -1,23 +1,16 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace EliteJournalReader.Events
 {
     //When written: when accessing the commodity market in a station
     //A separate file market.json is written to the same folder as the journal, containing full market price info
     //Parameters:
-    //•	MarketID
-    //•	StationName
-    //•	StarSystem
+    //ï¿½	MarketID
+    //ï¿½	StationName
+    //ï¿½	StarSystem
 
     //The separate file also contains:
-    //•	Items: array of objects
+    //ï¿½	Items: array of objects
     //o   id
     //o   Name
     //o   BuyPrice
@@ -39,32 +32,9 @@ namespace EliteJournalReader.Events
             public string StationName { get; set; }
             public long MarketID { get; set; }
             public string StarSystem { get; set; }
-
-            public MarketInfo ReadMarketInfo(string journalPath)
-            {
-                string filepath = Path.Combine(journalPath, "Market.json");
-                try
-                {
-                    var result = JToken.ReadFrom(new JsonTextReader(new StreamReader(filepath))).ToObject<MarketInfo>();
-                    return result;
-                }
-                catch (Exception e)
-                {
-                    System.Diagnostics.Trace.TraceError($"Error reading from {filepath}: {e.Message}");
-                    return null;
-                }
-            }
+            public string StationType { get; set; }
+            public List<MarketItem> Items { get; set; }
         }
-    }
-
-    public class MarketInfo
-    {
-        public DateTime Timestamp { get; set; }
-        public string Event { get; set; }
-        public long MarketID { get; set; }
-        public string StationName { get; set; }
-        public string StarSystem { get; set; }
-        public List<MarketItem> Items { get; set; }
     }
 
     public class MarketItem

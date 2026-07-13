@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //When Written: when a screen snapshot is saved
@@ -23,7 +16,7 @@ namespace EliteJournalReader.Events
         public class ScreenshotEventArgs : JournalEventArgs
         {
             public string Filename { get; set; }
-            public long Width { get; set; }
+            public long WIDth { get; set; }
             public int Height { get; set; }
             public string System { get; set; }
             public string Body { get; set; }

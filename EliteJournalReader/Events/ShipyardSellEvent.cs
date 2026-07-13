@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //When Written: when selling a ship stored in the shipyard
@@ -22,7 +15,7 @@ namespace EliteJournalReader.Events
             public long MarketID { get; set; }
             public string ShipType { get; set; }
             public string ShipType_Localised { get; set; }
-            public string SellShipId { get; set; }
+            public long SellShipID { get; set; }
             public int ShipPrice { get; set; }
             public string System { get; set; }
         }

@@ -1,16 +1,16 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace EliteJournalReader.Events
 {
-    public class StatusFileEvent : EventArgs
+    public class StatusEvent : JournalEvent<StatusFileEvent>
     {
-        public DateTime Timestamp { get; set; }
+        public StatusEvent() : base("Status") { }
+    }
 
+    public class StatusFileEvent : JournalEventArgs
+    {
         public StatusFlags Flags { get; set; }
 
         public MoreStatusFlags Flags2 { get; set; }
@@ -26,7 +26,8 @@ namespace EliteJournalReader.Events
 
         public double Cargo { get; set; }
 
-        public string LegalState { get; set; }
+        [JsonConverter(typeof(ExtendedStringEnumConverter<LegalState>))]
+        public LegalState LegalState { get; set; }
 
         public double Latitude { get; set; }
 
@@ -54,14 +55,23 @@ namespace EliteJournalReader.Events
 
         public double Gravity { get; set; }
 
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("Status: " + OriginalEvent?.ToString(Formatting.None) ?? "<no json>");
+            sb.AppendLine($"Status Flags : {(long)Flags:X8} - {string.Join(", ", Flags.GetIndividualFlags())}");
+            sb.AppendLine($"Status Flags2: {(long)Flags2:X8} - {string.Join(", ", Flags2.GetIndividualFlags())}");
+
+            return sb.ToString();
+        }
 
         class JsonPipsConverter : JsonConverter
         {
             public override bool CanConvert(Type objectType) => true;
             public override bool CanWrite => false;
 
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-                JsonSerializer serializer)
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
             {
                 (int System, int Engine, int Weapons) result;
 
@@ -75,30 +85,20 @@ namespace EliteJournalReader.Events
                 {
                     result = (0, 0, 0);
                 }
-
                 reader.Read(); // read EndArray
                 return result;
             }
 
-            private static int ReadInt(JsonReader reader)
-            {
-                if (reader.Read() && reader.TokenType == JsonToken.Integer)
-                    return Convert.ToInt32(reader.Value);
-                return 0;
-            }
+            private static int ReadInt(JsonReader reader) => reader.Read() && reader.TokenType == JsonToken.Integer ? Convert.ToInt32(reader.Value) : 0;
 
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-            {
-                throw new NotImplementedException();
-            }
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) => throw new NotImplementedException();
         }
-
     }
 
-    public struct Destination
+    public class Destination
     {
-        public string System { get; set; }
-        public string Body { get; set; }
+        public long System { get; set; }
+        public int Body { get; set; }
         public string Name { get; set; }
     }
 
@@ -145,8 +145,8 @@ namespace EliteJournalReader.Events
     {
         None = 0,
         OnFoot = 0x00000001,
-        InTaxi = 0x00000002,//(or dropship/shuttle
-        InMulticrew = 0x00000004, // ie in someone else’s ship) 
+        InTaxi = 0x00000002,
+        InMulticrew = 0x00000004,
         OnFootInStation = 0x00000008,
         OnFootOnPlanet = 0x00000010,
         AimDownSight = 0x00000020,
@@ -156,18 +156,22 @@ namespace EliteJournalReader.Events
         Hot = 0x00000200,
         VeryCold = 0x00000400,
         VeryHot = 0x00000800,
-        GlideMode  = 0x00001000,
-        OnFootInHangar  = 0x00002000,
-        OnFootSocialSpace  = 0x00004000,
-        OnFootExterior  = 0x00008000,
-        BreathableAtmosphere = 0x00010001,
-        TelepresenceMulticrew = 0x00020000,
-        PhysicalMulticrew = 0x00040000,
-        Fsdhyperdrivecharging = 0x00080000
+        GlideMode = 0x00001000,
+        OnFootInHangar = 0x00002000,
+        OnFootInSocialSpace = 0x00004000,
+        OnFootExterior = 0x00008000,
+        BreathableAtmosphere = 0x000010000,
+        TelepresenceMulticrew = 0x000020000,
+        PhysicalMulticrew = 0x000040000,
+        FsdHyperdriveCharging = 0x000080000,
+        SuperCruiseOvercharge = 0x000100000,
+        SuperCruiseAssist = 0x000200000,
+        NpcCrewIsActive = 0x000400000,
     }
 
     public enum StatusGuiFocus
     {
+        MainMenu = -1,
         NoFocus = 0,
         InternalPanel = 1,
         ExternalPanel = 2,

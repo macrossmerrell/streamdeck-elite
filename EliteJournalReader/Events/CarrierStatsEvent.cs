@@ -1,28 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //When written: When owner opens carrier management
-    //•	CarrierID: marketid
-    //•	Callsign: string
-    //•	Name: string
-    //•	DockingAccess: all/none/friends/squadron/squadronfriends
-    //•	AllowNotorious: bool
-    //•	FuelLevel: int
-    //•	JumpRangeCurr: float
-    //•	JumpRangeMax: float
-    //•	PendingDecommission: bool
-    //•	SpaceUsage { TotalCapacity, Crew, Cargo, CargoSpaceReserved, ShipPacks, ModulePacks, FreeSpace
+    //ï¿½	CarrierID: marketid
+    //ï¿½	Callsign: string
+    //ï¿½	Name: string
+    //ï¿½	DockingAccess: all/none/friends/squadron/squadronfriends
+    //ï¿½	AllowNotorious: bool
+    //ï¿½	FuelLevel: int
+    //ï¿½	JumpRangeCurr: float
+    //ï¿½	JumpRangeMax: float
+    //ï¿½	PendingDecommission: bool
+    //ï¿½	SpaceUsage { TotalCapacity, Crew, Cargo, CargoSpaceReserved, ShipPacks, ModulePacks, FreeSpace
     //}
-    //•	Finance { CarrierBalance, ReserveBalance, AvailableBalance, ReservePercent, TaxRate }
-    //•	Crew[{ CrewRole, Activated, Enabled, CrewName },...]
-    //•	ShipPacks[{ PackTheme, packTier },...]
-    //•	ModulePacks[{PackTheme, packTier },...]
+    //ï¿½	Finance { CarrierBalance, ReserveBalance, AvailableBalance, ReservePercent, TaxRate }
+    //ï¿½	Crew[{ CrewRole, Activated, Enabled, CrewName },...]
+    //ï¿½	ShipPacks[{ PackTheme, packTier },...]
+    //ï¿½	ModulePacks[{PackTheme, packTier },...]
     public class CarrierStatsEvent : JournalEvent<CarrierStatsEvent.CarrierStatsEventArgs>
     {
         public CarrierStatsEvent() : base("CarrierStats") { }
@@ -45,7 +38,7 @@ namespace EliteJournalReader.Events
             public CarrierModulePack[] ModulePacks { get; set; }
         }
 
-        public struct CarrierSpaceUsage
+        public class CarrierSpaceUsage
         {
             public long TotalCapacity { get; set; }
             public long Crew { get; set; }
@@ -56,7 +49,7 @@ namespace EliteJournalReader.Events
             public long FreeSpace { get; set; }
         }
 
-        public struct CarrierFinance
+        public class CarrierFinance
         {
             public long CarrierBalance { get; set; }
             public long ReserveBalance { get; set; }
@@ -65,7 +58,7 @@ namespace EliteJournalReader.Events
             public double TaxRate { get; set; }
         }
 
-        public struct CarrierCrew
+        public class CarrierCrew
         {
             public string CrewRole { get; set; }
             public bool Activated { get; set; }
@@ -73,13 +66,13 @@ namespace EliteJournalReader.Events
             public string Name { get; set; }
         }
 
-        public struct CarrierShipPack
+        public class CarrierShipPack
         {
             public string PackTheme { get; set; }
             public int PackTier { get; set; }
         }
 
-        public struct CarrierModulePack
+        public class CarrierModulePack
         {
             public string PackTheme { get; set; }
             public int PackTier { get; set; }

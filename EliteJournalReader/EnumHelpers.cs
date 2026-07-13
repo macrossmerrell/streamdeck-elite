@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reflection;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
@@ -12,7 +10,8 @@ namespace EliteJournalReader
 {
     public static class EnumHelpers
     {
-        private static Dictionary<Type, Dictionary<string, object>> enumDescriptionCache = new Dictionary<Type, Dictionary<string, object>>();
+        private static readonly Dictionary<Type, Dictionary<string, object>> enumDescriptionCache = new Dictionary<Type, Dictionary<string, object>>();
+        private static readonly Dictionary<Type, Dictionary<object, string>> enumToDescriptionCache = new Dictionary<Type, Dictionary<object, string>>();
 
         public static T ToEnum<T>(this string value, T defaultValue) where T : struct
         {
@@ -20,7 +19,7 @@ namespace EliteJournalReader
                 return defaultValue;
 
             var type = typeof(T);
-            if (!enumDescriptionCache.TryGetValue(type, out Dictionary<string, object> cache))
+            if (!enumDescriptionCache.TryGetValue(type, out var cache))
             {
                 cache = new Dictionary<string, object>();
                 var attrs = type.GetFields().SelectMany(f => f.GetCustomAttributes<DescriptionAttribute>().Select(d => new { field = f, desc = d }));
@@ -45,21 +44,38 @@ namespace EliteJournalReader
             }
 
             // if this all fails, try it again, but now case insensitive
-            var e = typeof(T)
-                .GetFields()
-                .FirstOrDefault(f => f.GetCustomAttributes<DescriptionAttribute>()
-                             .Any(a => a.Description.Equals(value, StringComparison.OrdinalIgnoreCase))
-                );
+            var descs = enumDescriptionCache[type];
+            FieldInfo fieldInfo = null;
+            if (descs == null)
+            {
+                fieldInfo = typeof(T)
+                    .GetFields()
+                    .FirstOrDefault(f => f.GetCustomAttributes<DescriptionAttribute>()
+                                 .Any(a => a.Description.Equals(value, StringComparison.OrdinalIgnoreCase))
+                    );
+
+            }
+            else
+            {
+                foreach (var kv in descs)
+                {
+                    if (kv.Key.Equals(value, StringComparison.OrdinalIgnoreCase))
+                    {
+                        cache[value] = kv.Value; // store for next time!
+                        return (T)kv.Value;
+                    }
+                }
+            }
 
             // not in the descriptions, perhaps in the 'regular' values?
-            if (e == null)
-                e = typeof(T)
+            if (fieldInfo == null)
+                fieldInfo = typeof(T)
                     .GetFields()
                     .FirstOrDefault(f => f.Name.Equals(value, StringComparison.OrdinalIgnoreCase));
 
-            if (e != null)
+            if (fieldInfo != null)
             {
-                var resultInsensitive = (T)e.GetValue(null);
+                var resultInsensitive = (T)fieldInfo.GetValue(null);
                 cache[value] = resultInsensitive; // remember for next time
                 return resultInsensitive;
             }
@@ -71,23 +87,87 @@ namespace EliteJournalReader
 
         public static string StringValue(this Enum enumItem)
         {
-            return enumItem
-            .GetType()
-            .GetField(enumItem.ToString())
-            .GetCustomAttributes<DescriptionAttribute>()
-            .Select(a => a.Description)
-            .FirstOrDefault() ?? enumItem.ToString();
+            if (enumToDescriptionCache.TryGetValue(enumItem.GetType(), out var cache))
+            {
+                if (cache.TryGetValue(enumItem, out string resultFromCache))
+                {
+                    return resultFromCache;
+                }
+            }
+            if (cache == null)
+            {
+                cache = new Dictionary<object, string>();
+                enumToDescriptionCache[enumItem.GetType()] = cache;
+            }
+            string value = enumItem
+                .GetType()
+                .GetField(enumItem.ToString())
+                .GetCustomAttributes<DescriptionAttribute>()
+                .Select(a => a.Description)
+                .FirstOrDefault() ?? enumItem.ToString();
+
+            cache[enumItem] = value;
+            return value;
+        }
+
+        public static IEnumerable<Enum> GetFlags(this Enum value)
+        {
+            return GetFlags(value, Enum.GetValues(value.GetType()).Cast<Enum>().ToArray());
+        }
+
+        public static IEnumerable<Enum> GetIndividualFlags(this Enum value)
+        {
+            return GetFlags(value, GetFlagValues(value.GetType()).ToArray());
+        }
+
+        private static IEnumerable<Enum> GetFlags(Enum value, Enum[] values)
+        {
+            ulong bits = Convert.ToUInt64(value);
+            List<Enum> results = new List<Enum>();
+            for (int i = values.Length - 1; i >= 0; i--)
+            {
+                ulong mask = Convert.ToUInt64(values[i]);
+                if (i == 0 && mask == 0L)
+                    break;
+                if ((bits & mask) == mask)
+                {
+                    results.Add(values[i]);
+                    bits -= mask;
+                }
+            }
+            if (bits != 0L)
+                return Enumerable.Empty<Enum>();
+            if (Convert.ToUInt64(value) != 0L)
+                return results.Reverse<Enum>();
+            if (bits == Convert.ToUInt64(value) && values.Length > 0 && Convert.ToUInt64(values[0]) == 0L)
+                return values.Take(1);
+            return Enumerable.Empty<Enum>();
+        }
+
+        private static IEnumerable<Enum> GetFlagValues(Type enumType)
+        {
+            ulong flag = 0x1;
+            foreach (var value in Enum.GetValues(enumType).Cast<Enum>())
+            {
+                ulong bits = Convert.ToUInt64(value);
+                if (bits == 0L)
+                    //yield return value;
+                    continue; // skip the zero value
+                while (flag < bits) flag <<= 1;
+                if (flag == bits)
+                    yield return value;
+            }
         }
     }
 
 
     public class ExtendedStringEnumConverter<T> : StringEnumConverter where T : struct
     {
-        private T defaultValue;
+        private readonly T defaultValue;
 
         public ExtendedStringEnumConverter()
         {
-            defaultValue = default(T);
+            defaultValue = default;
         }
 
         public ExtendedStringEnumConverter(T defaultValue)

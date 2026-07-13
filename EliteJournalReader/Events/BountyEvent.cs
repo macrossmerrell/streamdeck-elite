@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //    When written: player is awarded a bounty for a kill
@@ -19,11 +12,14 @@ namespace EliteJournalReader.Events
 
         public class BountyEventArgs : JournalEventArgs
         {
-            public struct FactionReward
+            public class FactionReward
             {
-                public string Faction;
-                public int Reward;
+                public string Faction { get; set; } 
+                public int Reward { get; set; }
             }
+
+            public string PilotName { get; set; }
+            public string PilotName_Localised { get; set; }
             public string Target { get; set; }
             public string Target_Localised { get; set; }
 

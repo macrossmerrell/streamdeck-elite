@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //When written: when putting multiple modules into storage
@@ -22,18 +15,18 @@ namespace EliteJournalReader.Events
 
         public class MassModuleStoreEventArgs : JournalEventArgs
         {
-            public struct ModuleItems
+            public class ModuleItems
             {
-                public string Slot;
-                public string Name;
-                public string EngineerModifications;
+                public string Slot { get; set; }
+                public string Name { get; set; }
+                public string EngineerModifications { get; set; }
                 public int Level { get; set; }
                 public double Quality { get; set; }
                 public bool Hot { get; set; }
             }
 
             public string Ship { get; set; }
-            public string ShipId { get; set; }
+            public long ShipID { get; set; }
             public ModuleItems[] Items { get; set; }
         }
     }

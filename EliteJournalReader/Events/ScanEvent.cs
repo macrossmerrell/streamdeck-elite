@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 
 namespace EliteJournalReader.Events
@@ -203,12 +200,12 @@ namespace EliteJournalReader.Events
 
             public string BodyName { get; set; }
 
-            public long BodyID { get; set; }
+            public int BodyID { get; set; }
 
             public double DistanceFromArrivalLs { get; set; }
 
             [JsonConverter(typeof(BodyParentConverter))]
-            public BodyParent[] Parents { get; set; }
+            public List<BodyParent> Parents { get; set; }
 
             public double? SemiMajorAxis { get; set; }
 
@@ -217,6 +214,10 @@ namespace EliteJournalReader.Events
             public double? Periapsis { get; set; }
 
             public double? OrbitalInclination { get; set; }
+
+            public double? AscendingNode { get; set; }
+
+            public double? MeanAnomaly { get; set; }
 
             public double? Age_MY { get; set; }
 
@@ -250,15 +251,16 @@ namespace EliteJournalReader.Events
             [JsonConverter(typeof(ExtendedStringEnumConverter<TerraformState>))]
             public TerraformState TerraformState { get; set; }
 
-            [JsonConverter(typeof(ExtendedStringEnumConverter<PlanetClass>))]
-            public PlanetClass PlanetClass { get; set; }
+            public string PlanetClass { get; set; }
 
             public string Atmosphere { get; set; }
 
             [JsonConverter(typeof(ExtendedStringEnumConverter<AtmosphereClass>))]
             public AtmosphereClass AtmosphereType { get; set; }
 
-            public ScanItemComponent[] AtmosphereComposition { get; set; }
+            public List<ScanItemComponent> AtmosphereComposition { get; set; }
+
+            public Dictionary<string, double> Composition { get; set; }
 
             public string Volcanism { get; set; }
 
@@ -272,49 +274,55 @@ namespace EliteJournalReader.Events
 
             public bool? TidalLock { get; set; }
 
-            public ScanItemComponent[] Materials { get; set; }
+            public List<ScanItemComponent> Materials { get; set; }
 
             public bool? WasDiscovered { get; set; }
+
             public bool? WasMapped { get; set; }
+
+            public bool? WasFootfalled { get; set; }
         }
     }
 
-    public struct ScanItemComponent
+    public class ScanItemComponent
     {
-        public string Name;
-        public double Percent;
+        public string Name { get; set; }
+        public double Percent { get; set; }
     }
 
-    public struct PlanetRing
+    public class ProspectedMaterial
     {
-        public string Name;
-        public string RingClass;
-        public double MassMT;
-        public double InnerRad;
-        public double OuterRad;
+        public string Name { get; set; }
+        public double Proportion { get; set; }
     }
 
-    public struct BodyParent
+    public class PlanetRing
     {
-        public string Type;
-        public long BodyID;
+        public string Name { get; set; }
+        public string RingClass { get; set; }
+        public double MassMT { get; set; }
+        public double InnerRad { get; set; }
+        public double OuterRad { get; set; }
+    }
+
+    public class BodyParent
+    {
+        public string Type { get; set; }
+        public int BodyID { get; set; }
     }
 
 
 
     public class BodyParentConverter : JsonConverter
     {
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(IEnumerable<BodyParent>);
-        }
+        public override bool CanConvert(Type objectType) => objectType == typeof(IEnumerable<BodyParent>);
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var bps = new List<BodyParent>();
             if (JToken.ReadFrom(reader) is JArray array)
             {
-                foreach (JToken token in array.Children())
+                foreach (var token in array.Children())
                 {
                     if (token is JObject obj)
                     {
@@ -324,19 +332,23 @@ namespace EliteJournalReader.Events
                             var bp = new BodyParent
                             {
                                 Type = prop.Name,
-                                BodyID = prop.Value.Value<long>()
+                                BodyID = prop.Value.Value<int>()
                             };
                             bps.Add(bp);
                         }
                     }
                 }
             }
-            return bps.ToArray();
+            return bps;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            if (!(value is List<BodyParent> bps))
+                return;
+
+            var bpsArray = bps.Select(bp => new Dictionary<string, long> { [bp.Type] = bp.BodyID }).ToArray();
+            serializer.Serialize(writer, bpsArray);
         }
     }
 }

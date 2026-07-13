@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     //    When written: when visiting shipyard
@@ -41,19 +34,19 @@ namespace EliteJournalReader.Events
 
         public class StoredShipsEventArgs : JournalEventArgs
         {
-            public struct StoredShip
+            public class StoredShip
             {
-                public string ShipID;
-                public string ShipType;
-                public string ShipType_Localised;
-                public string Name;
-                public int Value;
-                public bool Hot;
-                public bool InTransit;
-                public string StarSystem;
-                public long ShipMarketID;
-                public int TransferPrice;
-                public string TransferType;
+                public long ShipID { get; set; }
+                public string ShipType { get; set; }
+                public string ShipType_Localised { get; set; }
+                public string Name { get; set; }
+                public int Value { get; set; }
+                public bool Hot { get; set; }
+                public bool InTransit { get; set; }
+                public string StarSystem { get; set; }
+                public long ShipMarketID { get; set; }
+                public int TransferPrice { get; set; }
+                public string TransferType { get; set; }
             }
 
             public long MarketID { get; set; }

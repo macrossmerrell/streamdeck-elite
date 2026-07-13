@@ -1,9 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 
 namespace EliteJournalReader.Events
 {
@@ -20,12 +15,19 @@ namespace EliteJournalReader.Events
             public string StarSystem { get; set; }
             public long SystemAddress { get; set; }
             public string Body { get; set; }
-            public long BodyID { get; set; }
+            public int BodyID { get; set; }
             public bool OnStation { get; set; }
             public bool OnPlanet { get; set; }
             public string StationName { get; set; }
             public string StationType { get; set; }
             public long MarketID { get; set; }
+            public List<CrewRole> Crew { get; set; }
+        }
+
+        public class CrewRole
+        {
+            public string Name { get; set; }
+            public string Role { get; set; }
         }
     }
 }

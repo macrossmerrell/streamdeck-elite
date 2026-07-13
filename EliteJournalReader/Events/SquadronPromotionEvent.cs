@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-
 namespace EliteJournalReader.Events
 {
     public class SquadronPromotionEvent : JournalEvent<SquadronPromotionEvent.SquadronPromotionEventArgs>
@@ -13,6 +6,7 @@ namespace EliteJournalReader.Events
 
         public class SquadronPromotionEventArgs : JournalEventArgs
         {
+            public long SquadronID { get; set; }
             public string SquadronName { get; set; }
             public int OldRank { get; set; }
             public int NewRank { get; set; }

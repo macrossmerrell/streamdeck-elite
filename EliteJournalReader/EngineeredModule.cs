@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace EliteJournalReader
+﻿namespace EliteJournalReader
 {
     public class EngineeredModule
     {
         public string Engineer { get; set; }
-        public string EngineerID { get; set; }
-        public string BlueprintID { get; set; }
+        public long EngineerID { get; set; }
+        public long BlueprintID { get; set; }
         public string BlueprintName { get; set; }
         public int Level { get; set; }
         public double Quality { get; set; }

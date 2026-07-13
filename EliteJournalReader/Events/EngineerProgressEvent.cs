@@ -1,17 +1,12 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 
 namespace EliteJournalReader.Events
 {
     //When Written: when a player increases their access to an engineer
     //Parameters
-    //•	Engineer: name of engineer
-    //•	Rank: rank reached (when unlocked)
-    //•	Progress: progress stage (Invited/Acquainted/Unlocked/Barred)
+    //ï¿½	Engineer: name of engineer
+    //ï¿½	Rank: rank reached (when unlocked)
+    //ï¿½	Progress: progress stage (Invited/Acquainted/Unlocked/Barred)
     public class EngineerProgressEvent : JournalEvent<EngineerProgressEvent.EngineerProgressEventArgs>
     {
         public EngineerProgressEvent() : base("EngineerProgress") { }
@@ -19,7 +14,7 @@ namespace EliteJournalReader.Events
         public class EngineerProgressEventArgs : JournalEventArgs
         {
             public string Engineer { get; set; }
-            public string EngineerID { get; set; }
+            public long EngineerID { get; set; }
             public int? Rank { get; set; }
             public string Progress { get; set; }
 
