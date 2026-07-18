@@ -381,15 +381,16 @@ The plugin supports automatic Stream Deck profile switching based on game state.
 ### Follow the detailed instructions from CMDR Galyock: [Automatic Profile Switching Setup](https://github.com/macrossmerrell/streamdeck-elite/blob/master/Automatic%20Profile%20Switching%20Instructions.md).
 
 Ignore These Instructions:
-
-~~1. Create profiles in the Stream Deck software with these exact names:
+~~
+1. Create profiles in the Stream Deck software with these exact names:
    - `Elite Main` — default ship profile
    - `Elite OnFoot` — switches when on foot in Odyssey
    - `Elite InSRV` — switches when SRV is deployed
    - `Elite InFighter` — switches when in a fighter
 2. Export each profile from Stream Deck software as a `.streamDeckProfile` file
 3. Place the exported files in the `Profiles` folder inside the plugin directory
-4. Reinstall the plugin — Stream Deck will prompt to import the profiles~~
+4. Reinstall the plugin — Stream Deck will prompt to import the profiles
+~~
 
 > **Note:** Profile files are device-specific and tied to your hardware UUID. They cannot be shared universally, which is why this folder ships empty. This is an advanced setup for users who want it.
 
