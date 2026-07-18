@@ -378,6 +378,9 @@ A set of custom button images is included in the `Images/Optional` directory, cr
 
 The plugin supports automatic Stream Deck profile switching based on game state. To set this up:
 
+### Follow the instructions from CMDR Galyock
+[Automatic Profile Switching Setup](https://github.com/macrossmerrell/streamdeck-elite/blob/master/Automatic%20Profile%20Switching%20Instructions.md).
+
 1. Create profiles in the Stream Deck software with these exact names:
    - `Elite Main` — default ship profile
    - `Elite OnFoot` — switches when on foot in Odyssey
