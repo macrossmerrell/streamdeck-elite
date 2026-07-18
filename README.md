@@ -1,6 +1,6 @@
 # streamdeck-elite
 
-This is a custom fork of [mhwlng's original project](https://github.com/mhwlng/streamdeck-elite) and [DrFr33ze's .NET 10 conversion](https://github.com/DrFr33ze/streamdeck-elite). I could not do any of this without all the hard work they put into the project! I'm an explorer at heart and have added new buttons and features that reflect how I play Elite Dangerous.
+This is a custom fork of [mhwlng's original project](https://github.com/mhwlng/streamdeck-elite) and [DrFr33ze's .NET 10 conversion](https://github.com/DrFr33ze/streamdeck-elite) and CMDR Galyock for his Automatic Profile Switching instructions. I could not do any of this without all the hard work they put into the project! I'm an explorer at heart and have added new buttons and features that reflect how I play Elite Dangerous.
 
 **Ensure .NET 10 Desktop Runtime is installed** for proper operation: https://dotnet.microsoft.com/en-us/download/dotnet/10.0
 
@@ -378,8 +378,8 @@ A set of custom button images is included in the `Images/Optional` directory, cr
 
 The plugin supports automatic Stream Deck profile switching based on game state. To set this up:
 
-### Follow the instructions from CMDR Galyock
-### [Automatic Profile Switching Setup](https://github.com/macrossmerrell/streamdeck-elite/blob/master/Automatic%20Profile%20Switching%20Instructions.md).
+### Follow the detailed instructions from CMDR Galyock:
+## [Automatic Profile Switching Setup](https://github.com/macrossmerrell/streamdeck-elite/blob/master/Automatic%20Profile%20Switching%20Instructions.md).
 
 Ignore These Instructions:
 ```
