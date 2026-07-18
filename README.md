@@ -382,10 +382,10 @@ The plugin supports automatic Stream Deck profile switching based on game state.
 
 Ignore These Older Instructions:
 ~~Create profiles in the Stream Deck software with these exact names:
-   - `Elite Main` — default ship profile
-   - `Elite OnFoot` — switches when on foot in Odyssey
-   - `Elite InSRV` — switches when SRV is deployed
-   - `Elite InFighter` — switches when in a fighter
+`Elite Main` — default ship profile
+`Elite OnFoot` — switches when on foot in Odyssey
+`Elite InSRV` — switches when SRV is deployed
+`Elite InFighter` — switches when in a fighter
 Export each profile from Stream Deck software as a `.streamDeckProfile` file
 Place the exported files in the `Profiles` folder inside the plugin directory
 Reinstall the plugin — Stream Deck will prompt to import the profiles~~
