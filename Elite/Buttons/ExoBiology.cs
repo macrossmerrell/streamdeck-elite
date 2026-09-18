@@ -478,13 +478,6 @@ namespace Elite.Buttons
                     return;
             }
 
-            if (background == null)
-            {
-                if (!string.IsNullOrEmpty(backgroundFile))
-                    await Connection.SetImageAsync(backgroundFile);
-                return;
-            }
-
             string genusLine1 = EliteData.ExoBioGenus?.ToUpper();
             string genusLine2 = !string.IsNullOrEmpty(EliteData.ExoBioSpecies)
                                     ? EliteData.ExoBioSpecies.ToUpper()
@@ -503,10 +496,13 @@ namespace Elite.Buttons
             string imgBase64 = null;
             try
             {
-                using (var bitmap = new Bitmap(background))
+                using (var bitmap = background != null ? new Bitmap(background) : new Bitmap(256, 256))
                 {
                     using (var graphics = Graphics.FromImage(bitmap))
                     {
+                        if (background == null)
+                            graphics.Clear(Color.Black);
+
                         int width = bitmap.Width;
 
                         DrawGenusText(graphics, genusLine1, genusLine2, genusBrush, genusVPos, width);
@@ -725,7 +721,7 @@ namespace Elite.Buttons
                     bmp?.Dispose(); bmp = null; b64 = null;
                     if (File.Exists(filename))
                     {
-                        bmp = (Bitmap)Image.FromFile(filename);
+                        bmp = StreamDeckCommon.LoadBitmap(filename);
                         b64 = Tools.FileToBase64(filename, true);
                     }
                 }

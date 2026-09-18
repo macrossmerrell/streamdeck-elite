@@ -157,7 +157,7 @@ namespace Elite.Buttons
 
         public void HandleEliteEvents(object sender, MessageReceivedEventArgs args)
         {
-            AsyncHelper.RunSync(HandleDisplay);
+            AsyncHelper.RunCoalesced(this, HandleDisplay);
         }
 
         public override void KeyPressed(KeyPayload payload)

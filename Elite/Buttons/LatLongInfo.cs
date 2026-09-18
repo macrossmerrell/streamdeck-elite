@@ -53,6 +53,8 @@ namespace Elite.Buttons
         }
 
         private PluginSettings settings;
+        private long _lastDrawnVersion = -1;
+        private int _ticksSinceDraw;
         private Bitmap _primaryImage = null;
         private Bitmap _defaultImage = null;
         private string _primaryFile;
@@ -60,64 +62,11 @@ namespace Elite.Buttons
         private SolidBrush _latBrush = new SolidBrush(Color.Lime);
         private SolidBrush _longBrush = new SolidBrush(Color.FromArgb(0, 170, 255));
 
-        private void DrawLabelAndValue(Graphics graphics, string label, string value, SolidBrush brush, double verticalPosition, int width)
-        {
-            if (string.IsNullOrEmpty(value)) return;
-
-            var isBold = settings.TextBold == "true";
-            var fontStyle = isBold ? FontStyle.Bold : FontStyle.Regular;
-
-            // Try to fit both label and value lines starting from the largest font
-            //for (int adjustedSize = 25; adjustedSize >= 8; adjustedSize -= 1)
-            for (int adjustedSize = 20; adjustedSize >= 8; adjustedSize -= 1)
-            {
-                var testFont = new Font("Arial", adjustedSize, fontStyle);
-                var sf = new StringFormat(StringFormat.GenericTypographic);
-
-                // Measure label
-                sf.SetMeasurableCharacterRanges(new[] { new CharacterRange(0, label.Length) });
-                var labelRegions = graphics.MeasureCharacterRanges(label, testFont, new RectangleF(0, 0, 1000, 1000), sf);
-                var labelBounds = labelRegions[0].GetBounds(graphics);
-
-                // Measure value
-                sf.SetMeasurableCharacterRanges(new[] { new CharacterRange(0, value.Length) });
-                var valueRegions = graphics.MeasureCharacterRanges(value, testFont, new RectangleF(0, 0, 1000, 1000), sf);
-                var valueBounds = valueRegions[0].GetBounds(graphics);
-
-                bool fits = labelBounds.Width <= width * 0.95f && valueBounds.Width <= width * 0.95f;
-
-                if (fits)
-                {
-                    var drawFmt = new StringFormat(StringFormat.GenericTypographic);
-                    float currentY = (float)(verticalPosition * (width / 256.0));
-
-                    // Draw label
-                    var lsf = new StringFormat(StringFormat.GenericTypographic);
-                    lsf.SetMeasurableCharacterRanges(new[] { new CharacterRange(0, label.Length) });
-                    var lr = graphics.MeasureCharacterRanges(label, testFont, new RectangleF(0, 0, 1000, 1000), lsf);
-                    var lb = lr[0].GetBounds(graphics);
-                    float labelX = (width - lb.Width) / 2.0f;
-                    graphics.DrawString(label, testFont, brush, labelX, currentY - lb.Y, drawFmt);
-                    currentY += lb.Height * 1.1f;
-
-                    // Draw value
-                    var vsf = new StringFormat(StringFormat.GenericTypographic);
-                    vsf.SetMeasurableCharacterRanges(new[] { new CharacterRange(0, value.Length) });
-                    var vr = graphics.MeasureCharacterRanges(value, testFont, new RectangleF(0, 0, 1000, 1000), vsf);
-                    var vb = vr[0].GetBounds(graphics);
-                    float valueX = (width - vb.Width) / 2.0f;
-                    graphics.DrawString(value, testFont, brush, valueX, currentY - vb.Y, drawFmt);
-
-                    testFont.Dispose();
-                    return;
-                }
-
-                testFont.Dispose();
-            }
-        }
-
         private async Task HandleDisplay()
         {
+            _lastDrawnVersion = EliteData.DataVersion;
+            _ticksSinceDraw = 0;
+
             var s = EliteData.StatusData;
 
             if (!s.HasLatLong)
@@ -130,28 +79,30 @@ namespace Elite.Buttons
             var myBitmap = _primaryImage ?? _defaultImage;
             var imgBase64 = _primaryFile ?? _defaultFile;
 
-            if (myBitmap == null)
-            {
-                if (!string.IsNullOrEmpty(imgBase64))
-                    await Connection.SetImageAsync(imgBase64);
-                return;
-            }
-
             var latText = $"{s.Latitude:F4}°";
             var longText = $"{s.Longitude:F4}°";
 
             try
             {
-                using (var bitmap = new Bitmap(myBitmap))
+                using (var bitmap = myBitmap != null ? new Bitmap(myBitmap) : new Bitmap(256, 256))
                 {
                     using (var graphics = Graphics.FromImage(bitmap))
                     {
+                        if (myBitmap == null)
+                            graphics.Clear(Color.Black);
+
                         var width = bitmap.Width;
                         var latPos = double.TryParse(settings.LatVerticalPosition, out double lp) ? lp : 28.0;
                         var longPos = double.TryParse(settings.LongVerticalPosition, out double lop) ? lop : 128.0;
 
-                        DrawLabelAndValue(graphics, "LAT", latText, _latBrush, latPos, width);
-                        DrawLabelAndValue(graphics, "LONG", longText, _longBrush, longPos, width);
+                        // Budget each block's height to the actual gap between the two configured
+                        // positions (scaled to this bitmap), so the font can grow as large as the
+                        // user's own layout allows instead of a fixed guess.
+                        var latBudget = (float)((longPos > latPos ? longPos - latPos : 100.0) * (width / 256.0));
+                        var longBudget = (float)((256.0 - longPos > 0 ? 256.0 - longPos : 100.0) * (width / 256.0));
+
+                        TextFit.DrawLabelAndValue(graphics, "LAT", latText, _latBrush, latPos, width, latBudget, settings.TextBold == "true");
+                        TextFit.DrawLabelAndValue(graphics, "LONG", longText, _longBrush, longPos, width, longBudget, settings.TextBold == "true");
                     }
 
                     imgBase64 = BarRaider.SdTools.Tools.ImageToBase64(bitmap, true);
@@ -184,7 +135,7 @@ namespace Elite.Buttons
 
         public void HandleEliteEvents(object sender, MessageReceivedEventArgs args)
         {
-            AsyncHelper.RunSync(HandleDisplay);
+            AsyncHelper.RunCoalesced(this, HandleDisplay);
         }
 
         public override void KeyPressed(KeyPayload payload) { }
@@ -199,6 +150,10 @@ namespace Elite.Buttons
         public override async void OnTick()
         {
             base.OnTick();
+
+            // Nothing this button shows can have changed since the last draw; redraw at least every 30 ticks as a safety net.
+            if (_lastDrawnVersion == EliteData.DataVersion && ++_ticksSinceDraw < 30) return;
+
             await HandleDisplay();
         }
 
@@ -228,13 +183,13 @@ namespace Elite.Buttons
 
                 if (File.Exists(settings.PrimaryImageFilename))
                 {
-                    _primaryImage = (Bitmap)Image.FromFile(settings.PrimaryImageFilename);
+                    _primaryImage = StreamDeckCommon.LoadBitmap(settings.PrimaryImageFilename);
                     _primaryFile = Tools.FileToBase64(settings.PrimaryImageFilename, true);
                 }
 
                 if (File.Exists(settings.DefaultImageFilename))
                 {
-                    _defaultImage = (Bitmap)Image.FromFile(settings.DefaultImageFilename);
+                    _defaultImage = StreamDeckCommon.LoadBitmap(settings.DefaultImageFilename);
                     _defaultFile = Tools.FileToBase64(settings.DefaultImageFilename, true);
                 }
                 else

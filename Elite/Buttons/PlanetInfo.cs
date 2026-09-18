@@ -148,6 +148,8 @@ namespace Elite.Buttons
         }
 
         private PluginSettings settings;
+        private long _lastDrawnVersion = -1;
+        private int _ticksSinceDraw;
         private Bitmap _primaryImage = null;
         private Bitmap _defaultImage = null;
         private string _primaryFile;
@@ -155,7 +157,7 @@ namespace Elite.Buttons
         private SolidBrush _atmosphereBrush = new SolidBrush(Color.White);
         private SolidBrush _temperatureBrush = new SolidBrush(Color.FromArgb(255, 136, 0));
 
-        private void DrawAtmosphereText(Graphics graphics, string text, SolidBrush brush, double verticalPosition, int width)
+        private void DrawAtmosphereText(Graphics graphics, string text, SolidBrush brush, double verticalPosition, int width, float maxBlockHeight)
         {
             if (string.IsNullOrEmpty(text)) return;
 
@@ -163,13 +165,12 @@ namespace Elite.Buttons
             var fontStyle = isBold ? FontStyle.Bold : FontStyle.Regular;
             var lines = text.Split('\n');
 
-            // Cap total block height so 3-line text (e.g. "HOT\nSULPHUR\nDIOXIDE") can't
-            // grow past the top half of the button and crowd the temperature line.
-            float maxBlockHeight = width * 0.46f;
+            var startSize = (int)(64 * (width / 256.0));
+            if (startSize < 8) startSize = 8;
 
-            for (int adjustedSize = 25; adjustedSize >= 8; adjustedSize -= 1)
+            for (int adjustedSize = startSize; adjustedSize >= 8; adjustedSize -= 1)
             {
-                var testFont = new Font("Arial", adjustedSize, fontStyle);
+                using var testFont = new Font("Arial", adjustedSize, fontStyle);
                 bool fits = true;
                 var lineWidths = new float[lines.Length];
                 var lineHeights = new float[lines.Length];
@@ -232,7 +233,7 @@ namespace Elite.Buttons
 
             for (int adjustedSize = 100; adjustedSize >= 10; adjustedSize -= 5)
             {
-                var testFont = new Font("Arial", adjustedSize, fontStyle);
+                using var testFont = new Font("Arial", adjustedSize, fontStyle);
                 var measuredSize = graphics.MeasureString(text, testFont);
 
                 if (fontContainerHeight >= measuredSize.Height && measuredSize.Width <= width)
@@ -250,6 +251,9 @@ namespace Elite.Buttons
 
         private async Task HandleDisplay()
         {
+            _lastDrawnVersion = EliteData.DataVersion;
+            _ticksSinceDraw = 0;
+
             var s = EliteData.StatusData;
 
             Bitmap myBitmap = null;
@@ -293,24 +297,26 @@ namespace Elite.Buttons
                 return;
             }
 
-            if (myBitmap == null)
-            {
-                if (!string.IsNullOrEmpty(imgBase64))
-                    await Connection.SetImageAsync(imgBase64);
-                return;
-            }
-
             try
             {
-                using (var bitmap = new Bitmap(myBitmap))
+                using (var bitmap = myBitmap != null ? new Bitmap(myBitmap) : new Bitmap(256, 256))
                 {
                     using (var graphics = Graphics.FromImage(bitmap))
                     {
+                        if (myBitmap == null)
+                            graphics.Clear(Color.Black);
+
                         var width = bitmap.Width;
                         var atmPos = double.TryParse(settings.AtmosphereVerticalPosition, out double ap) ? ap : 28.0;
                         var tempPos = double.TryParse(settings.TemperatureVerticalPosition, out double tp) ? tp : 128.0;
 
-                        DrawAtmosphereText(graphics, atmosphereText, _atmosphereBrush, atmPos, width);
+                        // Budget the atmosphere block to the actual gap between the two configured
+                        // positions (scaled to this bitmap) instead of a fixed guess, so multi-line
+                        // atmosphere text (e.g. "THIN\nARGON\nSULFIDE") gets the room the user's own
+                        // layout actually allows.
+                        var atmBudget = (float)((tempPos > atmPos ? tempPos - atmPos : 100.0) * (width / 256.0));
+
+                        DrawAtmosphereText(graphics, atmosphereText, _atmosphereBrush, atmPos, width, atmBudget);
                         DrawTemperatureText(graphics, temperatureText, _temperatureBrush, tempPos, width);
                     }
 
@@ -344,7 +350,7 @@ namespace Elite.Buttons
 
         public void HandleEliteEvents(object sender, MessageReceivedEventArgs args)
         {
-            AsyncHelper.RunSync(HandleDisplay);
+            AsyncHelper.RunCoalesced(this, HandleDisplay);
         }
 
         public override void KeyPressed(KeyPayload payload) { }
@@ -359,6 +365,10 @@ namespace Elite.Buttons
         public override async void OnTick()
         {
             base.OnTick();
+
+            // Nothing this button shows can have changed since the last draw; redraw at least every 30 ticks as a safety net.
+            if (_lastDrawnVersion == EliteData.DataVersion && ++_ticksSinceDraw < 30) return;
+
             await HandleDisplay();
         }
 
@@ -393,13 +403,13 @@ namespace Elite.Buttons
 
                 if (File.Exists(settings.PrimaryImageFilename))
                 {
-                    _primaryImage = (Bitmap)Image.FromFile(settings.PrimaryImageFilename);
+                    _primaryImage = StreamDeckCommon.LoadBitmap(settings.PrimaryImageFilename);
                     _primaryFile = Tools.FileToBase64(settings.PrimaryImageFilename, true);
                 }
 
                 if (File.Exists(settings.DefaultImageFilename))
                 {
-                    _defaultImage = (Bitmap)Image.FromFile(settings.DefaultImageFilename);
+                    _defaultImage = StreamDeckCommon.LoadBitmap(settings.DefaultImageFilename);
                     _defaultFile = Tools.FileToBase64(settings.DefaultImageFilename, true);
                 }
                 else

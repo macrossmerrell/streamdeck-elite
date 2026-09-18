@@ -127,89 +127,6 @@ namespace Elite
 
             keywatcherjob.QueueUserWorkItem(GetKeyBindings, null);
         }
-        private static void WatchJournalForSignals(string journalPath)
-        {
-            Task.Run(() =>
-            {
-                try
-                {
-                    // Find the most recent journal file
-                    string currentFile = null;
-                    long filePosition = 0;
-
-                    while (true)
-                    {
-                        try
-                        {
-                            // Always watch the most recent journal file
-                            var latestFile = Directory.GetFiles(journalPath, "Journal.*.log")
-                                .OrderByDescending(f => f)
-                                .FirstOrDefault();
-
-                            if (latestFile != currentFile)
-                            {
-                                currentFile = latestFile;
-                                filePosition = 0;
-                                Logger.Instance.LogMessage(TracingLevel.INFO, $"SignalWatcher: watching {currentFile}");
-                            }
-
-                            if (currentFile == null) { System.Threading.Thread.Sleep(1000); continue; }
-
-                            using (var fs = new FileStream(currentFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                            {
-                                fs.Seek(filePosition, SeekOrigin.Begin);
-                                using (var reader = new StreamReader(fs))
-                                {
-                                    string line;
-                                    while ((line = reader.ReadLine()) != null)
-                                    {
-                                        if (string.IsNullOrWhiteSpace(line)) continue;
-                                        if (!line.Contains("FSSBodySignals") && !line.Contains("SAASignalsFound")) continue;
-
-                                        try
-                                        {
-                                            var obj = JObject.Parse(line);
-                                            var evt = obj.Value<string>("event");
-                                            var bodyName = obj.Value<string>("BodyName");
-                                            var signals = obj["Signals"];
-
-                                            if (string.IsNullOrEmpty(bodyName) || signals == null) continue;
-
-                                            EliteData.SignalCache.TryGetValue(bodyName, out var existing);
-                                            int bio = existing.BiologyCount, geo = existing.GeologyCount;
-
-                                            foreach (var sig in signals)
-                                            {
-                                                var sigType = sig.Value<string>("Type") ?? "";
-                                                var sigCount = sig.Value<int>("Count");
-                                                if (sigType.Contains("Biological")) bio = sigCount;
-                                                else if (sigType.Contains("Geological")) geo = sigCount;
-                                            }
-
-                                            EliteData.SignalCache[bodyName] = (bio, geo);
-                                            Logger.Instance.LogMessage(TracingLevel.INFO, $"SignalWatcher: {bodyName} bio={bio} geo={geo}");
-                                        }
-                                        catch { }
-                                    }
-                                    filePosition = fs.Position;
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.Instance.LogMessage(TracingLevel.WARN, $"SignalWatcher error: {ex.Message}");
-                        }
-
-                        System.Threading.Thread.Sleep(1000);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.LogMessage(TracingLevel.FATAL, $"SignalWatcher fatal: {ex}");
-                }
-            });
-        }
-
         private static bool IsFileLocked(FileInfo file)
         {
             FileStream stream = null;
@@ -588,7 +505,7 @@ namespace Elite
                 Logger.Instance.LogMessage(TracingLevel.INFO, $"BackfillScanCache: scanning for system '{currentSystem}'");
 
                 var journalFiles = Directory.GetFiles(journalPath, "Journal.*.log")
-                    .OrderByDescending(f => f)
+                    .OrderByDescending(f => File.GetLastWriteTimeUtc(f))
                     .Take(10)
                     .ToArray();
 
@@ -786,7 +703,7 @@ namespace Elite
             try
             {
                 var journalFiles = Directory.GetFiles(journalPath, "Journal.*.log")
-                    .OrderByDescending(f => f)
+                    .OrderByDescending(f => File.GetLastWriteTimeUtc(f))
                     .Take(10)
                     .ToArray();
 
@@ -836,6 +753,16 @@ namespace Elite
                                 EliteData.BaseJumpRange = maxJumpRange;
                             }
 
+                            var modulesArr = lastLoadout["Modules"] as JArray;
+                            var fsdMod = modulesArr?.FirstOrDefault(m => (m.Value<string>("Item") ?? "").StartsWith("int_hyperdrive", StringComparison.OrdinalIgnoreCase));
+                            var boosterMod = modulesArr?.FirstOrDefault(m => (m.Value<string>("Item") ?? "").StartsWith("int_guardianfsdbooster", StringComparison.OrdinalIgnoreCase));
+                            var fsdMods = fsdMod?["Engineering"]?["Modifiers"] as JArray;
+
+                            FsdData.Set(fsdMod?.Value<string>("Item"),
+                                fsdMods?.FirstOrDefault(x => x.Value<string>("Label") == "FSDOptimalMass")?.Value<double?>("Value"),
+                                fsdMods?.FirstOrDefault(x => x.Value<string>("Label") == "MaxFuelPerJump")?.Value<double?>("Value"),
+                                boosterMod?.Value<string>("Item"));
+
                             Logger.Instance.LogMessage(TracingLevel.INFO,
                                 $"BackfillLoadout: found Loadout in {file} - UnladenMass={unladenMass}, MaxJumpRange={maxJumpRange}");
 
@@ -878,7 +805,7 @@ namespace Elite
             try
             {
                 var journalFiles = Directory.GetFiles(journalPath, "Journal.*.log")
-                    .OrderByDescending(f => f)
+                    .OrderByDescending(f => File.GetLastWriteTimeUtc(f))
                     .Take(10)
                     .ToArray();
 
@@ -1211,12 +1138,6 @@ namespace Elite
                 {
                     Logger.Instance.LogMessage(TracingLevel.FATAL, $"Directory doesn't exist {journalPath}");
                 }
-
-                var defaultFilter = @"Journal.*.log";
-//#if DEBUG
-            //defaultFilter = @"JournalAlpha.*.log";
-//#endif
-
                 StatusWatcher = new StatusWatcher(journalPath);
 
                 StatusWatcher.StatusUpdated += EliteData.HandleStatusEvents;
@@ -1240,15 +1161,13 @@ namespace Elite
                 // player to swap ships or visit Outfitting this session.
                 BackfillLoadoutState(journalPath);
 
+                EliteData.MarkChanged();
+
                 // Backfill the active route's waypoint list from the most recent NavRoute event,
                 // trimmed to match jumps already completed - NavRoute only fires once when a route
                 // is plotted, so a route plotted in an earlier session would otherwise leave
                 // RouteAdv's Next System / Destination options stuck at 0.0 ly forever.
                 BackfillRouteState(journalPath);
-
-                // Watch journal for FSSBodySignals and SAASignalsFound independently
-                WatchJournalForSignals(journalPath);
-
                 CargoWatcher = new CargoWatcher(journalPath);
 
                 CargoWatcher.CargoUpdated += EliteData.HandleCargoEvents;

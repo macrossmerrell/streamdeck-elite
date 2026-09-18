@@ -150,7 +150,6 @@ namespace Elite.Buttons
                     break;
             }
 
-            if (_primaryImage != null)
             {
                 var bitmapImage = pips == 8 ? _primaryImage : _secondaryImage;
                 var imgBase64 = pips == 8 ? _primaryFile : _secondaryFile;
@@ -183,10 +182,13 @@ namespace Elite.Buttons
                 {
                     try
                     {
-                        using (var bitmap = new Bitmap(bitmapImage))
+                        using (var bitmap = bitmapImage != null ? new Bitmap(bitmapImage) : new Bitmap(256, 256))
                         {
                             using (var graphics = Graphics.FromImage(bitmap))
                             {
+                                if (bitmapImage == null)
+                                    graphics.Clear(Color.Black);
+
                                 var width = bitmap.Width; // assumes rectangular bitmap
 
                                 for (var i = 2; i <= 8; i += 2)
@@ -221,7 +223,8 @@ namespace Elite.Buttons
                     }
                 }
 
-                await Connection.SetImageAsync(imgBase64);
+                if (!string.IsNullOrEmpty(imgBase64))
+                    await Connection.SetImageAsync(imgBase64);
             }
         }
 
@@ -251,7 +254,7 @@ namespace Elite.Buttons
 
         public void HandleEliteEvents(object sender, MessageReceivedEventArgs args)
         {
-            AsyncHelper.RunSync(HandleDisplay);
+            AsyncHelper.RunCoalesced(this, HandleDisplay);
         }
 
         private void AdjustPips(int index)
@@ -446,7 +449,7 @@ namespace Elite.Buttons
 
                 if (File.Exists(settings.PrimaryImageFilename))
                 {
-                    _primaryImage = (Bitmap) Image.FromFile(settings.PrimaryImageFilename);
+                    _primaryImage = StreamDeckCommon.LoadBitmap(settings.PrimaryImageFilename);
 
                     _primaryFile = Tools.FileToBase64(settings.PrimaryImageFilename, true);
 
@@ -455,7 +458,7 @@ namespace Elite.Buttons
 
                 if (File.Exists(settings.SecondaryImageFilename))
                 {
-                    _secondaryImage = (Bitmap) Image.FromFile(settings.SecondaryImageFilename);
+                    _secondaryImage = StreamDeckCommon.LoadBitmap(settings.SecondaryImageFilename);
 
                     _secondaryFile = Tools.FileToBase64(settings.SecondaryImageFilename, true);
 
@@ -482,7 +485,7 @@ namespace Elite.Buttons
 
                 if (File.Exists(settings.TertiaryImageFilename))
                 {
-                    _tertiaryImage = (Bitmap) Image.FromFile(settings.TertiaryImageFilename);
+                    _tertiaryImage = StreamDeckCommon.LoadBitmap(settings.TertiaryImageFilename);
 
                     _tertiaryFile = Tools.FileToBase64(settings.TertiaryImageFilename, true);
 

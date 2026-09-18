@@ -343,7 +343,7 @@ namespace Elite.Buttons
                 return routeList;
             }
 
-            var remaining = EliteData.RemainingJumpsInRoute;
+            var remaining = EliteData.EffectiveRemainingJumps;
 
             if (remaining <= 0 || remaining >= routeList.Count)
             {
@@ -427,6 +427,18 @@ namespace Elite.Buttons
         // weight closely enough for an at-a-glance Stream Deck readout.
         private double GetEstimatedJumpRangeLy()
         {
+            // Preferred: exact calculation from the ship's own FSD stats (see FsdData). Uses live
+            // mass (hull + modules + all fuel + cargo) and caps the fuel that can go into one jump.
+            if (FsdData.Known && EliteData.UnladenMass > 0)
+            {
+                var fuel = EliteData.StatusData?.Fuel;
+                var fuelMain = fuel?.FuelMain ?? 0;
+                var totalMass = EliteData.UnladenMass + fuelMain + (fuel?.FuelReservoir ?? 0) + (EliteData.StatusData?.Cargo ?? 0);
+
+                return FsdData.Range(totalMass, fuelMain);
+            }
+
+            // Fallback (FSD not recognised): ratio estimate from the Loadout's MaxJumpRange.
             if (EliteData.BaseJumpRange <= 0 || EliteData.UnladenMass <= 0)
             {
                 return 0;
@@ -525,80 +537,6 @@ namespace Elite.Buttons
         // largest one whose width still fits the button, so both the label and the value are
         // drawn as large as possible. verticalPosition follows the same 256-wide scale used
         // throughout this plugin (e.g. 5 = very top, 160 = very bottom).
-        private void DrawFittedText(Graphics graphics, string text, Color color, double verticalPosition, bool bold, int width)
-        {
-            if (string.IsNullOrEmpty(text))
-            {
-                return;
-            }
-
-            var fontStyle = bold ? FontStyle.Bold : FontStyle.Regular;
-            var lines = text.Replace("\r\n", "\n").Replace("\\n", "\n").Split('\n');
-            var brush = new SolidBrush(color);
-
-            // Scale the ceiling by image width (same 256-baseline convention used elsewhere in this
-            // plugin), but keep it modest - the label and value share one image (top half / bottom
-            // half), so neither should be sized as if it owned the whole button.
-            var maxFontSize = (int)(48 * (width / 256.0));
-            if (maxFontSize < 10)
-            {
-                maxFontSize = 10;
-            }
-
-            // Treat the button as roughly square: cap text height to a bit under half the button,
-            // so a short value like "14" stops growing once it would crowd the label above/below it.
-            var maxLineHeight = width * 0.40f;
-
-            for (int adjustedSize = maxFontSize; adjustedSize >= 10; adjustedSize--)
-            {
-                var testFont = new Font("Arial", adjustedSize, fontStyle);
-                bool fits = true;
-                var lineHeights = new float[lines.Length];
-
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    var line = lines[i];
-                    if (string.IsNullOrEmpty(line)) { lineHeights[i] = testFont.Height; continue; }
-
-                    var sf = new StringFormat(StringFormat.GenericTypographic);
-                    sf.SetMeasurableCharacterRanges(new[] { new CharacterRange(0, line.Length) });
-                    var regions = graphics.MeasureCharacterRanges(line, testFont, new RectangleF(0, 0, 1000, 1000), sf);
-                    var bounds = regions[0].GetBounds(graphics);
-                    lineHeights[i] = bounds.Height;
-
-                    if (bounds.Width > width * 0.85f || bounds.Height > maxLineHeight)
-                    {
-                        fits = false;
-                        break;
-                    }
-                }
-
-                if (fits)
-                {
-                    var drawFmt = new StringFormat(StringFormat.GenericTypographic);
-                    float currentY = (float)(verticalPosition * (width / 256.0));
-
-                    for (int i = 0; i < lines.Length; i++)
-                    {
-                        var sf2 = new StringFormat(StringFormat.GenericTypographic);
-                        sf2.SetMeasurableCharacterRanges(new[] { new CharacterRange(0, lines[i].Length) });
-                        var regions2 = graphics.MeasureCharacterRanges(lines[i], testFont, new RectangleF(0, 0, 1000, 1000), sf2);
-                        var b = regions2[0].GetBounds(graphics);
-                        var x = (width - b.Width) / 2.0f;
-                        graphics.DrawString(lines[i], testFont, brush, x, currentY - b.Y, drawFmt);
-                        currentY += b.Height * 1.1f;
-                    }
-                    testFont.Dispose();
-                    brush.Dispose();
-                    return;
-                }
-
-                testFont.Dispose();
-            }
-
-            brush.Dispose();
-        }
-
         
         private async Task HandleDisplay()
         {
@@ -627,28 +565,26 @@ namespace Elite.Buttons
                 baseImage = _noRouteImage; baseFile = _noRouteFile; baseIsGif = _noRouteImageIsGif;
             }
 
-            if (baseImage == null)
-            {
-                return;
-            }
-
             var imgBase64 = baseFile;
 
             if (!baseIsGif)
             {
                 try
                 {
-                    using (var bitmap = new Bitmap(baseImage))
+                    using (var bitmap = baseImage != null ? new Bitmap(baseImage) : new Bitmap(256, 256))
                     {
                         using (var graphics = Graphics.FromImage(bitmap))
                         {
+                            if (baseImage == null)
+                                graphics.Clear(Color.Black);
+
                             var width = bitmap.Width;
                             var isBold = optionData.bold == "true";
                             var valuePosition = double.TryParse(optionData.verticalPosition, out double parsedValuePosition) ? parsedValuePosition : 160.0;
                             var labelPosition = double.TryParse(optionData.labelPosition, out double parsedLabelPosition) ? parsedLabelPosition : 5.0;
 
-                            DrawFittedText(graphics, optionData.label, optionData.labelBrush.Color, labelPosition, isBold, width);
-                            DrawFittedText(graphics, optionData.text, optionData.brush.Color, valuePosition, isBold, width);
+                            TextFit.DrawFittedText(graphics, optionData.label, optionData.labelBrush.Color, labelPosition, isBold, width);
+                            TextFit.DrawFittedText(graphics, optionData.text, optionData.brush.Color, valuePosition, isBold, width);
                         }
 
                         imgBase64 = BarRaider.SdTools.Tools.ImageToBase64(bitmap, true);
@@ -683,7 +619,7 @@ namespace Elite.Buttons
 
         public void HandleEliteEvents(object sender, MessageReceivedEventArgs args)
         {
-            AsyncHelper.RunSync(HandleDisplay);
+            AsyncHelper.RunCoalesced(this, HandleDisplay);
         }
 
         public override void KeyPressed(KeyPayload payload)
@@ -791,7 +727,7 @@ namespace Elite.Buttons
 
             if (File.Exists(filename))
             {
-                image = (Bitmap)Image.FromFile(filename);
+                image = StreamDeckCommon.LoadBitmap(filename);
                 file = Tools.FileToBase64(filename, true);
                 isGif = StreamDeckCommon.CheckForGif(filename);
             }

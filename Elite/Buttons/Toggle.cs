@@ -35,6 +35,50 @@ namespace Elite.Buttons
                 .Unwrap()
                 .GetAwaiter()
                 .GetResult();
+
+        private sealed class RunState { public int Running; public int Dirty; }
+
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<object, RunState> States =
+            new System.Runtime.CompilerServices.ConditionalWeakTable<object, RunState>();
+
+        // Runs func off the calling thread without blocking it. If a run for the same owner is already
+        // in flight, the request is coalesced into one follow-up run, so a burst of events never queues
+        // up stale redraws and the last state always wins.
+        public static void RunCoalesced(object owner, Func<Task> func)
+        {
+            var state = States.GetOrCreateValue(owner);
+            Interlocked.Exchange(ref state.Dirty, 1);
+
+            if (Interlocked.CompareExchange(ref state.Running, 1, 0) != 0)
+            {
+                return;
+            }
+
+            Task.Run(async () =>
+            {
+                while (true)
+                {
+                    while (Interlocked.Exchange(ref state.Dirty, 0) == 1)
+                    {
+                        try
+                        {
+                            await func();
+                        }
+                        catch (Exception ex)
+                        {
+                            BarRaider.SdTools.Logger.Instance.LogMessage(BarRaider.SdTools.TracingLevel.ERROR, $"RunCoalesced: {ex}");
+                        }
+                    }
+
+                    Volatile.Write(ref state.Running, 0);
+
+                    if (Volatile.Read(ref state.Dirty) == 0 || Interlocked.CompareExchange(ref state.Running, 1, 0) != 0)
+                    {
+                        return;
+                    }
+                }
+            });
+        }
     }
 
     [PluginActionId("com.mhwlng.elite")]
@@ -204,7 +248,7 @@ namespace Elite.Buttons
 
         public void HandleEliteEvents(object sender, MessageReceivedEventArgs args)
         {
-            AsyncHelper.RunSync(HandleDisplay);
+            AsyncHelper.RunCoalesced(this, HandleDisplay);
         }
 
 

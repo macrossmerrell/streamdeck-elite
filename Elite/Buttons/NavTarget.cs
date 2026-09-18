@@ -213,13 +213,6 @@ namespace Elite.Buttons
             var myBitmap  = (planetLines != null) ? _activeImage  : _defaultImage;
             var imgBase64 = (planetLines != null) ? _activeFile   : _defaultFile;
 
-            if (myBitmap == null)
-            {
-                if (!string.IsNullOrEmpty(imgBase64))
-                    await Connection.SetImageAsync(imgBase64);
-                return;
-            }
-
             // Current rotating planet-type phrase
             string planetText = null;
             if (planetLines != null && planetLines.Length > 0)
@@ -253,10 +246,13 @@ namespace Elite.Buttons
             // Render text onto a copy of the image
             try
             {
-                using (var bitmap = new Bitmap(myBitmap))
+                using (var bitmap = myBitmap != null ? new Bitmap(myBitmap) : new Bitmap(256, 256))
                 {
                     using (var graphics = Graphics.FromImage(bitmap))
                     {
+                        if (myBitmap == null)
+                            graphics.Clear(Color.Black);
+
                         var width   = bitmap.Width;
                         var typePos = double.TryParse(_settings.PlanetTypeVerticalPosition,
                                           out double tp) ? tp : 34.0;
@@ -388,13 +384,13 @@ namespace Elite.Buttons
 
                 if (File.Exists(_settings.ActiveImageFilename))
                 {
-                    _activeImage = (Bitmap)Image.FromFile(_settings.ActiveImageFilename);
+                    _activeImage = StreamDeckCommon.LoadBitmap(_settings.ActiveImageFilename);
                     _activeFile  = Tools.FileToBase64(_settings.ActiveImageFilename, true);
                 }
 
                 if (File.Exists(_settings.DefaultImageFilename))
                 {
-                    _defaultImage = (Bitmap)Image.FromFile(_settings.DefaultImageFilename);
+                    _defaultImage = StreamDeckCommon.LoadBitmap(_settings.DefaultImageFilename);
                     _defaultFile  = Tools.FileToBase64(_settings.DefaultImageFilename, true);
                 }
                 else

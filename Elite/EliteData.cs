@@ -3,6 +3,7 @@ using EliteJournalReader;
 using EliteJournalReader.Events;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,19 @@ namespace Elite
         public static DateTime LastUnderAttackEvent = DateTime.Now;
         public static string FsdTargetName { get; set; }
         public static int RemainingJumpsInRoute { get; set; }
+
+        // During a hyperspace jump the game drops RemainingJumpsInRoute (FSDTarget) several seconds before
+        // the FSDJump arrival updates CurrentStarPos. Route maths that mixes the two mid-jump measures
+        // from the departure system to a hop that is one too far ahead. So StartJump freezes the counter
+        // here and FSDJump/Location release it; EffectiveRemainingJumps is what position-based route
+        // calculations should use. The time limit is a safety net for a jump that never completes.
+        public static int? RemainingJumpsAtJumpStart { get; set; }
+        public static DateTime JumpStartTime { get; set; }
+
+        public static int EffectiveRemainingJumps =>
+            RemainingJumpsAtJumpStart.HasValue && (DateTime.UtcNow - JumpStartTime).TotalSeconds < 120
+                ? RemainingJumpsAtJumpStart.Value
+                : RemainingJumpsInRoute;
         public static int TotalJumpsInRoute { get; set; }
 
         // The final destination this TotalJumpsInRoute belongs to, so we know whether a
@@ -38,13 +52,19 @@ namespace Elite
 
         public static int LimpetCount { get; set; }
 
+        // Bumped whenever journal/status/cache data changes, so data-driven buttons can skip
+        // redrawing on ticks where nothing they show could have changed.
+        private static long _dataVersion;
+        public static long DataVersion => System.Threading.Interlocked.Read(ref _dataVersion);
+        public static void MarkChanged() => System.Threading.Interlocked.Increment(ref _dataVersion);
+
         // Cache of planet data per body name, populated from Scan journal events
-        public static Dictionary<string, (double SurfaceGravity, double PlanetRadius, string Atmosphere, double SurfaceTemperature, string PlanetClass, string TerraformState, bool Landable)> GravityCache
-            = new Dictionary<string, (double, double, string, double, string, string, bool)>(StringComparer.OrdinalIgnoreCase);
+        public static ConcurrentDictionary<string, (double SurfaceGravity, double PlanetRadius, string Atmosphere, double SurfaceTemperature, string PlanetClass, string TerraformState, bool Landable)> GravityCache
+            = new ConcurrentDictionary<string, (double, double, string, double, string, string, bool)>(StringComparer.OrdinalIgnoreCase);
 
         // Cache of bio/geo signal counts per body name, populated from FSSBodySignals and SAASignalsFound
-        public static Dictionary<string, (int BiologyCount, int GeologyCount)> SignalCache
-            = new Dictionary<string, (int, int)>(StringComparer.OrdinalIgnoreCase);
+        public static ConcurrentDictionary<string, (int BiologyCount, int GeologyCount)> SignalCache
+            = new ConcurrentDictionary<string, (int, int)>(StringComparer.OrdinalIgnoreCase);
 
         // ── Exobiology scan state ─────────────────────────────────────────────────
         // Shared across all ExoBiology button instances and written by Program.BackfillExoBiologyState
@@ -244,10 +264,9 @@ namespace Elite
 
             if (info?.Route == null || info.Route.Length < 2)
             {
+                // Empty route (cleared, or the file caught mid-write): show no route, but keep the
+                // remembered total so a re-plot of the same route continues its progress.
                 RouteList = new List<RouteItem>();
-                TotalJumpsInRoute = 0;
-                RouteFinalDestination = null;
-                SaveRouteProgressCache();
             }
             else
             {
@@ -264,9 +283,10 @@ namespace Elite
                     ? RouteList[RouteList.Count - 1].SystemAddress.ToString()
                     : null;
 
-                if (newFinalDestination != RouteFinalDestination)
+                if (newFinalDestination != RouteFinalDestination || RouteList.Count > TotalJumpsInRoute)
                 {
-                    // Genuinely new route (different final destination) - reset the jump total
+                    // Genuinely new route (different final destination, or longer than the route we were
+                    // remembering, so it cannot be a continuation) - reset the jump total
                     RouteFinalDestination = newFinalDestination;
                     TotalJumpsInRoute = RouteList.Count;
                     SaveRouteProgressCache();
@@ -286,6 +306,12 @@ namespace Elite
         }
 
         public static void HandleStatusEvents(object sender, StatusFileEvent evt)
+        {
+            try { HandleStatusEventsCore(sender, evt); }
+            finally { MarkChanged(); }
+        }
+
+        private static void HandleStatusEventsCore(object sender, StatusFileEvent evt)
         {
             StatusData.ShieldsUp = (evt.Flags & StatusFlags.ShieldsUp) != 0;
             StatusData.FlightAssistOff = (evt.Flags & StatusFlags.FlightAssistOff) != 0;
@@ -379,6 +405,12 @@ namespace Elite
 
         public static void HandleEliteEvents(object sender, MessageReceivedEventArgs args)
         {
+            try { HandleEliteEventsCore(sender, args); }
+            finally { MarkChanged(); }
+        }
+
+        private static void HandleEliteEventsCore(object sender, MessageReceivedEventArgs args)
+        {
             var e = args.EventArgs;
                         var evt = ((JournalEventArgs)e).OriginalEvent.Value<string>("event");
 
@@ -396,6 +428,7 @@ namespace Elite
                     var locationInfo = (LocationEvent.LocationEventArgs)e;
 
                     EliteData.StarSystem = locationInfo.StarSystem;
+                    EliteData.RemainingJumpsAtJumpStart = null;
                     EliteData.CurrentStarPos = locationInfo.StarPos;
                     break;
 
@@ -432,6 +465,17 @@ namespace Elite
                         EliteData.BaseJumpRange = loadoutInfo.MaxJumpRange;
                     }
 
+                    {
+                        var fsdModule = loadoutInfo.Modules?.FirstOrDefault(m => m.Item != null && m.Item.StartsWith("int_hyperdrive", StringComparison.OrdinalIgnoreCase));
+                        var boosterModule = loadoutInfo.Modules?.FirstOrDefault(m => m.Item != null && m.Item.StartsWith("int_guardianfsdbooster", StringComparison.OrdinalIgnoreCase));
+                        var mods = fsdModule?.Engineering?.Modifiers;
+
+                        FsdData.Set(fsdModule?.Item,
+                            mods?.FirstOrDefault(x => x.Label == ModuleAttribute.FSDOptimalMass)?.Value,
+                            mods?.FirstOrDefault(x => x.Label == ModuleAttribute.MaxFuelPerJump)?.Value,
+                            boosterModule?.Item);
+                    }
+
                     break;
 
                 case "FSDJump":
@@ -439,6 +483,14 @@ namespace Elite
                     var fsdJumpInfo = (FSDJumpEvent.FSDJumpEventArgs)e;
 
                     EliteData.StarSystem = fsdJumpInfo.StarSystem;
+                    LoadRouteProgressCacheIfNeeded();
+                    if (RouteFinalDestination != null && fsdJumpInfo.SystemAddress.ToString() == RouteFinalDestination)
+                    {
+                        TotalJumpsInRoute = 0;
+                        RouteFinalDestination = null;
+                        SaveRouteProgressCache();
+                    }
+                    EliteData.RemainingJumpsAtJumpStart = null;
                     EliteData.CurrentStarPos = fsdJumpInfo.StarPos;
                     break;
 
@@ -454,6 +506,15 @@ namespace Elite
                     var supercruiseExitInfo = (SupercruiseExitEvent.SupercruiseExitEventArgs)e;
 
                     EliteData.StarSystem = supercruiseExitInfo.StarSystem;
+                    break;
+
+                case "StartJump":
+                    //When written: when a jump begins (hyperspace or supercruise entry)
+                    if (((StartJumpEvent.StartJumpEventArgs)e).JumpType == JumpType.Hyperspace)
+                    {
+                        EliteData.RemainingJumpsAtJumpStart = EliteData.RemainingJumpsInRoute;
+                        EliteData.JumpStartTime = DateTime.UtcNow;
+                    }
                     break;
 
                 case "FSDTarget":
@@ -513,10 +574,10 @@ namespace Elite
 
                     EliteData.RouteList = new List<RouteItem>();
                     EliteData.RemainingJumpsInRoute = 0;
-                    EliteData.TotalJumpsInRoute = 0;
-                    EliteData.RouteFinalDestination = null;
-                    EliteData.SaveRouteProgressCache();
-
+                    EliteData.RemainingJumpsAtJumpStart = null;
+                    // Deliberately keep TotalJumpsInRoute / RouteFinalDestination: the game also clears the
+                    // route around launch and map opening (and old clears are replayed at plugin start), then
+                    // re-plots the SAME route. Wiping the memory here made that look like a brand new route.
                     break;
 
                 case "Scan":

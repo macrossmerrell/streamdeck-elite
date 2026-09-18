@@ -13,6 +13,28 @@ This release upgrades the plugin's underlying `EliteJournalReader` library (the 
 Latest Release: https://github.com/macrossmerrell/streamdeck-elite/releases
 
 ---
+## New & Updated Features (v4.1.0)
+
+### ✏️ Updated: Advanced Route Button
+- **Jump Range is now exact.** It is calculated from your ship's real FSD (base stats, engineering changes to optimal mass / max fuel per jump, and Guardian FSD Boosters) using live fuel, cargo and reservoir mass, and it drops correctly when you're low on fuel. (Previously an estimate that ignored the per-jump fuel cap and scaled the booster bonus.)
+- **Trip Progress no longer resets** when the game clears and re-plots the same route (launching the game, opening the Galaxy Map). It only resets when you plot a different destination, plot a longer route, or arrive at your destination.
+- **Fixed a wrong Next System / Destination distance during hyperspace jumps.** It showed a hop too far ahead until the jump completed.
+
+### ✏️ Updated: Text no longer disappears without a background image
+Buttons that draw text (Gravity, Planet Info, Lat/Long, Heading/Altitude, Nav Target, Alert, Exobiology, On Foot Exploration, Odyssey Ship Status, Advanced Route, Route, Limpet, Power) now draw on a plain black background when no image is set, instead of showing nothing.
+
+### ✏️ Updated: Text sizing on Lat/Long, Heading/Altitude and Planet Info
+Font size now scales with your background image and fits the space between your configured vertical positions, so text uses the room you've given it. Three-line atmosphere text (e.g. `THIN / ARGON / SULFIDE`) is larger than before.
+
+### 🛠️ Fixes & Under the Hood
+- Journals from older game releases are now read correctly (the newest journal is chosen by file date, not by file name).
+- Background images are no longer locked by the plugin, so you can edit or replace them while Stream Deck is running (a button picks up the change when its settings reload or Stream Deck restarts).
+- All bundled button images now ship inside the plugin's `Images` folder, so they appear in the file picker after installing.
+- Less CPU and Stream Deck traffic: data-driven buttons skip redraws when nothing has changed.
+- Fixed memory leaks in text drawing and made the shared route/planet caches thread-safe.
+- Removed a duplicate journal reader.
+
+---
 ## New & Updated Features (v4.0.0)
 
 ### 🆕 Replacement of outdated EliteJournalReader - Thank you MagicMau!
@@ -76,7 +98,7 @@ A cycling route information button designed for long-distance exploration. Displ
 - **Next System** — straight-line distance in light years to the next system in your route
 - **Trip Progress** — percentage of the route completed, based on jumps done vs. total jumps when the route was plotted
 - **Fuel Status** — current main tank fuel level in tons
-- **Jump Range** — estimated current jump range in light years, calculated from your ship's base range and current fuel/cargo mass
+- **Jump Range** — current jump range in light years, calculated from your ship's FSD (including engineering and Guardian boosters) and current fuel/cargo mass
 
 **Cycling behaviour:**
 - Pressing the button advances to the next enabled option (wraps back to the start)
@@ -99,7 +121,7 @@ A cycling route information button designed for long-distance exploration. Displ
 - No Route Image — shown when no route is active
 - Click sound and disabled sound
 
-> **Note:** Jump Range is an estimate based on your ship's unladen mass and base jump range, scaled by current fuel and cargo weight. It updates in near real-time as you burn fuel. It does not account for FSD engineering modifiers, but it's close enough :smiley:.
+> **Note:** Jump Range is calculated from your ship's actual FSD and updates in near real-time as you burn fuel or change cargo. If your FSD isn't recognised it falls back to an estimate scaled from the game's own base jump range.
 
 ### 🆕 (NEW) Odyssey Ship Status Button
 
@@ -138,7 +160,7 @@ DIOXIDE
 ```
 
 **Three-line layout with auto-sizing:**
-The button now supports up to three lines of atmosphere text. Font size automatically scales down to ensure all three lines fit within the top half of the button, keeping the temperature reading clear and unobstructed.
+The button now supports up to three lines of atmosphere text. Font size automatically scales to ensure all three lines fit in the space above the temperature line, keeping the temperature reading clear and unobstructed.
 
 **Rich atmosphere types:**
 Atmosphere types with a "rich" qualifier (Neon Rich, Argon Rich, Water Rich, Methane Rich, Ammonia Rich, Carbon Dioxide Rich) now include the RICH label in the display rather than showing only the base gas name.
@@ -368,7 +390,7 @@ When no alerts are active, the button shows a configurable default state (image 
 
 ## Optional Button Images
 
-A set of custom button images is included in the `Images/Optional` directory, created using [Andechs75's Elite Dangerous icon PowerPoint template](https://github.com/Andechs75/Elite-Dangerous-Streamdeck-Icons/tree/master). These cover the Ship Status states and other common functions. Feel free to use, modify, or create your own using the same template.
+A set of custom button images is included in the plugin's `Images` directory, created using [Andechs75's Elite Dangerous icon PowerPoint template](https://github.com/Andechs75/Elite-Dangerous-Streamdeck-Icons/tree/master). These cover the Ship Status states and other common functions. Feel free to use, modify, or create your own using the same template.
 
 > **Tip:** Use the PowerPoint template to design a button, take a snip, then crop in your favourite paint program to fit your Stream Deck button size.
 

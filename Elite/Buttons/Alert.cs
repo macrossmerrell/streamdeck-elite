@@ -360,7 +360,7 @@ namespace Elite.Buttons
 
             for (int adjustedSize = 25; adjustedSize >= 10; adjustedSize -= 1)
             {
-                var testFont = new Font("Arial", adjustedSize, fontStyle);
+                using var testFont = new Font("Arial", adjustedSize, fontStyle);
                 bool fits = true;
                 var lineHeights = new float[lines.Length];
 
@@ -511,7 +511,7 @@ namespace Elite.Buttons
                 bold = alertBold;
             }
 
-            if (imgBase64 == null) return;
+            if (imgBase64 == null && string.IsNullOrEmpty(text)) return;
 
             try
             {
@@ -528,11 +528,14 @@ namespace Elite.Buttons
                 if (sourceBitmap == null && imgBase64 == _defaultFile)
                     sourceBitmap = _defaultBitmap;
 
-                if (sourceBitmap != null && !string.IsNullOrEmpty(text))
+                if (!string.IsNullOrEmpty(text))
                 {
-                    using (var bitmap = new Bitmap(sourceBitmap))
+                    using (var bitmap = sourceBitmap != null ? new Bitmap(sourceBitmap) : new Bitmap(256, 256))
                     using (var graphics = Graphics.FromImage(bitmap))
                     {
+                        if (sourceBitmap == null)
+                            graphics.Clear(Color.Black);
+
                         DrawText(graphics, text, textColor, vertPos, bold, bitmap.Width);
                         imgBase64 = BarRaider.SdTools.Tools.ImageToBase64(bitmap, true);
                     }
@@ -543,7 +546,8 @@ namespace Elite.Buttons
                 Logger.Instance.LogMessage(TracingLevel.FATAL, "Alert HandleDisplay " + ex);
             }
 
-            await Connection.SetImageAsync(imgBase64);
+            if (!string.IsNullOrEmpty(imgBase64))
+                await Connection.SetImageAsync(imgBase64);
         }
 
         // Cached bitmaps
@@ -667,7 +671,7 @@ namespace Elite.Buttons
 
             if (File.Exists(filename))
             {
-                _alertBitmaps[type] = (Bitmap)Image.FromFile(filename);
+                _alertBitmaps[type] = StreamDeckCommon.LoadBitmap(filename);
                 _alertFiles[type] = Tools.FileToBase64(filename, true);
             }
         }
@@ -681,7 +685,7 @@ namespace Elite.Buttons
 
             if (File.Exists(settings.DefaultImageFilename))
             {
-                _defaultBitmap = (Bitmap)Image.FromFile(settings.DefaultImageFilename);
+                _defaultBitmap = StreamDeckCommon.LoadBitmap(settings.DefaultImageFilename);
                 _defaultFile = Tools.FileToBase64(settings.DefaultImageFilename, true);
             }
 

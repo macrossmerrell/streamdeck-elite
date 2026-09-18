@@ -67,6 +67,8 @@ namespace Elite.Buttons
         }
 
         private PluginSettings settings;
+        private long _lastDrawnVersion = -1;
+        private int _ticksSinceDraw;
         private Bitmap _primaryImage = null;
         private Bitmap _tertiaryImage = null;
 
@@ -85,6 +87,9 @@ namespace Elite.Buttons
 
         private async Task HandleDisplay()
         {
+            _lastDrawnVersion = EliteData.DataVersion;
+            _ticksSinceDraw = 0;
+
             var myBitmap = _primaryImage; // Engaged Image
             var imgBase64 = _primaryFile;
             var bitmapImageIsGif = _primaryImageIsGif;
@@ -106,17 +111,19 @@ namespace Elite.Buttons
             }
          
 
-            if (_primaryImage != null)
             {
                 if (!bitmapImageIsGif && remainingJumpsInRoute > 0 && textHtmlColor != "#ff00ff")
                 {
                     try
                     {
 
-                        using (var bitmap = new Bitmap(myBitmap))
+                        using (var bitmap = myBitmap != null ? new Bitmap(myBitmap) : new Bitmap(256, 256))
                         {
                             using (var graphics = Graphics.FromImage(bitmap))
                             {
+                                if (myBitmap == null)
+                                    graphics.Clear(Color.Black);
+
                                 var width = bitmap.Width; // assumes rectangular bitmap
 
                                 var fontContainerHeight = 100 * (width / 256.0);
@@ -127,7 +134,7 @@ namespace Elite.Buttons
                                     // var testFont = new Font(drawFont.Name, adjustedSize, drawFont.Style);
                                     var isBold = settings.TextBold == "true";
                                     var fontStyle = isBold ? FontStyle.Bold : FontStyle.Regular;
-                                    var testFont = new Font("Arial", adjustedSize, fontStyle);
+                                    using var testFont = new Font("Arial", adjustedSize, fontStyle);
                                     var adjustedSizeNew =
                                         graphics.MeasureString(remainingJumpsInRoute.ToString(),
                                             testFont);
@@ -161,7 +168,8 @@ namespace Elite.Buttons
                         Logger.Instance.LogMessage(TracingLevel.FATAL, "Route HandleDisplay " + ex);
                     }
                 }
-                await Connection.SetImageAsync(imgBase64);
+                if (!string.IsNullOrEmpty(imgBase64))
+                    await Connection.SetImageAsync(imgBase64);
             }
         }
 
@@ -191,7 +199,7 @@ namespace Elite.Buttons
 
         public void HandleEliteEvents(object sender, MessageReceivedEventArgs args)
         {
-            AsyncHelper.RunSync(HandleDisplay);
+            AsyncHelper.RunCoalesced(this, HandleDisplay);
         }
 
         public override void KeyPressed(KeyPayload payload)
@@ -262,6 +270,10 @@ namespace Elite.Buttons
         public override async void OnTick()
         {
             base.OnTick();
+
+            // Nothing this button shows can have changed since the last draw; redraw at least every 30 ticks as a safety net.
+            if (_lastDrawnVersion == EliteData.DataVersion && ++_ticksSinceDraw < 30) return;
+
             await HandleDisplay();
         }
 
@@ -355,7 +367,7 @@ namespace Elite.Buttons
 
                 if (File.Exists(settings.PrimaryImageFilename))
                 {
-                    _primaryImage = (Bitmap) Image.FromFile(settings.PrimaryImageFilename);
+                    _primaryImage = StreamDeckCommon.LoadBitmap(settings.PrimaryImageFilename);
 
                     _primaryFile = Tools.FileToBase64(settings.PrimaryImageFilename, true);
 
@@ -365,7 +377,7 @@ namespace Elite.Buttons
 
                 if (File.Exists(settings.TertiaryImageFilename))
                 {
-                    _tertiaryImage = (Bitmap) Image.FromFile(settings.TertiaryImageFilename);
+                    _tertiaryImage = StreamDeckCommon.LoadBitmap(settings.TertiaryImageFilename);
 
                     _tertiaryFile = Tools.FileToBase64(settings.TertiaryImageFilename, true);
 

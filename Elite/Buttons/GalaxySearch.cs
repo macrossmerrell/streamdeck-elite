@@ -311,7 +311,7 @@ namespace Elite.Buttons
 
                 if (File.Exists(settings.BackgroundImageFilename))
                 {
-                    _backgroundImage = (Bitmap)Image.FromFile(settings.BackgroundImageFilename);
+                    _backgroundImage = StreamDeckCommon.LoadBitmap(settings.BackgroundImageFilename);
                     _backgroundFile  = Tools.FileToBase64(settings.BackgroundImageFilename, true);
                 }
             }

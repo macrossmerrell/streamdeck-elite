@@ -68,6 +68,8 @@ namespace Elite.Buttons
         }
 
         private PluginSettings settings;
+        private long _lastDrawnVersion = -1;
+        private int _ticksSinceDraw;
         private Bitmap _primaryImage = null;
         private Bitmap _secondaryImage = null;
 
@@ -87,6 +89,9 @@ namespace Elite.Buttons
 
         private async Task HandleDisplay()
         {
+            _lastDrawnVersion = EliteData.DataVersion;
+            _ticksSinceDraw = 0;
+
             var isDisabled = (EliteData.StatusData.OnFoot ||
                               EliteData.StatusData.InSRV ||
                               EliteData.StatusData.Docked ||
@@ -115,23 +120,25 @@ namespace Elite.Buttons
             var textBrush = EliteData.LimpetCount > 0 && !isDisabled ? _primaryBrush : _secondaryBrush;
             var textHtmlColor = EliteData.LimpetCount > 0 && !isDisabled ? settings.PrimaryColor : settings.SecondaryColor;
 
-            if (_primaryImage != null)
             {
                 if (!bitmapImageIsGif && EliteData.LimpetCount > 0 && textHtmlColor != "#ff00ff")
                 {
                     try
                     {
-                        using (var bitmap = new Bitmap(myBitmap))
+                        using (var bitmap = myBitmap != null ? new Bitmap(myBitmap) : new Bitmap(256, 256))
                         {
                             using (var graphics = Graphics.FromImage(bitmap))
                             {
+                                if (myBitmap == null)
+                                    graphics.Clear(Color.Black);
+
                                 var width = bitmap.Width; // assumes rectangular bitmap
 
                                 var fontContainerHeight = 100 * (width / 256.0);
 
                                 for (int adjustedSize = 60; adjustedSize >= 10; adjustedSize -= 5)
                                 {
-                                    var testFont = new Font(drawFont.Name, adjustedSize, drawFont.Style);
+                                    using var testFont = new Font(drawFont.Name, adjustedSize, drawFont.Style);
 
                                     var adjustedSizeNew =
                                         graphics.MeasureString(EliteData.LimpetCount.ToString(), testFont);
@@ -162,7 +169,8 @@ namespace Elite.Buttons
                         Logger.Instance.LogMessage(TracingLevel.FATAL, "Limpet HandleDisplay " + ex);
                     }
                 }
-                await Connection.SetImageAsync(imgBase64);
+                if (!string.IsNullOrEmpty(imgBase64))
+                    await Connection.SetImageAsync(imgBase64);
             }
         }
 
@@ -192,7 +200,7 @@ namespace Elite.Buttons
 
         public void HandleEliteEvents(object sender, MessageReceivedEventArgs args)
         {
-            AsyncHelper.RunSync(HandleDisplay);
+            AsyncHelper.RunCoalesced(this, HandleDisplay);
         }
 
         public override void KeyPressed(KeyPayload payload)
@@ -316,6 +324,7 @@ namespace Elite.Buttons
         public override void Dispose() 
         {
             base.Dispose();
+            drawFont.Dispose();
 
             //Logger.Instance.LogMessage(TracingLevel.DEBUG, "Destructor called #1");
 
@@ -325,6 +334,10 @@ namespace Elite.Buttons
         public override async void OnTick()
         {
             base.OnTick();
+
+            // Nothing this button shows can have changed since the last draw; redraw at least every 30 ticks as a safety net.
+            if (_lastDrawnVersion == EliteData.DataVersion && ++_ticksSinceDraw < 30) return;
+
 
             await HandleDisplay();
         }
@@ -410,7 +423,7 @@ namespace Elite.Buttons
 
                 if (File.Exists(settings.PrimaryImageFilename))
                 {
-                    _primaryImage = (Bitmap) Image.FromFile(settings.PrimaryImageFilename);
+                    _primaryImage = StreamDeckCommon.LoadBitmap(settings.PrimaryImageFilename);
 
                     _primaryFile = Tools.FileToBase64(settings.PrimaryImageFilename, true);
 
@@ -419,7 +432,7 @@ namespace Elite.Buttons
 
                 if (File.Exists(settings.SecondaryImageFilename))
                 {
-                    _secondaryImage = (Bitmap) Image.FromFile(settings.SecondaryImageFilename);
+                    _secondaryImage = StreamDeckCommon.LoadBitmap(settings.SecondaryImageFilename);
 
                     _secondaryFile = Tools.FileToBase64(settings.SecondaryImageFilename, true);
 

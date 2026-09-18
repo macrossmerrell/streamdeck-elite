@@ -12,6 +12,8 @@ using Newtonsoft.Json.Linq;
 using System.Globalization;
 using NLog.Fluent;
 using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 
 namespace Elite.Buttons
 {
@@ -632,6 +634,17 @@ namespace Elite.Buttons
             if (!string.IsNullOrEmpty(inputText))
             {
                 SendInputUp("{" + inputText + "}");
+            }
+        }
+
+        // Loads an image fully into memory and releases the file straight away. Image.FromFile keeps
+        // the file open for the life of the bitmap, which blocks moving/editing/replacing it.
+        public static Bitmap LoadBitmap(string path)
+        {
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var img = Image.FromStream(stream))
+            {
+                return new Bitmap(img);
             }
         }
 

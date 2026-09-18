@@ -635,69 +635,6 @@ namespace Elite.Buttons
 
         // ===================== drawing =====================
 
-        private void DrawFittedText(Graphics graphics, string text, Color color, double verticalPosition, bool bold, int width)
-        {
-            if (string.IsNullOrEmpty(text)) return;
-
-            var fontStyle = bold ? FontStyle.Bold : FontStyle.Regular;
-            var lines = text.Replace("\r\n", "\n").Replace("\\n", "\n").Split('\n');
-            var brush = new SolidBrush(color);
-
-            var maxFontSize = (int)(48 * (width / 256.0));
-            if (maxFontSize < 10) maxFontSize = 10;
-
-            var maxLineHeight = width * 0.40f;
-
-            for (int adjustedSize = maxFontSize; adjustedSize >= 10; adjustedSize--)
-            {
-                var testFont = new Font("Arial", adjustedSize, fontStyle);
-                bool fits = true;
-                var lineHeights = new float[lines.Length];
-
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    var line = lines[i];
-                    if (string.IsNullOrEmpty(line)) { lineHeights[i] = testFont.Height; continue; }
-
-                    var sf = new StringFormat(StringFormat.GenericTypographic);
-                    sf.SetMeasurableCharacterRanges(new[] { new CharacterRange(0, line.Length) });
-                    var regions = graphics.MeasureCharacterRanges(line, testFont, new RectangleF(0, 0, 1000, 1000), sf);
-                    var bounds = regions[0].GetBounds(graphics);
-                    lineHeights[i] = bounds.Height;
-
-                    if (bounds.Width > width * 0.85f || bounds.Height > maxLineHeight)
-                    {
-                        fits = false;
-                        break;
-                    }
-                }
-
-                if (fits)
-                {
-                    var drawFmt = new StringFormat(StringFormat.GenericTypographic);
-                    float currentY = (float)(verticalPosition * (width / 256.0));
-
-                    for (int i = 0; i < lines.Length; i++)
-                    {
-                        var sf2 = new StringFormat(StringFormat.GenericTypographic);
-                        sf2.SetMeasurableCharacterRanges(new[] { new CharacterRange(0, lines[i].Length) });
-                        var regions2 = graphics.MeasureCharacterRanges(lines[i], testFont, new RectangleF(0, 0, 1000, 1000), sf2);
-                        var b = regions2[0].GetBounds(graphics);
-                        var x = (width - b.Width) / 2.0f;
-                        graphics.DrawString(lines[i], testFont, brush, x, currentY - b.Y, drawFmt);
-                        currentY += b.Height * 1.1f;
-                    }
-                    testFont.Dispose();
-                    brush.Dispose();
-                    return;
-                }
-
-                testFont.Dispose();
-            }
-
-            brush.Dispose();
-        }
-
         private async Task HandleDisplay()
         {
             // Only active on foot on a planet surface
@@ -717,24 +654,25 @@ namespace Elite.Buttons
             var baseFile = optionData.image != null ? optionData.imageFile : _inactiveFile;
             var baseIsGif = optionData.image != null ? optionData.imageIsGif : _inactiveImageIsGif;
 
-            if (baseImage == null) return;
-
             var imgBase64 = baseFile;
 
             if (!baseIsGif)
             {
                 try
                 {
-                    using (var bitmap = new Bitmap(baseImage))
+                    using (var bitmap = baseImage != null ? new Bitmap(baseImage) : new Bitmap(256, 256))
                     using (var graphics = Graphics.FromImage(bitmap))
                     {
+                        if (baseImage == null)
+                            graphics.Clear(Color.Black);
+
                         var width = bitmap.Width;
                         var isBold = optionData.bold == "true";
                         var valuePos = double.TryParse(optionData.valuePosition, out double vp) ? vp : 160.0;
                         var labelPos = double.TryParse(optionData.labelPosition, out double lp) ? lp : 5.0;
 
-                        DrawFittedText(graphics, labelText, optionData.labelBrush.Color, labelPos, isBold, width);
-                        DrawFittedText(graphics, optionData.text, optionData.valueBrush.Color, valuePos, isBold, width);
+                        TextFit.DrawFittedText(graphics, labelText, optionData.labelBrush.Color, labelPos, isBold, width);
+                        TextFit.DrawFittedText(graphics, optionData.text, optionData.valueBrush.Color, valuePos, isBold, width);
 
                         imgBase64 = BarRaider.SdTools.Tools.ImageToBase64(bitmap, true);
                     }
@@ -833,7 +771,7 @@ namespace Elite.Buttons
 
             if (File.Exists(filename))
             {
-                image = (Bitmap)Image.FromFile(filename);
+                image = StreamDeckCommon.LoadBitmap(filename);
                 file = Tools.FileToBase64(filename, true);
                 isGif = StreamDeckCommon.CheckForGif(filename);
             }

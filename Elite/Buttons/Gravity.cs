@@ -63,6 +63,8 @@ namespace Elite.Buttons
         }
 
         private PluginSettings settings;
+        private long _lastDrawnVersion = -1;
+        private int _ticksSinceDraw;
         private Bitmap _primaryImage = null;
         private Bitmap _defaultImage = null;
         private Bitmap _highGravityImage = null;
@@ -81,6 +83,9 @@ namespace Elite.Buttons
 
         private async Task HandleDisplay()
         {
+            _lastDrawnVersion = EliteData.DataVersion;
+            _ticksSinceDraw = 0;
+
             var s = EliteData.StatusData;
 
             Bitmap myBitmap = null;
@@ -162,19 +167,15 @@ namespace Elite.Buttons
                 }
             }
 
-            if (myBitmap == null)
-            {
-                if (!string.IsNullOrEmpty(imgBase64))
-                    await Connection.SetImageAsync(imgBase64);
-                return;
-            }
-
             try
             {
-                using (var bitmap = new Bitmap(myBitmap))
+                using (var bitmap = myBitmap != null ? new Bitmap(myBitmap) : new Bitmap(256, 256))
                 {
                     using (var graphics = Graphics.FromImage(bitmap))
                     {
+                        if (myBitmap == null)
+                            graphics.Clear(Color.Black);
+
                         var width = bitmap.Width;
                         var fontContainerHeight = 100 * (width / 256.0);
 
@@ -182,7 +183,7 @@ namespace Elite.Buttons
                         {
                             var isBold = settings.TextBold == "true";
                             var fontStyle = isBold ? FontStyle.Bold : FontStyle.Regular;
-                            var testFont = new Font("Arial", adjustedSize, fontStyle);
+                            using var testFont = new Font("Arial", adjustedSize, fontStyle);
                             var adjustedSizeNew = graphics.MeasureString(gravityText, testFont);
 
                             if (fontContainerHeight >= adjustedSizeNew.Height)
@@ -231,7 +232,7 @@ namespace Elite.Buttons
 
         public void HandleEliteEvents(object sender, MessageReceivedEventArgs args)
         {
-            AsyncHelper.RunSync(HandleDisplay);
+            AsyncHelper.RunCoalesced(this, HandleDisplay);
         }
 
         public override void KeyPressed(KeyPayload payload) { }
@@ -246,6 +247,10 @@ namespace Elite.Buttons
         public override async void OnTick()
         {
             base.OnTick();
+
+            // Nothing this button shows can have changed since the last draw; redraw at least every 30 ticks as a safety net.
+            if (_lastDrawnVersion == EliteData.DataVersion && ++_ticksSinceDraw < 30) return;
+
             await HandleDisplay();
         }
 
@@ -285,13 +290,13 @@ namespace Elite.Buttons
 
                 if (File.Exists(settings.PrimaryImageFilename))
                 {
-                    _primaryImage = (Bitmap)Image.FromFile(settings.PrimaryImageFilename);
+                    _primaryImage = StreamDeckCommon.LoadBitmap(settings.PrimaryImageFilename);
                     _primaryFile = Tools.FileToBase64(settings.PrimaryImageFilename, true);
                 }
 
                 if (File.Exists(settings.DefaultImageFilename))
                 {
-                    _defaultImage = (Bitmap)Image.FromFile(settings.DefaultImageFilename);
+                    _defaultImage = StreamDeckCommon.LoadBitmap(settings.DefaultImageFilename);
                     _defaultFile = Tools.FileToBase64(settings.DefaultImageFilename, true);
                 }
                 else
@@ -308,7 +313,7 @@ namespace Elite.Buttons
 
                 if (File.Exists(settings.HighGravityImageFilename))
                 {
-                    _highGravityImage = (Bitmap)Image.FromFile(settings.HighGravityImageFilename);
+                    _highGravityImage = StreamDeckCommon.LoadBitmap(settings.HighGravityImageFilename);
                     _highGravityFile = Tools.FileToBase64(settings.HighGravityImageFilename, true);
                 }
                 // Note: _highGravityImage intentionally left null if no file is set;
