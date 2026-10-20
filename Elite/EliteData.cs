@@ -258,9 +258,26 @@ namespace Elite
             }
         }
 
+        // Set by NavRouteClear: the next route that loads must supply the next system itself, because
+        // the game only writes FSDTarget when the target CHANGES - re-plotting toward the same next
+        // system stays silent and RemainingJumpsInRoute would otherwise stay 0.
+        private static bool _awaitingRouteAfterClear;
+        private static DateTime _lastRouteTimestamp = DateTime.MinValue;
+        // NavRoute.json can briefly still hold the old route after a clear; ignore it until it changes.
+        private static DateTime? _staleRouteTimestamp;
+
+        /// <summary>Raised when a route loaded right after a clear, so UI can switch back to its destination view.</summary>
+        public static event Action RouteReplotted;
+
         public static void HandleNavRouteEvents(object sender, NavRouteEvent.NavRouteEventArgs info)
         {
             LoadRouteProgressCacheIfNeeded();
+
+            if (_awaitingRouteAfterClear && info?.Route != null && info.Route.Length >= 2
+                && _staleRouteTimestamp.HasValue && info.Timestamp == _staleRouteTimestamp.Value)
+            {
+                return; // old content still in the file
+            }
 
             if (info?.Route == null || info.Route.Length < 2)
             {
@@ -270,6 +287,7 @@ namespace Elite
             }
             else
             {
+                _lastRouteTimestamp = info.Timestamp;
                 RouteList = info.Route.Select(
                     x => new RouteItem
                     {
@@ -293,7 +311,30 @@ namespace Elite
                 }
                 // else: the SAME destination re-fired (relaunch, reopening the Galaxy Map, etc.)
                 // - keep whatever TotalJumpsInRoute we already have (loaded from cache or in memory).
+
+                if (_awaitingRouteAfterClear)
+                {
+                    _awaitingRouteAfterClear = false;
+                    _staleRouteTimestamp = null;
+
+                    // Next system = the one after the system we're in, or the first hop if the route
+                    // starts elsewhere. Route[0] is the origin, so hop i is Route[i + 1].
+                    var idx = Array.FindIndex(info.Route, r => r.StarSystem == StarSystem);
+                    var nextIdx = idx >= 0 ? idx + 1 : 1;
+
+                    if (nextIdx < info.Route.Length)
+                    {
+                        var next = info.Route[nextIdx];
+                        FsdTargetName = next.StarSystem;
+                        StarClass = next.StarClass;
+                        RemainingJumpsInRoute = info.Route.Length - nextIdx;
+                        RemainingJumpsAtJumpStart = null;
+                    }
+
+                    RouteReplotted?.Invoke();
+                }
             }
+            MarkChanged();
         }
 
         public static void HandleCargoEvents(object sender, CargoEvent.CargoEventArgs evt)
@@ -525,6 +566,19 @@ namespace Elite
 
                     EliteData.RemainingJumpsInRoute = fsdTargetInfo.RemainingJumpsInRoute;
 
+                    // A target that isn't on the route we're tracking (new star picked, or FSDTarget
+                    // arriving before the new NavRoute loads) makes the old total meaningless: it would
+                    // show a bogus % against the previous trip. Restart the trip from this target; a
+                    // multi-hop NavRoute loading afterwards replaces the total with the exact count.
+                    LoadRouteProgressCacheIfNeeded();
+                    var onTrackedRoute = RouteList != null && RouteList.Any(r => r.SystemAddress == fsdTargetInfo.SystemAddress);
+                    if (!onTrackedRoute || TotalJumpsInRoute < fsdTargetInfo.RemainingJumpsInRoute)
+                    {
+                        TotalJumpsInRoute = fsdTargetInfo.RemainingJumpsInRoute;
+                        RouteFinalDestination = null;
+                        SaveRouteProgressCache();
+                    }
+
                     EliteData.StarClass = fsdTargetInfo.StarClass;
 
                     break;
@@ -575,9 +629,15 @@ namespace Elite
                     EliteData.RouteList = new List<RouteItem>();
                     EliteData.RemainingJumpsInRoute = 0;
                     EliteData.RemainingJumpsAtJumpStart = null;
-                    // Deliberately keep TotalJumpsInRoute / RouteFinalDestination: the game also clears the
-                    // route around launch and map opening (and old clears are replayed at plugin start), then
-                    // re-plots the SAME route. Wiping the memory here made that look like a brand new route.
+                    // A clear starts a new trip: restart progress so re-plotting to the same final
+                    // destination doesn't count the old hops as done.
+                    LoadRouteProgressCacheIfNeeded();
+                    TotalJumpsInRoute = 0;
+                    RouteFinalDestination = null;
+                    SaveRouteProgressCache();
+                    // The next route to load supplies the next system (game stays silent if unchanged).
+                    _staleRouteTimestamp = _lastRouteTimestamp == DateTime.MinValue ? (DateTime?)null : _lastRouteTimestamp;
+                    _awaitingRouteAfterClear = true;
                     break;
 
                 case "Scan":

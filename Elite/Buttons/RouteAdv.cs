@@ -615,6 +615,16 @@ namespace Elite.Buttons
             }
 
             Program.JournalWatcher.MessageReceived += HandleEliteEvents;
+            EliteData.RouteReplotted += HandleRouteReplotted;
+        }
+
+        // A cleared route was re-plotted: show the Destination view again (falls back to the first enabled option)
+        private void HandleRouteReplotted()
+        {
+            _currentOptionIndex = Array.IndexOf(OptionOrder, "Remaining");
+            EnsureCurrentOptionIsEnabled();
+            _autoRotateTickCount = 0;
+            AsyncHelper.RunCoalesced(this, HandleDisplay);
         }
 
         public void HandleEliteEvents(object sender, MessageReceivedEventArgs args)
@@ -680,6 +690,7 @@ namespace Elite.Buttons
             base.Dispose();
 
             Program.JournalWatcher.MessageReceived -= HandleEliteEvents;
+            EliteData.RouteReplotted -= HandleRouteReplotted;
         }
 
         public override async void OnTick()

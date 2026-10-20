@@ -13,6 +13,21 @@ This release upgrades the plugin's underlying `EliteJournalReader` library (the 
 Latest Release: https://github.com/macrossmerrell/streamdeck-elite/releases
 
 ---
+## Bug Fix Release (v4.1.1)
+
+This is a bug fix release. There are no new buttons or settings, and it is a drop-in update for v4.1.0.
+
+### 🛠️ Fixed: Advanced Route button not detecting a cleared and re-plotted route
+- **The problem:** If you cleared your route and plotted a new one (to the same planet or a different one), the Advanced Route button could stay on "no route". The game only reports a new jump target when the target *changes*, so re-plotting toward the same next system produced no signal and the button never recovered.
+- **The fix:** After a route is cleared, the next route that loads now supplies the next system and the remaining jump count itself. The button also switches back to its Destination view.
+- **Stale route file:** The route file can briefly still hold the old route after a clear. The plugin now ignores that old content until the file changes.
+
+### 🛠️ Fixed: Trip Progress showing the wrong percentage
+- **Clearing a route now starts a new trip**, so re-plotting to the same final destination no longer counts the old hops as already done.
+- **Selecting a new star no longer shows a bogus percentage.** Previously the new target was measured against the previous trip's total (for example, 55% complete on a trip you had just started). A target that isn't on the route being tracked now restarts the trip at 0%.
+- **Behaviour change:** Because a clear now resets progress, the game's own clears around launch and opening the Galaxy Map also restart Trip Progress. This reverses the v4.1.0 behaviour of keeping progress across those clears.
+
+---
 ## New & Updated Features (v4.1.0)
 
 ### ✏️ Updated: Advanced Route Button
