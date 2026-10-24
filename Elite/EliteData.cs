@@ -566,18 +566,17 @@ namespace Elite
 
                     EliteData.RemainingJumpsInRoute = fsdTargetInfo.RemainingJumpsInRoute;
 
-                    // A target that isn't on the route we're tracking (new star picked, or FSDTarget
-                    // arriving before the new NavRoute loads) makes the old total meaningless: it would
-                    // show a bogus % against the previous trip. Restart the trip from this target; a
-                    // multi-hop NavRoute loading afterwards replaces the total with the exact count.
                     LoadRouteProgressCacheIfNeeded();
-                    var onTrackedRoute = RouteList != null && RouteList.Any(r => r.SystemAddress == fsdTargetInfo.SystemAddress);
-                    if (!onTrackedRoute || TotalJumpsInRoute < fsdTargetInfo.RemainingJumpsInRoute)
+                    if (TotalJumpsInRoute < fsdTargetInfo.RemainingJumpsInRoute)
                     {
                         TotalJumpsInRoute = fsdTargetInfo.RemainingJumpsInRoute;
-                        RouteFinalDestination = null;
                         SaveRouteProgressCache();
                     }
+
+                    // Deliberately NOT judging here whether this target is on the tracked route: the game
+                    // writes FSDTarget before NavRoute.json is loaded, so that would misread a re-plot.
+                    // Every new target also writes a route file (>= 2 systems), and HandleNavRouteEvents
+                    // decides new trip vs same trip by comparing final destinations.
 
                     EliteData.StarClass = fsdTargetInfo.StarClass;
 

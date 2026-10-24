@@ -13,6 +13,17 @@ This release upgrades the plugin's underlying `EliteJournalReader` library (the 
 Latest Release: https://github.com/macrossmerrell/streamdeck-elite/releases
 
 ---
+## Bug Fix Release (v4.1.2)
+
+This is a bug fix release. There are no new buttons or settings, and it is a drop-in update for v4.1.1.
+
+### 🛠️ Fixed: Trip Progress dropping to a few percent when a route is re-plotted
+- **The problem:** With a route already set, reopening the Galaxy Map makes the game announce the route again. It announces the jump target *before* the plugin has loaded the route file. v4.1.1 judged that target against the plugin's idea of the current route, decided it was a brand new trip, and threw away the remembered trip total. Progress then restarted from the remaining route length (for example a few percent instead of about 37%).
+- **The fix:** The plugin no longer guesses from the jump target. A new trip is now decided only when the route file loads, by comparing the final destination: a different destination starts a new trip, and the same destination keeps its total. This does not depend on how long the route took to calculate or how the game orders its messages.
+- **Safety net:** If the saved total is ever smaller than the jumps remaining, it is raised so the meter can't go negative.
+- This replaces the v4.1.1 behaviour of restarting the trip when a selected star was not on the tracked route. Selecting a new star still starts a new trip, because the new route has a different destination.
+
+---
 ## Bug Fix Release (v4.1.1)
 
 This is a bug fix release. There are no new buttons or settings, and it is a drop-in update for v4.1.0.
